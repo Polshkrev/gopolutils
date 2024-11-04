@@ -19,9 +19,7 @@ func NewSet[Type comparable]() *Set[Type] {
 }
 
 func (set *Set[Type]) Append(item Type) {
-	var found bool
-	_, found = set.items[item]
-	if found {
+	if set.Contains(item) {
 		return
 	}
 	set.items[item] = struct{}{}
@@ -30,9 +28,7 @@ func (set *Set[Type]) Append(item Type) {
 
 func (set *Set[Type]) Remove(item Type) *gopolutils.Exception {
 	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Item '%v' does not exist.", item))
-	var found bool
-	_, found = set.items[item]
-	if !found {
+	if !set.Contains(item) {
 		return notFound
 	}
 	delete(set.items, item)
@@ -41,9 +37,7 @@ func (set *Set[Type]) Remove(item Type) *gopolutils.Exception {
 }
 
 func (set *Set[Type]) Discard(item Type) {
-	var found bool
-	_, found = set.items[item]
-	if !found {
+	if !set.Contains(item) {
 		return
 	}
 	delete(set.items, item)
@@ -52,4 +46,10 @@ func (set *Set[Type]) Discard(item Type) {
 
 func (set Set[_]) Size() uint64 {
 	return set.size
+}
+
+func (set Set[Type]) Contains(item Type) bool {
+	var found bool
+	_, found = set.items[item]
+	return found
 }
