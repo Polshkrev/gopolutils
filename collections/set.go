@@ -83,13 +83,26 @@ func (set Set[Type]) Intersection(other Set[Type]) *Set[Type] {
 	return new
 }
 
-func (set Set[Type]) ToString() string {
+func (set Set[Type]) ToSlice() []Type {
 	var list []Type = make([]Type, 0)
 	var item Type
-	var i int
 	for item = range *set.Items() {
 		list = append(list, item)
 	}
+	return list
+}
+
+func (set Set[Type]) ToArray() *Array[Type] {
+	var array *Array[Type] = NewArray[Type]()
+	var list []Type = set.ToSlice()
+	array.Extend(list)
+	return array
+}
+
+func (set Set[Type]) ToString() string {
+	var list []Type = set.ToSlice()
+	var item Type
+	var i int
 	var buffer strings.Builder = strings.Builder{}
 	buffer.WriteString("{")
 	for i, item = range list {
