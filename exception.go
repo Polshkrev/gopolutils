@@ -19,6 +19,7 @@ func (exception *Exception) assignName(name string) {
 
 func NewException(message string) *Exception {
 	var exception *Exception = new(Exception)
+	exception.assignName("Exception")
 	exception.message = message
 	exception.assignRepr()
 	return exception
