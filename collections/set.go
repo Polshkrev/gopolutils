@@ -39,3 +39,13 @@ func (set *Set[Type]) Remove(item Type) *gopolutils.Exception {
 	set.size--
 	return nil
 }
+
+func (set *Set[Type]) Discard(item Type) {
+	var found bool
+	_, found = set.items[item]
+	if !found {
+		return
+	}
+	delete(set.items, item)
+	set.size--
+}
