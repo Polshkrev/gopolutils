@@ -19,3 +19,9 @@ func VersionConvert(major, minor, patch uint8) *Version {
 	version.patch = patch
 	return version
 }
+
+func NewNamedVersion(name string) *Version {
+	var version *Version = NewVersion()
+	version.name = name
+	return version
+}
