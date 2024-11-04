@@ -16,3 +16,18 @@ func (exception *Exception) assignName(name string) {
 	exception.name = name
 	exception.assignRepr()
 }
+
+func NewException(message string) *Exception {
+	var exception *Exception = new(Exception)
+	exception.message = message
+	exception.assignRepr()
+	return exception
+}
+
+func NewNamedException(name, message string) *Exception {
+	var exception *Exception = new(Exception)
+	exception.assignName(name)
+	exception.message = message
+	exception.assignRepr()
+	return exception
+}
