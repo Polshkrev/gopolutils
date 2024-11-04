@@ -11,3 +11,11 @@ type Version struct {
 func NewVersion() *Version {
 	return new(Version)
 }
+
+func VersionConvert(major, minor, patch uint8) *Version {
+	var version *Version = NewVersion()
+	version.major = major
+	version.minor = minor
+	version.patch = patch
+	return version
+}
