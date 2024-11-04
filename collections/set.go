@@ -11,3 +11,13 @@ func NewSet[Type comparable]() *Set[Type] {
 	set.size = 0
 	return set
 }
+
+func (set *Set[Type]) Append(item Type) {
+	var found bool
+	_, found = set.items[item]
+	if found {
+		return
+	}
+	set.items[item] = struct{}{}
+	set.size++
+}
