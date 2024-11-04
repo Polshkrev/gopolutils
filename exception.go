@@ -31,3 +31,7 @@ func NewNamedException(name, message string) *Exception {
 	exception.assignRepr()
 	return exception
 }
+
+func (exception Exception) Error() string {
+	return exception.repr
+}
