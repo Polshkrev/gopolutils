@@ -11,3 +11,8 @@ func NewStack[Type any]() *Stack[Type] {
 	stack.size = 0
 	return stack
 }
+
+func (stack *Stack[Type]) Append(item Type) {
+	stack.items = append(stack.items, item)
+	stack.size++
+}
