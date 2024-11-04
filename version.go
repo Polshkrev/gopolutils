@@ -98,3 +98,18 @@ func (version Version) Compare(operand Version) bool {
 func (version Version) IsPublic() bool {
 	return version.CompareMajor(1)
 }
+
+func (version *Version) Release() {
+	version.major++
+	version.SetMinor(0)
+	version.SetPatch(0)
+}
+
+func (version *Version) Update() {
+	version.minor++
+	version.SetPatch(0)
+}
+
+func (version *Version) Fix() {
+	version.patch++
+}
