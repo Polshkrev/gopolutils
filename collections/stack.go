@@ -45,7 +45,7 @@ func (stack *Stack[Type]) Remove(index uint64) *gopolutils.Exception {
 
 func (stack *Stack[Type]) Pop() (*Type, *gopolutils.Exception) {
 	var empty *gopolutils.Exception = gopolutils.NewException("Can not pop from an empty stack.")
-	if len(stack.items) == 0 {
+	if stack.IsEmpty() {
 		return nil, empty
 	}
 	var index int = len(stack.items) - 1
@@ -57,9 +57,13 @@ func (stack *Stack[Type]) Pop() (*Type, *gopolutils.Exception) {
 
 func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
 	var empty *gopolutils.Exception = gopolutils.NewException("Can not peek from an empty stack.")
-	if len(stack.items) == 0 {
+	if stack.IsEmpty() {
 		return nil, empty
 	}
 	var index int = len(stack.items) - 1
 	return &stack.items[index], nil
+}
+
+func (stack Stack[Type]) IsEmpty() bool {
+	return len(stack.items) == 0 && stack.size == 0
 }
