@@ -16,3 +16,10 @@ func (stack *Stack[Type]) Append(item Type) {
 	stack.items = append(stack.items, item)
 	stack.size++
 }
+
+func (stack *Stack[Type]) Extend(items []Type) {
+	var item Type
+	for _, item = range items {
+		stack.Append(item)
+	}
+}
