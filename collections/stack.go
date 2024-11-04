@@ -54,3 +54,12 @@ func (stack *Stack[Type]) Pop() (*Type, *gopolutils.Exception) {
 	stack.size--
 	return &last, nil
 }
+
+func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
+	var empty *gopolutils.Exception = gopolutils.NewException("Can not peek from an empty stack.")
+	if len(stack.items) == 0 {
+		return nil, empty
+	}
+	var index int = len(stack.items) - 1
+	return &stack.items[index], nil
+}
