@@ -45,7 +45,7 @@ func (queue *Queue[Type]) Remove(index uint64) *gopolutils.Exception {
 
 func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 	var empty *gopolutils.Exception = gopolutils.NewException("Can not dequeue from an empty queue.")
-	if queue.size == 0 {
+	if queue.IsEmpty() {
 		return nil, empty
 	}
 	var first Type
@@ -56,8 +56,12 @@ func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 
 func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
 	var empty *gopolutils.Exception = gopolutils.NewException("Can not peek into an empty queue.")
-	if queue.size == 0 {
+	if queue.IsEmpty() {
 		return nil, empty
 	}
 	return &queue.items[0], nil
+}
+
+func (queue Queue[Type]) IsEmpty() bool {
+	return queue.size == 0 && len(queue.items) == 0
 }
