@@ -49,3 +49,7 @@ func (set *Set[Type]) Discard(item Type) {
 	delete(set.items, item)
 	set.size--
 }
+
+func (set Set[_]) Size() uint64 {
+	return set.size
+}
