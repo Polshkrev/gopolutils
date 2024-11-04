@@ -11,3 +11,8 @@ func NewQueue[Type any]() *Queue[Type] {
 	queue.size = 0
 	return queue
 }
+
+func (queue *Queue[Type]) Append(item Type) {
+	queue.items = append(queue.items, item)
+	queue.size++
+}
