@@ -31,3 +31,10 @@ func NewStringVersion(name, description string) *Version {
 	version.description = description
 	return version
 }
+
+func NewFullVersion(name, description string, major, minor, patch uint8) *Version {
+	var version *Version = VersionConvert(major, minor, patch)
+	version.name = name
+	version.description = description
+	return version
+}
