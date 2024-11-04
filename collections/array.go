@@ -11,3 +11,8 @@ func NewArray[Type any]() *Array[Type] {
 	array.size = 0
 	return array
 }
+
+func (array *Array[Type]) Append(item Type) {
+	array.items = append(array.items, item)
+	array.size++
+}
