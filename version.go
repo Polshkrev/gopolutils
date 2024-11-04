@@ -101,6 +101,17 @@ func (version Version) IsPublic() bool {
 	return version.CompareMajor(1)
 }
 
+func (version *Version) Publish() *Exception {
+	var publicError *Exception = NewNamedException("ValueError", "Version is already public.")
+	if version.IsPublic() {
+		return publicError
+	}
+	version.SetMajor(1)
+	version.SetMinor(0)
+	version.SetPatch(0)
+	return nil
+}
+
 func (version *Version) Release() {
 	version.major++
 	version.SetMinor(0)
