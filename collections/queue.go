@@ -42,3 +42,11 @@ func (queue *Queue[Type]) Remove(index uint64) *gopolutils.Exception {
 	var notImplemented *gopolutils.Exception = gopolutils.NewNamedException("NotImplementedError", "Can not remove by index in a queue. Try using the dequeue method.")
 	return notImplemented
 }
+
+func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
+	var empty *gopolutils.Exception = gopolutils.NewException("Can not dequeue from an empty queue.")
+	if queue.size == 0 {
+		return nil, empty
+	}
+	return &queue.items[0], nil
+}
