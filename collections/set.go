@@ -27,6 +27,13 @@ func (set *Set[Type]) Append(item Type) {
 	set.size++
 }
 
+func (set *Set[Type]) Extend(items []Type) {
+	var item Type
+	for _, item = range items {
+		set.Append(item)
+	}
+}
+
 func (set *Set[Type]) Remove(item Type) *gopolutils.Exception {
 	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Item '%v' does not exist.", item))
 	if !set.Contains(item) {
