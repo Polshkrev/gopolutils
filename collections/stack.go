@@ -42,3 +42,15 @@ func (stack *Stack[Type]) Remove(index uint64) *gopolutils.Exception {
 	var notImplemented *gopolutils.Exception = gopolutils.NewNamedException("NotImplementedError", "Can not remove by index from a stack. Try using the pop method.")
 	return notImplemented
 }
+
+func (stack *Stack[Type]) Pop() (*Type, *gopolutils.Exception) {
+	var empty *gopolutils.Exception = gopolutils.NewException("Can not pop from an empty stack.")
+	if len(stack.items) == 0 {
+		return nil, empty
+	}
+	var index int = len(stack.items) - 1
+	var last Type
+	last, stack.items = stack.items[index], stack.items[:index]
+	stack.size--
+	return &last, nil
+}
