@@ -1,4 +1,4 @@
-package gopolutils
+package main
 
 type Version struct {
 	name        string
@@ -93,4 +93,8 @@ func (version Version) ComparePatch(patch uint8) bool {
 
 func (version Version) Compare(operand Version) bool {
 	return version.CompareMajor(operand.Major()) && version.CompareMinor(operand.Minor()) && version.ComparePatch(operand.Patch())
+}
+
+func (version Version) IsPublic() bool {
+	return version.CompareMajor(1)
 }
