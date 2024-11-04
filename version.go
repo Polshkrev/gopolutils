@@ -78,3 +78,19 @@ func (version *Version) SetMinor(minor uint8) {
 func (version *Version) SetPatch(patch uint8) {
 	version.patch = patch
 }
+
+func (version Version) CompareMajor(major uint8) bool {
+	return version.Major() >= major
+}
+
+func (version Version) CompareMinor(minor uint8) bool {
+	return version.Minor() >= minor
+}
+
+func (version Version) ComparePatch(patch uint8) bool {
+	return version.Patch() >= patch
+}
+
+func (version Version) Compare(operand Version) bool {
+	return version.CompareMajor(operand.Major()) && version.CompareMinor(operand.Minor()) && version.ComparePatch(operand.Patch())
+}
