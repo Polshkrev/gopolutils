@@ -7,3 +7,7 @@ type Version struct {
 	minor       uint8
 	patch       uint8
 }
+
+func NewVersion() *Version {
+	return new(Version)
+}
