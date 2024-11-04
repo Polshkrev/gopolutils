@@ -16,3 +16,9 @@ func (array *Array[Type]) Append(item Type) {
 	array.items = append(array.items, item)
 	array.size++
 }
+
+func (array *Array[Type]) Extend(items []Type) {
+	for _, item := range items {
+		array.Append(item)
+	}
+}
