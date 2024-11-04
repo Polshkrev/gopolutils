@@ -1,5 +1,11 @@
 package collections
 
+import (
+	"fmt"
+
+	"github.com/Polshkrev/gopolutils"
+)
+
 type Array[Type any] struct {
 	items []Type
 	size  uint64
@@ -21,4 +27,12 @@ func (array *Array[Type]) Extend(items []Type) {
 	for _, item := range items {
 		array.Append(item)
 	}
+}
+
+func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
+	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d", array.size, index))
+	if index > array.size {
+		return nil, outOfRange
+	}
+	return &array.items[index], nil
 }
