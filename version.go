@@ -25,3 +25,9 @@ func NewNamedVersion(name string) *Version {
 	version.name = name
 	return version
 }
+
+func NewStringVersion(name, description string) *Version {
+	var version *Version = NewNamedVersion(name)
+	version.description = description
+	return version
+}
