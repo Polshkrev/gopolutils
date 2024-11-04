@@ -48,5 +48,16 @@ func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 	if queue.size == 0 {
 		return nil, empty
 	}
+	var first Type
+	first, queue.items = queue.items[0], queue.items[1:]
+	queue.size--
+	return &first, nil
+}
+
+func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
+	var empty *gopolutils.Exception = gopolutils.NewException("Can not peek into an empty queue.")
+	if queue.size == 0 {
+		return nil, empty
+	}
 	return &queue.items[0], nil
 }
