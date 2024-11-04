@@ -36,3 +36,13 @@ func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	}
 	return &array.items[index], nil
 }
+
+func (array *Array[Type]) Remove(index uint64) *gopolutils.Exception {
+	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d", array.size, index))
+	if index > array.size {
+		return outOfRange
+	}
+	array.items = append(array.items[:index], array.items[index+1:]...)
+	array.size--
+	return nil
+}
