@@ -69,3 +69,15 @@ func (set Set[Type]) Difference(other Set[Type]) *Set[Type] {
 	}
 	return new
 }
+
+func (set Set[Type]) Intersection(other Set[Type]) *Set[Type] {
+	var new *Set[Type] = NewSet[Type]()
+	var item Type
+	for item = range *other.Items() {
+		if !set.Contains(item) {
+			continue
+		}
+		new.Append(item)
+	}
+	return new
+}
