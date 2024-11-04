@@ -53,3 +53,7 @@ func (set Set[Type]) Contains(item Type) bool {
 	_, found = set.items[item]
 	return found
 }
+
+func (set Set[Type]) Items() *map[Type]struct{} {
+	return &set.items
+}
