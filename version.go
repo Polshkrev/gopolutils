@@ -1,4 +1,6 @@
-package main
+package gopolutils
+
+import "fmt"
 
 type Version struct {
 	name        string
@@ -112,4 +114,15 @@ func (version *Version) Update() {
 
 func (version *Version) Fix() {
 	version.patch++
+}
+
+func (version Version) ToString() string {
+	if len(version.Name()) == 0 && len(version.Description()) == 0 {
+		return fmt.Sprintf("%d.%d.%d", version.Major(), version.Minor(), version.Patch())
+	} else if len(version.Name()) == 0 && len(version.Description()) != 0 {
+		return fmt.Sprintf("%d.%d.%d - %s", version.Major(), version.Minor(), version.Patch(), version.Description())
+	} else if len(version.Name()) != 0 && len(version.Description()) == 0 {
+		return fmt.Sprintf("%s: %d.%d.%d", version.Name(), version.Major(), version.Minor(), version.Patch())
+	}
+	return fmt.Sprintf("%s: %d.%d.%d - %s", version.Name(), version.Major(), version.Minor(), version.Patch(), version.Description())
 }
