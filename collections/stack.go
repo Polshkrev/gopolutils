@@ -38,7 +38,7 @@ func (stack Stack[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	return &stack.items[index], nil
 }
 
-func (stack *Stack[Type]) Remove(index uint64) *gopolutils.Exception {
+func (stack *Stack[_]) Remove(index uint64) *gopolutils.Exception {
 	var notImplemented *gopolutils.Exception = gopolutils.NewNamedException("NotImplementedError", "Can not remove by index from a stack. Try using the pop method.")
 	return notImplemented
 }
@@ -64,10 +64,14 @@ func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
 	return &stack.items[index], nil
 }
 
-func (stack Stack[Type]) IsEmpty() bool {
+func (stack Stack[_]) IsEmpty() bool {
 	return len(stack.items) == 0 && stack.size == 0
 }
 
 func (stack Stack[Type]) Items() *[]Type {
 	return &stack.items
+}
+
+func (stack Stack[_]) Size() uint64 {
+	return stack.size
 }
