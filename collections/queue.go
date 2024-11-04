@@ -38,7 +38,7 @@ func (queue Queue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	return &queue.items[index], nil
 }
 
-func (queue *Queue[Type]) Remove(index uint64) *gopolutils.Exception {
+func (queue *Queue[_]) Remove(index uint64) *gopolutils.Exception {
 	var notImplemented *gopolutils.Exception = gopolutils.NewNamedException("NotImplementedError", "Can not remove by index in a queue. Try using the dequeue method.")
 	return notImplemented
 }
@@ -62,6 +62,10 @@ func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
 	return &queue.items[0], nil
 }
 
-func (queue Queue[Type]) IsEmpty() bool {
+func (queue Queue[_]) IsEmpty() bool {
 	return queue.size == 0 && len(queue.items) == 0
+}
+
+func (queue Queue[Type]) Items() *[]Type {
+	return &queue.items
 }
