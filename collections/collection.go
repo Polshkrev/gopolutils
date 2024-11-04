@@ -7,4 +7,7 @@ type Collection[Type any] interface {
 	Extend(items []Type)
 	At(index uint64) (*Type, *gopolutils.Exception)
 	Remove(index uint64) *gopolutils.Exception
+	IsEmpty() bool
+	Items() *[]Type
+	Size() uint64
 }
