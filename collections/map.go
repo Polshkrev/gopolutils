@@ -40,3 +40,15 @@ func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	}
 	return &value, nil
 }
+
+func (mapping *Map[Key, Value]) Remove(key Key) *gopolutils.Exception {
+	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' does not exist.", key))
+	var found bool
+	_, found = mapping.items[key]
+	if !found {
+		return notFound
+	}
+	delete(mapping.items, key)
+	mapping.size--
+	return nil
+}
