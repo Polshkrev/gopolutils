@@ -37,3 +37,8 @@ func (queue Queue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	}
 	return &queue.items[index], nil
 }
+
+func (queue *Queue[Type]) Remove(index uint64) *gopolutils.Exception {
+	var notImplemented *gopolutils.Exception = gopolutils.NewNamedException("NotImplementedError", "Can not remove by index in a queue. Try using the dequeue method.")
+	return notImplemented
+}
