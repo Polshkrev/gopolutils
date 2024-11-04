@@ -46,3 +46,15 @@ func (array *Array[Type]) Remove(index uint64) *gopolutils.Exception {
 	array.size--
 	return nil
 }
+
+func (array Array[Type]) Items() *[]Type {
+	return &array.items
+}
+
+func (array Array[_]) Size() uint64 {
+	return array.size
+}
+
+func (array Array[_]) IsEmpty() bool {
+	return len(array.items) == 0 && array.size == 0
+}
