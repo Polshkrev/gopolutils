@@ -1,5 +1,11 @@
 package collections
 
+import (
+	"fmt"
+
+	"github.com/Polshkrev/gopolutils"
+)
+
 type Queue[Type any] struct {
 	items []Type
 	size  uint64
@@ -22,4 +28,12 @@ func (queue *Queue[Type]) Extend(items []Type) {
 	for _, item = range items {
 		queue.Append(item)
 	}
+}
+
+func (queue Queue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
+	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
+	if index > queue.size {
+		return nil, outOfRange
+	}
+	return &queue.items[index], nil
 }

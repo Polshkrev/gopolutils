@@ -30,7 +30,7 @@ func (array *Array[Type]) Extend(items []Type) {
 }
 
 func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
-	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d", array.size, index))
+	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
 	if index > array.size {
 		return nil, outOfRange
 	}
@@ -38,7 +38,7 @@ func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 }
 
 func (array *Array[Type]) Remove(index uint64) *gopolutils.Exception {
-	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d", array.size, index))
+	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
 	if index > array.size {
 		return outOfRange
 	}
