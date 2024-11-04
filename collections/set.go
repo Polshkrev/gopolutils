@@ -2,6 +2,7 @@ package collections
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/Polshkrev/gopolutils"
 )
@@ -80,4 +81,24 @@ func (set Set[Type]) Intersection(other Set[Type]) *Set[Type] {
 		new.Append(item)
 	}
 	return new
+}
+
+func (set Set[Type]) ToString() string {
+	var list []Type = make([]Type, 0)
+	var item Type
+	var i int
+	for item = range *set.Items() {
+		list = append(list, item)
+	}
+	var buffer strings.Builder = strings.Builder{}
+	buffer.WriteString("{")
+	for i, item = range list {
+		if i == len(list)-1 {
+			buffer.WriteString(fmt.Sprintf("%v", item))
+		} else {
+			buffer.WriteString(fmt.Sprintf("%v,", item))
+		}
+	}
+	buffer.WriteString("}")
+	return buffer.String()
 }
