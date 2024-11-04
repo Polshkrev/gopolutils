@@ -19,7 +19,7 @@ func NewMap[Key comparable, Value any]() *Map[Key, Value] {
 }
 
 func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Exception {
-	var foundException *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key %v already exists.", key))
+	var foundException *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' already exists.", key))
 	var found bool
 	_, found = mapping.items[key]
 	if found {
@@ -28,4 +28,15 @@ func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Excepti
 	mapping.items[key] = value
 	mapping.size++
 	return nil
+}
+
+func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
+	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' does not exist.", key))
+	var value Value
+	var ok bool
+	value, ok = mapping.items[key]
+	if !ok {
+		return nil, notFound
+	}
+	return &value, nil
 }
