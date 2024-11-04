@@ -16,3 +16,10 @@ func (queue *Queue[Type]) Append(item Type) {
 	queue.items = append(queue.items, item)
 	queue.size++
 }
+
+func (queue *Queue[Type]) Extend(items []Type) {
+	var item Type
+	for _, item = range items {
+		queue.Append(item)
+	}
+}
