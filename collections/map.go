@@ -20,9 +20,7 @@ func NewMap[Key comparable, Value any]() *Map[Key, Value] {
 
 func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Exception {
 	var foundException *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' already exists.", key))
-	var found bool
-	_, found = mapping.items[key]
-	if found {
+	if mapping.HasKey(key) {
 		return foundException
 	}
 	mapping.items[key] = value
@@ -33,22 +31,42 @@ func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Excepti
 func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' does not exist.", key))
 	var value Value
-	var ok bool
-	value, ok = mapping.items[key]
-	if !ok {
+	if !mapping.HasKey(key) {
 		return nil, notFound
 	}
 	return &value, nil
 }
 
-func (mapping *Map[Key, Value]) Remove(key Key) *gopolutils.Exception {
+func (mapping Map[Key, _]) Keys() []Key {
+	var keys []Key = make([]Key, 0)
+	var key Key
+	for key = range mapping.items {
+		keys = append(keys, key)
+	}
+	return keys
+}
+
+func (mapping Map[_, Value]) Values() []Value {
+	var values []Value = make([]Value, 0)
+	var value Value
+	for _, value = range mapping.items {
+		values = append(values, value)
+	}
+	return values
+}
+
+func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' does not exist.", key))
-	var found bool
-	_, found = mapping.items[key]
-	if !found {
+	if !mapping.HasKey(key) {
 		return notFound
 	}
 	delete(mapping.items, key)
 	mapping.size--
 	return nil
+}
+
+func (mapping Map[Key, _]) HasKey(key Key) bool {
+	var found bool
+	_, found = mapping.items[key]
+	return found
 }
