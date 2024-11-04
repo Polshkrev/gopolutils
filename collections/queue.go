@@ -69,3 +69,7 @@ func (queue Queue[_]) IsEmpty() bool {
 func (queue Queue[Type]) Items() *[]Type {
 	return &queue.items
 }
+
+func (queue Queue[_]) Size() uint64 {
+	return queue.size
+}
