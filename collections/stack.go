@@ -37,3 +37,8 @@ func (stack Stack[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	}
 	return &stack.items[index], nil
 }
+
+func (stack *Stack[Type]) Remove(index uint64) *gopolutils.Exception {
+	var notImplemented *gopolutils.Exception = gopolutils.NewNamedException("NotImplementedError", "Can not remove by index from a stack. Try using the pop method.")
+	return notImplemented
+}
