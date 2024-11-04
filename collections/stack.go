@@ -67,3 +67,7 @@ func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
 func (stack Stack[Type]) IsEmpty() bool {
 	return len(stack.items) == 0 && stack.size == 0
 }
+
+func (stack Stack[Type]) Items() *[]Type {
+	return &stack.items
+}
