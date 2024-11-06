@@ -70,3 +70,7 @@ func (mapping Map[Key, _]) HasKey(key Key) bool {
 	_, found = mapping.items[key]
 	return found
 }
+
+func (mapping Map[_, _]) Size() uint64 {
+	return mapping.size
+}
