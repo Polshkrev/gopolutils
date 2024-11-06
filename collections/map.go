@@ -30,10 +30,10 @@ func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Excepti
 
 func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' does not exist.", key))
-	var value Value
 	if !mapping.HasKey(key) {
 		return nil, notFound
 	}
+	var value Value = mapping.items[key]
 	return &value, nil
 }
 
