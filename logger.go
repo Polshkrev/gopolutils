@@ -138,6 +138,22 @@ func (logger *Logger) Write(message string, level LoggingLevel) {
 	}
 }
 
+func (logger *Logger) Close() {
+	var output *os.File
+	for _, output = range logger.outputs {
+		if !isFile(output) {
+			continue
+		} else if output != nil {
+			continue
+		}
+		var err error = output.Close()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			os.Exit(1)
+		}
+	}
+}
+
 func buildMessage(timestamp, name, message string, level LoggingLevel) string {
 	var buffer strings.Builder = strings.Builder{}
 	buffer.WriteString(timestamp)
