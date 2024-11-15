@@ -97,3 +97,16 @@ func (logger *Logger) FileOnly(fileName string) *Exception {
 	OUTPUT_COUNT = 2
 	return nil
 }
+
+func (logger *Logger) FullSetup(fileName string) *Exception {
+	var except *Exception
+	except = logger.AddConsole()
+	if except != nil {
+		return except
+	}
+	except = logger.AddFile(fileName)
+	if except != nil {
+		return except
+	}
+	return nil
+}
