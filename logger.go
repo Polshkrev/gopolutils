@@ -33,3 +33,11 @@ type Logger struct {
 	level   LoggingLevel
 	outputs []*os.File
 }
+
+func NewLogger(name string, level LoggingLevel) *Logger {
+	var logger *Logger = new(Logger)
+	logger.name = name
+	logger.level = level
+	logger.outputs = make([]*os.File, 0)
+	return logger
+}
