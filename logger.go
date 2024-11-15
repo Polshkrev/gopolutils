@@ -64,3 +64,18 @@ func (logger *Logger) AddConsole() *Exception {
 	OUTPUT_COUNT++
 	return nil
 }
+
+func (logger *Logger) AddFile(fileName string) *Exception {
+	if OUTPUT_COUNT >= AVAILABLE_OUTPUTS {
+		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
+	}
+	var file *os.File
+	var except error
+	file, except = os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if except != nil {
+		return NewException(except.Error())
+	}
+	logger.append(file)
+	OUTPUT_COUNT++
+	return nil
+}
