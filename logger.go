@@ -1,11 +1,19 @@
 package gopolutils
 
 import (
+	"bufio"
+	"fmt"
 	"os"
+	"strings"
+	"time"
 )
 
 const (
 	AVAILABLE_OUTPUTS uint8 = 2
+)
+
+const (
+	TIMESTAMP_FORMAT string = "2006-01-02 15:04:05" // I've tried other's; they don't work.
 )
 
 var (
@@ -109,4 +117,54 @@ func (logger *Logger) FullSetup(fileName string) *Exception {
 		return except
 	}
 	return nil
+}
+
+func (logger *Logger) Write(message string, level LoggingLevel) {
+	if level < logger.level {
+		return
+	}
+	var output *os.File
+	var timestamp = getTimestamp()
+	var logMessage string = buildMessage(timestamp, logger.name, message, level)
+	for _, output = range logger.outputs {
+		var writer *bufio.Writer = bufio.NewWriter(output)
+		var err error
+		_, err = writer.WriteString(logMessage)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			return
+		}
+		writer.Flush()
+	}
+}
+
+func buildMessage(timestamp, name, message string, level LoggingLevel) string {
+	var buffer strings.Builder = strings.Builder{}
+	buffer.WriteString(timestamp)
+	buffer.WriteString(":")
+	buffer.WriteString(name)
+	buffer.WriteString("[")
+	buffer.WriteString(lltostr(level))
+	buffer.WriteString("] - ")
+	buffer.WriteString(message)
+	buffer.WriteString("\n")
+	return buffer.String()
+}
+
+func getTimestamp() string {
+	var now time.Time = time.Now()
+	return now.Format(TIMESTAMP_FORMAT)
+}
+
+func isFile(stream *os.File) bool {
+	var found bool = false
+	var streams [3]*os.File = [3]*os.File{os.Stdout, os.Stdin, os.Stderr}
+	var output int
+	for output = 0; output < 3; output++ {
+		if streams[output] != stream {
+			continue
+		}
+		found = true
+	}
+	return !found
 }
