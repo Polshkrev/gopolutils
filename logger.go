@@ -79,3 +79,12 @@ func (logger *Logger) AddFile(fileName string) *Exception {
 	OUTPUT_COUNT++
 	return nil
 }
+
+func (logger *Logger) ConsoleOnly() *Exception {
+	var except *Exception = logger.AddConsole()
+	if except != nil {
+		return except
+	}
+	OUTPUT_COUNT = 2
+	return nil
+}
