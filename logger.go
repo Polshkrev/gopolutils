@@ -9,15 +9,15 @@ import (
 )
 
 const (
-	AVAILABLE_OUTPUTS uint8 = 2
+	__AVAILABLE_OUTPUTS uint8 = 2
 )
 
 const (
-	TIMESTAMP_FORMAT string = "2006-01-02 15:04:05" // I've tried other's; they don't work.
+	__TIMESTAMP_FORMAT string = "2006-01-02 15:04:05" // I've tried other's; they don't work.
 )
 
 var (
-	OUTPUT_COUNT uint8 = 0
+	__OUTPUT_COUNT uint8 = 0
 )
 
 type LoggingLevel = uint8
@@ -65,16 +65,16 @@ func (logger *Logger) append(output *os.File) {
 }
 
 func (logger *Logger) AddConsole() *Exception {
-	if OUTPUT_COUNT >= AVAILABLE_OUTPUTS {
+	if __OUTPUT_COUNT >= __AVAILABLE_OUTPUTS {
 		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
 	}
 	logger.append(os.Stdout)
-	OUTPUT_COUNT++
+	__OUTPUT_COUNT++
 	return nil
 }
 
 func (logger *Logger) AddFile(fileName string) *Exception {
-	if OUTPUT_COUNT >= AVAILABLE_OUTPUTS {
+	if __OUTPUT_COUNT >= __AVAILABLE_OUTPUTS {
 		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
 	}
 	var file *os.File
@@ -84,7 +84,7 @@ func (logger *Logger) AddFile(fileName string) *Exception {
 		return NewException(except.Error())
 	}
 	logger.append(file)
-	OUTPUT_COUNT++
+	__OUTPUT_COUNT++
 	return nil
 }
 
@@ -93,7 +93,7 @@ func (logger *Logger) ConsoleOnly() *Exception {
 	if except != nil {
 		return except
 	}
-	OUTPUT_COUNT = 2
+	__OUTPUT_COUNT = 2
 	return nil
 }
 
@@ -102,7 +102,7 @@ func (logger *Logger) FileOnly(fileName string) *Exception {
 	if except != nil {
 		return except
 	}
-	OUTPUT_COUNT = 2
+	__OUTPUT_COUNT = 2
 	return nil
 }
 
@@ -119,7 +119,7 @@ func (logger *Logger) FullSetup(fileName string) *Exception {
 	return nil
 }
 
-func (logger *Logger) Write(message string, level LoggingLevel) {
+func (logger *Logger) Log(message string, level LoggingLevel) {
 	if level < logger.level {
 		return
 	}
@@ -169,7 +169,7 @@ func buildMessage(timestamp, name, message string, level LoggingLevel) string {
 
 func getTimestamp() string {
 	var now time.Time = time.Now()
-	return now.Format(TIMESTAMP_FORMAT)
+	return now.Format(__TIMESTAMP_FORMAT)
 }
 
 func isFile(stream *os.File) bool {
