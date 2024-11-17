@@ -10,3 +10,14 @@ func Enumerate[Type any](items []Type) func(func(uint64, Type) bool) {
 		}
 	}
 }
+
+func In[Type comparable](items []Type, item Type) bool {
+	var i Type
+	for _, i = range items {
+		if i != item {
+			continue
+		}
+		return true
+	}
+	return false
+}
