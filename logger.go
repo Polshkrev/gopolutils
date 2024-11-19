@@ -1,10 +1,8 @@
 package gopolutils
 
 import (
-	"bufio"
 	"fmt"
 	"os"
-	"strings"
 	"time"
 )
 
@@ -124,17 +122,8 @@ func (logger *Logger) Log(message string, level LoggingLevel) {
 		return
 	}
 	var output *os.File
-	var timestamp = getTimestamp()
-	var logMessage string = buildMessage(timestamp, logger.name, message, level)
 	for _, output = range logger.outputs {
-		var writer *bufio.Writer = bufio.NewWriter(output)
-		var err error
-		_, err = writer.WriteString(logMessage)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
-			return
-		}
-		writer.Flush()
+		publishMessage(output, getTimestamp(), logger.name, message, level)
 	}
 }
 
@@ -154,17 +143,8 @@ func (logger *Logger) Close() {
 	}
 }
 
-func buildMessage(timestamp, name, message string, level LoggingLevel) string {
-	var buffer strings.Builder = strings.Builder{}
-	buffer.WriteString(timestamp)
-	buffer.WriteString(":")
-	buffer.WriteString(name)
-	buffer.WriteString("[")
-	buffer.WriteString(lltostr(level))
-	buffer.WriteString("] - ")
-	buffer.WriteString(message)
-	buffer.WriteString("\n")
-	return buffer.String()
+func publishMessage(stream *os.File, timestamp, name, message string, level LoggingLevel) {
+	fmt.Fprintf(stream, "%s:%s[%s] - %s\n", timestamp, name, lltostr(level), message)
 }
 
 func getTimestamp() string {
