@@ -24,3 +24,12 @@ func (pair Pair[First, _]) First() *First {
 func (pair Pair[_, Second]) Second() *Second {
 	return &pair.second
 }
+
+// Swap two pairs with the same types.
+// Both the original pair and the operand passed into the function will be modified.
+func (pair *Pair[First, Second]) Swap(operand *Pair[First, Second]) {
+	var newPair *Pair[First, Second] = NewPair(*operand.First(), *operand.Second())
+	*operand = *pair
+	*pair = *newPair
+	newPair = nil
+}
