@@ -54,13 +54,13 @@ func (stack *Stack[_]) Remove(index uint64) *gopolutils.Exception {
 	return notImplemented
 }
 
-// Pop the last appended element from the stack.
+// Pop the last appended item from the stack.
 //
 // This is the implementation of a "First In Last Out" data structure.
-// As the name suggests, when the last element is popped off the stack, it is also removed from the stack.
-// Returns a pointer to the last element in the stack.
+// As the name suggests, when the last item is popped off the stack, it is also removed from the stack.
+// Returns a pointer to the last item in the stack.
 // If the stack is evaluated to be empty, an Exception is returned with a nil data pointer.
-// IF an Exception is returned, the stack is not changed.
+// IF an Exception is returned, the stack is not modified.
 func (stack *Stack[Type]) Pop() (*Type, *gopolutils.Exception) {
 	var empty *gopolutils.Exception = gopolutils.NewException("Can not pop from an empty stack.")
 	if stack.IsEmpty() {
@@ -73,11 +73,11 @@ func (stack *Stack[Type]) Pop() (*Type, *gopolutils.Exception) {
 	return &last, nil
 }
 
-// Peek at the last appended element from the stack.
+// Peek at the last appended item from the stack.
 //
 // This is the implementation of a "First In Last Out" data structure.
-// Unlike pop, this method accesses the data on the stack without changing the stack itself.
-// Returns a pointer to the last element in the stack.
+// Unlike pop, this method accesses the data on the stack without modifying the stack itself.
+// Returns a pointer to the last item in the stack.
 // If the stack is evaluated to be empty, an Exception is returned with a nil data pointer.
 func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
 	var empty *gopolutils.Exception = gopolutils.NewException("Can not peek from an empty stack.")
