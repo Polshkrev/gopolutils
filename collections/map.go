@@ -74,3 +74,9 @@ func (mapping Map[Key, _]) HasKey(key Key) bool {
 func (mapping Map[_, _]) Size() uint64 {
 	return mapping.size
 }
+
+// Determine if the map is empty.
+// Returns true if the length of the underlying data and the size of the map is equal to 0.
+func (mapping Map[_, _]) IsEmpty() bool {
+	return len(mapping.items) == 0 && mapping.size == 0
+}
