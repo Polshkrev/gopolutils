@@ -63,6 +63,8 @@ func (array Array[Type]) Items() *[]Type {
 	return &array.items
 }
 
+// Collect the data stored in the array as a slice.
+// Returns a view into the data stored in the array.
 func (array Array[Type]) Collect() []Type {
 	return array.items
 }
