@@ -139,6 +139,20 @@ func (version Version) IsPublic() bool {
 	return version.CompareMajor(1)
 }
 
+// Publish a version object.
+// Set the version object's major property to 1.
+// Zero-out all other numeric properties.
+// If the version object is evaluated to have already been published, a ValueError is returned and no properties are modified.
+func (version *Version) Publish() *Exception {
+	if version.IsPublic() {
+		return NewNamedException("ValueError", "Version is already public.")
+	}
+	version.SetMajor(1)
+	version.SetMinor(0)
+	version.SetPatch(0)
+	return nil
+}
+
 // Increment the version object's major property.
 // The version object's minor and patch properties are set to 0.
 func (version *Version) Release() {
