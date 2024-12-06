@@ -110,6 +110,12 @@ func (set Set[Type]) Intersection(other Set[Type]) *Set[Type] {
 	return new
 }
 
+// Determine if the set is empty.
+// Returns true if the length of the underlying data stored in the set and the size of the set is equal to 0.
+func (set Set[_]) IsEmpty() bool {
+	return len(set.items) == 0 && set.size == 0
+}
+
 // Access a slice of the data within the set.
 // Returns a slice of the data within the set.
 func (set Set[Type]) ToSlice() []Type {

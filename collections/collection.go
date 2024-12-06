@@ -15,14 +15,9 @@ type Collection[Type any] interface {
 	// Remove the data in the collection at a given index.
 	// If the given index is greater than the size of the collection, an IndexOutOfRangeError is returned.
 	Remove(index uint64) *gopolutils.Exception
-	// Determine if the collection is empty.
-	// Returns true if the length of the underlying data stored in the collection and the size of the collection is equal to 0.
-	IsEmpty() bool
 	// Access a pointer to a slice of the data within the collection.
 	// This method is called when the data stored in the collection is determined to be internally mutable, or a mutable pointer is needed to access the data.
 	// Returns a mutable pointer to the underlying data within the collection.
 	Items() *[]Type
-	// Access the size of the collection.
-	// Returns the size of the collection as an unsigned 64-bit integer.
-	Size() uint64
+	Sized
 }

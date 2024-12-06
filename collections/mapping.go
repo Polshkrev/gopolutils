@@ -23,7 +23,5 @@ type Mapping[Key, Value any] interface {
 	// Determine if a given key is located within the mapping.
 	// Returns true if the given key is found.
 	HasKey(key Key) bool
-	// Access the size of the mapping.
-	// Returns the size of the mapping as an unsigned 64-bit integer.
-	Size() uint64
+	Sized
 }
