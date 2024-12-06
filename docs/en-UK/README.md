@@ -19,6 +19,7 @@
         3. [Set](/docs/en-UK/collections/set.md)
         4. [Queue](/docs/en-UK/collections/queue.md)
         5. [Stack](/docs/en-UK/collections/stack.md)
+        6. [Pair](/docs/en-UK/collections/pair.md)
     3. [Iterators](/docs/en-UK/collections/iterators.md)
 
 ### Install
