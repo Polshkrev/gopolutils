@@ -28,9 +28,9 @@ func (stack *Stack[Type]) Append(item Type) {
 }
 
 // Append multiple items to the stack.
-func (stack *Stack[Type]) Extend(items []Type) {
+func (stack *Stack[Type]) Extend(items View[Type]) {
 	var item Type
-	for _, item = range items {
+	for _, item = range items.Collect() {
 		stack.Append(item)
 	}
 }
@@ -92,6 +92,12 @@ func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
 // Returns true if the length of the underlying data and the size of the stack is equal to 0.
 func (stack Stack[_]) IsEmpty() bool {
 	return len(stack.items) == 0 && stack.size == 0
+}
+
+// Collect the data stored in the stack as a slice.
+// Returns a view into the data stored in the stack.
+func (stack Stack[Type]) Collect() []Type {
+	return stack.items
 }
 
 // Get a pointer to a slice of the data within stack.
