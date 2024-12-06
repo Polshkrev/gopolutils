@@ -7,7 +7,7 @@ type Collection[Type any] interface {
 	// Append an item to the collection.
 	Append(item Type)
 	// Append multiple items to the collection.
-	Extend(items []Type)
+	Extend(items View[Type])
 	// Access an item within the collection at a given index.
 	// Returns a pointer to the data in the collection at the given index.
 	// If the given index is greater than the size of the collection, an IndexOutOfRangeError is returned with a nil data pointer.
@@ -19,5 +19,5 @@ type Collection[Type any] interface {
 	// This method is called when the data stored in the collection is determined to be internally mutable, or a mutable pointer is needed to access the data.
 	// Returns a mutable pointer to the underlying data within the collection.
 	Items() *[]Type
-	Sized
+	View[Type]
 }
