@@ -2,6 +2,7 @@ package collections
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/Polshkrev/gopolutils"
@@ -9,7 +10,7 @@ import (
 
 // Implementation of a set.
 type Set[Type comparable] struct {
-	items map[Type]struct{}
+	items Mapping[Type, struct{}]
 	size  uint64
 }
 
@@ -17,7 +18,7 @@ type Set[Type comparable] struct {
 // Returns a pointer to a new empty set.
 func NewSet[Type comparable]() *Set[Type] {
 	var set *Set[Type] = new(Set[Type])
-	set.items = make(map[Type]struct{}, 0)
+	set.items = NewMap[Type, struct{}]()
 	set.size = 0
 	return set
 }
@@ -27,7 +28,11 @@ func (set *Set[Type]) Append(item Type) {
 	if set.Contains(item) {
 		return
 	}
-	set.items[item] = struct{}{}
+	var except *gopolutils.Exception = set.items.Insert(item, struct{}{})
+	if except != nil {
+		fmt.Fprintln(os.Stderr, except.Error())
+		os.Exit(1)
+	}
 	set.size++
 }
 
@@ -46,17 +51,25 @@ func (set Set[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	return nil, gopolutils.NewNamedException("NotImplementedError", "Can not access a set by index.")
 }
 
-// Remove an item in the set.
-// if the item is not in the set, a KeyError is returned.
-// if a KeyError is returned, the set will not be modified.
-func (set *Set[Type]) Remove(item Type) *gopolutils.Exception {
-	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Item '%v' does not exist.", item))
-	if !set.Contains(item) {
-		return notFound
+// Remove an item in the set at a given index.
+// If the given index is greater than the size of the set, an IndexOutOfRangeError is returned.
+// If no item can be found at the given index, an IndexError is returned.
+// if an IndexError or an IndexOutOfRangError is returned, the set will not be modified.
+func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
+	if index > set.size {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access set of size %d at index %d.", set.size, index))
 	}
-	delete(set.items, item)
-	set.size--
-	return nil
+	var i uint64
+	var key Type
+	for i, key = range Enumerate(set) {
+		if i != index {
+			continue
+		}
+		set.items.Remove(key)
+		set.size--
+		return nil
+	}
+	return gopolutils.NewNamedException("IndexError", fmt.Sprintf("No item at index %d exists.", index))
 }
 
 // Remove an item within the set without an exception.
@@ -65,7 +78,12 @@ func (set *Set[Type]) Discard(item Type) {
 	if !set.Contains(item) {
 		return
 	}
-	delete(set.items, item)
+	var except *gopolutils.Exception = set.items.Remove(item)
+	if except != nil {
+		// Critical error. This should be covered by the contains check, but just in case.
+		fmt.Fprintln(os.Stderr, except.Error())
+		os.Exit(1)
+	}
 	set.size--
 }
 
@@ -78,15 +96,14 @@ func (set Set[_]) Size() uint64 {
 // Determine if the given item is contained within the set.
 // Returns true if the item is found within the set.
 func (set Set[Type]) Contains(item Type) bool {
-	var found bool
-	_, found = set.items[item]
-	return found
+	return set.items.HasKey(item)
 }
 
 // Access the underlying data of the set.
 // Returns a mutable pointer to a map representing the underlying data of the set.
-func (set Set[Type]) Items() *map[Type]struct{} {
-	return &set.items
+func (set Set[Type]) Items() *[]Type {
+	var keys []Type = set.items.Keys()
+	return &keys
 }
 
 // Determine the difference between set and a given set operand.
@@ -94,7 +111,7 @@ func (set Set[Type]) Items() *map[Type]struct{} {
 func (set Set[Type]) Difference(other Set[Type]) *Set[Type] {
 	var new *Set[Type] = NewSet[Type]()
 	var item Type
-	for item = range *other.Items() {
+	for _, item = range other.Collect() {
 		if set.Contains(item) {
 			continue
 		}
@@ -108,7 +125,7 @@ func (set Set[Type]) Difference(other Set[Type]) *Set[Type] {
 func (set Set[Type]) Intersection(other Set[Type]) *Set[Type] {
 	var new *Set[Type] = NewSet[Type]()
 	var item Type
-	for item = range *other.Items() {
+	for _, item = range other.Collect() {
 		if !set.Contains(item) {
 			continue
 		}
@@ -120,18 +137,13 @@ func (set Set[Type]) Intersection(other Set[Type]) *Set[Type] {
 // Determine if the set is empty.
 // Returns true if the length of the underlying data stored in the set and the size of the set is equal to 0.
 func (set Set[_]) IsEmpty() bool {
-	return len(set.items) == 0 && set.size == 0
+	return set.items.IsEmpty() && set.size == 0
 }
 
 // Access a slice of the data within the set.
 // Returns a view of the data within the set.
 func (set Set[Type]) Collect() []Type {
-	var list []Type = make([]Type, 0)
-	var item Type
-	for item = range *set.Items() {
-		list = append(list, item)
-	}
-	return list
+	return set.items.Keys()
 }
 
 // Transfer the data within the set to a linear array.
@@ -146,11 +158,11 @@ func (set Set[Type]) ToArray() *Array[Type] {
 // Returns a string representation of the set.
 func (set Set[Type]) ToString() string {
 	var item Type
-	var i int
+	var i uint64
 	var buffer strings.Builder = strings.Builder{}
 	buffer.WriteString("{")
-	for i, item = range set.Collect() {
-		if i == int(set.Size()-1) {
+	for i, item = range Enumerate(set) {
+		if i == set.Size()-1 {
 			buffer.WriteString(fmt.Sprintf("%v", item))
 		} else {
 			buffer.WriteString(fmt.Sprintf("%v,", item))
