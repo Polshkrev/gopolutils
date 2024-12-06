@@ -28,8 +28,8 @@ func (array *Array[Type]) Append(item Type) {
 }
 
 // Append multiple items to the array.
-func (array *Array[Type]) Extend(items []Type) {
-	for _, item := range items {
+func (array *Array[Type]) Extend(items View[Type]) {
+	for _, item := range items.Collect() {
 		array.Append(item)
 	}
 }
@@ -61,6 +61,12 @@ func (array *Array[Type]) Remove(index uint64) *gopolutils.Exception {
 // Returns a mutable pointer to the data stored in the array.
 func (array Array[Type]) Items() *[]Type {
 	return &array.items
+}
+
+// Collect the data stored in the array as a slice.
+// Returns a view into the data stored in the array.
+func (array Array[Type]) Collect() []Type {
+	return array.items
 }
 
 // Access the size of the array.

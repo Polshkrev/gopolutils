@@ -32,11 +32,18 @@ func (set *Set[Type]) Append(item Type) {
 }
 
 // Append multiple items to the set.
-func (set *Set[Type]) Extend(items []Type) {
+func (set *Set[Type]) Extend(items View[Type]) {
 	var item Type
-	for _, item = range items {
+	for _, item = range items.Collect() {
 		set.Append(item)
 	}
+}
+
+// Access the data stored at a given index within the set.
+// This method is not yet implemented.
+// If the index is greater than the size of the set, an IndexOutOfRangeError is returned with a nil data pointer.
+func (set Set[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
+	return nil, gopolutils.NewNamedException("NotImplementedError", "Can not access a set by index.")
 }
 
 // Remove an item in the set.
@@ -117,8 +124,8 @@ func (set Set[_]) IsEmpty() bool {
 }
 
 // Access a slice of the data within the set.
-// Returns a slice of the data within the set.
-func (set Set[Type]) ToSlice() []Type {
+// Returns a view of the data within the set.
+func (set Set[Type]) Collect() []Type {
 	var list []Type = make([]Type, 0)
 	var item Type
 	for item = range *set.Items() {
@@ -131,21 +138,19 @@ func (set Set[Type]) ToSlice() []Type {
 // Returns the set as an array.
 func (set Set[Type]) ToArray() *Array[Type] {
 	var array *Array[Type] = NewArray[Type]()
-	var list []Type = set.ToSlice()
-	array.Extend(list)
+	array.Extend(set)
 	return array
 }
 
 // Render a string representation of the set.
 // Returns a string representation of the set.
 func (set Set[Type]) ToString() string {
-	var list []Type = set.ToSlice()
 	var item Type
 	var i int
 	var buffer strings.Builder = strings.Builder{}
 	buffer.WriteString("{")
-	for i, item = range list {
-		if i == len(list)-1 {
+	for i, item = range set.Collect() {
+		if i == int(set.Size()-1) {
 			buffer.WriteString(fmt.Sprintf("%v", item))
 		} else {
 			buffer.WriteString(fmt.Sprintf("%v,", item))

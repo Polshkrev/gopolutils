@@ -28,9 +28,9 @@ func (queue *Queue[Type]) Append(item Type) {
 }
 
 // Append multiple items to the queue.
-func (queue *Queue[Type]) Extend(items []Type) {
+func (queue *Queue[Type]) Extend(items View[Type]) {
 	var item Type
-	for _, item = range items {
+	for _, item = range items.Collect() {
 		queue.Append(item)
 	}
 }
@@ -87,6 +87,12 @@ func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
 // Returns true if the length of the underlying data and the size of the queue is equal to 0.
 func (queue Queue[_]) IsEmpty() bool {
 	return queue.size == 0 && len(queue.items) == 0
+}
+
+// Collect the data stored in the queue as a slice.
+// Returns a view into the data stored in the queue.
+func (queue Queue[Type]) Collect() []Type {
+	return queue.items
 }
 
 // Get a pointer to the slice of the queue.
