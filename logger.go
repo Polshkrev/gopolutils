@@ -7,27 +7,38 @@ import (
 )
 
 const (
+	// Output capacity.
 	__AVAILABLE_OUTPUTS uint8 = 2
 )
 
 const (
+	// Format to structure the log timstamp. Copied from the time module docs.
 	__TIMESTAMP_FORMAT string = "2006-01-02 15:04:05" // I've tried other's; they don't work.
 )
 
 var (
+	// Sef-explanatory.
 	__OUTPUT_COUNT uint8 = 0
 )
 
+// An enum representation of the severity of a log message.
 type LoggingLevel = uint8
 
 const (
+	// Lowest severity log message. Used to log debug information for development.
 	DEBUG LoggingLevel = iota
+	// Used to log info that should be read. It is not an error, but is not a debug message.
 	INFO
+	// Used to log a non-crashing warning, such as a file already existing when calling a create function.
 	WARNING
+	// Used to log a non-crashing error. This level should be the default when logging an error.
 	ERROR
+	// Used to log a crashing error. Used to log a message of a panic or breaking state.
 	CRITICAL
 )
 
+// Represent a logging level as a string.
+// Returns a string representation of a logging level.
 func lltostr(level LoggingLevel) string {
 	switch level {
 	case DEBUG:
@@ -44,12 +55,16 @@ func lltostr(level LoggingLevel) string {
 	return "Unknown logging level." // unreachable
 }
 
+// A logger.
 type Logger struct {
 	name    string
 	level   LoggingLevel
 	outputs []*os.File
 }
 
+// Construct a new logger with a given name and default logging level.
+// The default logging level passed into this constructor is the minimum level of severity that will be ouput by the logger.
+// Returns a pointer to a new logger.
 func NewLogger(name string, level LoggingLevel) *Logger {
 	var logger *Logger = new(Logger)
 	logger.name = name
@@ -58,10 +73,13 @@ func NewLogger(name string, level LoggingLevel) *Logger {
 	return logger
 }
 
+// Private method to append an output to the logger.
 func (logger *Logger) append(output *os.File) {
 	logger.outputs = append(logger.outputs, output)
 }
 
+// Bind the standard output to the logger.
+// If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
 func (logger *Logger) AddConsole() *Exception {
 	if __OUTPUT_COUNT >= __AVAILABLE_OUTPUTS {
 		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
@@ -71,6 +89,9 @@ func (logger *Logger) AddConsole() *Exception {
 	return nil
 }
 
+// Bind a file to the logger.
+// If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
+// If the given file can not be found, an Exception is returned.
 func (logger *Logger) AddFile(fileName string) *Exception {
 	if __OUTPUT_COUNT >= __AVAILABLE_OUTPUTS {
 		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
@@ -86,6 +107,8 @@ func (logger *Logger) AddFile(fileName string) *Exception {
 	return nil
 }
 
+// Bind only the standard output to the logger.
+// If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
 func (logger *Logger) ConsoleOnly() *Exception {
 	var except *Exception = logger.AddConsole()
 	if except != nil {
@@ -95,6 +118,9 @@ func (logger *Logger) ConsoleOnly() *Exception {
 	return nil
 }
 
+// Bind only a file to the logger.
+// If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
+// If the given file can not be found, an Exception is returned.
 func (logger *Logger) FileOnly(fileName string) *Exception {
 	var except *Exception = logger.AddFile(fileName)
 	if except != nil {
@@ -104,6 +130,9 @@ func (logger *Logger) FileOnly(fileName string) *Exception {
 	return nil
 }
 
+// Bind both a file and the standard output to the logger.
+// If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
+// If the given file can not be found, an Exception is returned.
 func (logger *Logger) FullSetup(fileName string) *Exception {
 	var except *Exception
 	except = logger.AddConsole()
@@ -117,6 +146,9 @@ func (logger *Logger) FullSetup(fileName string) *Exception {
 	return nil
 }
 
+// Log a message.
+//
+// If the default logging level of the logger is greater than the given logging level of the message, the message will not be logged.
 func (logger *Logger) Log(message string, level LoggingLevel) {
 	if level < logger.level {
 		return
@@ -127,6 +159,10 @@ func (logger *Logger) Log(message string, level LoggingLevel) {
 	}
 }
 
+// Deallocate the logger.
+// If the logger has a file bound, the file will need to be closed with this method.
+// A good practice is to call the this method deferred even if a file is not bound;
+// this method will not close the standard output.
 func (logger *Logger) Close() {
 	var output *os.File
 	for _, output = range logger.outputs {
@@ -143,15 +179,21 @@ func (logger *Logger) Close() {
 	}
 }
 
+// Private method to seperate the responsibility of the log method.
+// This is the method that actually logs the message to the given stream.
 func publishMessage(stream *os.File, timestamp, name, message string, level LoggingLevel) {
 	fmt.Fprintf(stream, "%s:%s[%s] - %s\n", timestamp, name, lltostr(level), message)
 }
 
+// Private method to construct a formatted timestamp.
+// Returns a string representation of a correctly fotmatted timestamp.
 func getTimestamp() string {
 	var now time.Time = time.Now()
 	return now.Format(__TIMESTAMP_FORMAT)
 }
 
+// Determine if the given stream is a file.
+// Returns true if the given stream is neither the standard output, standard input, or standard error.
 func isFile(stream *os.File) bool {
 	var found bool = false
 	var streams [3]*os.File = [3]*os.File{os.Stdout, os.Stdin, os.Stderr}
