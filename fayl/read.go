@@ -45,7 +45,7 @@ func ReadJSONList[Type any](fileName string) collections.View[Type] {
 }
 
 // Read a json file as a view.
-// Returns a view into a json file containing an object of data.
+// Returns a pointer to an object of data from a json file.
 func ReadJSONObject[Type any](fileName string) *Type {
 	var raw []byte = ReadFile(fileName)
 	var rawObject *Type = new(Type)
