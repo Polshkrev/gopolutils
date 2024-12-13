@@ -1,4 +1,4 @@
-package gopolutils
+package fayl
 
 import (
 	"encoding/json"
