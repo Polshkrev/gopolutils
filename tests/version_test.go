@@ -147,3 +147,11 @@ func TestVersionUpdate(test *testing.T) {
 		test.Errorf("Version update did not increment correctly. Got: %d, Expected: %d.", version.Minor(), 1)
 	}
 }
+
+func TestVersionFix(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.NewVersion()
+	version.Fix()
+	if version.Patch() != 1 {
+		test.Errorf("Version release did not increment correctly. Got: %d, Expected: %d.", version.Patch(), 1)
+	}
+}
