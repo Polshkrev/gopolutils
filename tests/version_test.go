@@ -123,3 +123,11 @@ func TestVersionPublish(test *testing.T) {
 		test.Errorf("Version publish returned a non nil exception. Got: %+v. Expected: %+v", result, nil)
 	}
 }
+
+func TestVersionPublishAlredyPublic(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
+	var result *gopolutils.Exception = version.Publish()
+	if result == nil {
+		test.Errorf("Version publish returned a nil exception. Got: %+v. Expected: %+v", result, nil)
+	}
+}
