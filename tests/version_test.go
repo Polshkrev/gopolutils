@@ -54,3 +54,12 @@ func TestVersionComparePatch(test *testing.T) {
 		test.Errorf("Version patch is less than the compare value. Got: %t. Expected: %t", result, true)
 	}
 }
+
+func TestVersionCompare(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(2, 0, 0)
+	var compare *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
+	var result bool = version.Compare(*compare)
+	if !result {
+		test.Errorf("Version is less than the compare value. Got: %t. Expected: %t", result, true)
+	}
+}
