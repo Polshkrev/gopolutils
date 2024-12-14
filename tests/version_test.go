@@ -115,3 +115,11 @@ func TestVersionIsPublicFailure(test *testing.T) {
 		test.Errorf("Version is less than the compare value. Got: %t. Expected: %t", result, false)
 	}
 }
+
+func TestVersionPublish(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(0, 0, 0)
+	var result *gopolutils.Exception = version.Publish()
+	if result != nil {
+		test.Errorf("Version publish returned a non nil exception. Got: %+v. Expected: %+v", result, nil)
+	}
+}
