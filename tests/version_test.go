@@ -27,3 +27,12 @@ func TestVersionConvertSetsCorrectly(test *testing.T) {
 		test.Errorf("New version patch is not set correctly: %d. Expected: %d\n", version.Patch(), 1)
 	}
 }
+
+func TestVersionCompareMajor(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(2, 0, 0)
+	var compare *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
+	var result bool = version.CompareMajor(compare.Major())
+	if !result {
+		test.Errorf("Version major is less than the compare value. Got: %t. Expected: %t", result, false)
+	}
+}
