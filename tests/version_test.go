@@ -91,6 +91,15 @@ func TestVersionCompare(test *testing.T) {
 	}
 }
 
+func TestVersionCompareFailure(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
+	var compare *gopolutils.Version = gopolutils.VersionConvert(2, 0, 0)
+	var result bool = version.Compare(*compare)
+	if result {
+		test.Errorf("Version major is less than the compare value. Got: %t. Expected: %t", result, false)
+	}
+}
+
 func TestVersionIsPublic(test *testing.T) {
 	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
 	var result bool = version.IsPublic()
