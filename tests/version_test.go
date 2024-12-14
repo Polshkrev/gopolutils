@@ -131,3 +131,11 @@ func TestVersionPublishAlredyPublic(test *testing.T) {
 		test.Errorf("Version publish returned a nil exception. Got: %+v. Expected: %+v", result, nil)
 	}
 }
+
+func TestVersionRelease(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.NewVersion()
+	version.Release()
+	if version.Major() != 1 {
+		test.Errorf("Version release did not increment correctly. Got: %d, Expected: %d.", version.Major(), 1)
+	}
+}
