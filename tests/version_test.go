@@ -107,3 +107,11 @@ func TestVersionIsPublic(test *testing.T) {
 		test.Errorf("Version is less than the compare value. Got: %t. Expected: %t", result, true)
 	}
 }
+
+func TestVersionIsPublicFailure(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(0, 1, 0)
+	var result bool = version.IsPublic()
+	if result {
+		test.Errorf("Version is less than the compare value. Got: %t. Expected: %t", result, false)
+	}
+}
