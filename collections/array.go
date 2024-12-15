@@ -35,6 +35,7 @@ func (array *Array[Type]) Extend(items View[Type]) {
 }
 
 // Access the data stored in the array at a given index.
+// If the array is empty, an IndexOutOfRangeError is returned with a nil data pointer.
 // If the given index is greater than the size of the array, an IndexOutOfRangeError is returned with a nil data pointer.
 func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	if array.IsEmpty() {
@@ -46,6 +47,7 @@ func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 }
 
 // Remove the data stored in the array at a given index.
+// If the array is empty, an IndexOutOfRangeError is returned.
 // If the given index is greater than the size of the array, an IndexOutOfRangeError is returned.
 // If an IndexOutOfRangeError is returned, the array is not modified.
 func (array *Array[Type]) Remove(index uint64) *gopolutils.Exception {
