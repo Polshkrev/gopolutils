@@ -37,6 +37,7 @@ func (stack *Stack[Type]) Extend(items View[Type]) {
 
 // Access the data stored on the stack at a given index.
 // Returns a pointer to the data stored on the stack at the given index.
+// If the stack is evaluated to be empty, an IndexOutOfRangeError is returned with a nil data pointer.
 // If the index is greater than the size of the stack, an IndexOutOfRangeError is returned with a nil data pointer.
 func (stack Stack[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	if stack.IsEmpty() {
