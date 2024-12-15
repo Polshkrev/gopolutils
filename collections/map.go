@@ -24,9 +24,8 @@ func NewMap[Key comparable, Value any]() *Map[Key, Value] {
 // Insert a key-value pair into the map.
 // If the key is already in the map, instead of just quietly not inserting into the map, a KeyEror is retruned.
 func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Exception {
-	var foundException *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' already exists.", key))
 	if mapping.HasKey(key) {
-		return foundException
+		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' already exists.", key))
 	}
 	mapping.items[key] = value
 	mapping.size++
@@ -37,9 +36,10 @@ func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Excepti
 // Returns a pointer to the data stored at the given key.
 // If the key is not in the map, a KeyError is returned with a nil data pointer.
 func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
-	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' does not exist.", key))
-	if !mapping.HasKey(key) {
-		return nil, notFound
+	if mapping.IsEmpty() {
+		return nil, gopolutils.NewNamedException("KeyError", fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
+	} else if !mapping.HasKey(key) {
+		return nil, gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%+v' does not exist.", key))
 	}
 	var value Value = mapping.items[key]
 	return &value, nil
@@ -70,9 +70,10 @@ func (mapping Map[_, Value]) Values() []Value {
 // Remove an item stored at a given key within the map.
 // If the given key is not stored in the map, a KeyError is returned.
 func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
-	var notFound *gopolutils.Exception = gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' does not exist.", key))
-	if !mapping.HasKey(key) {
-		return notFound
+	if mapping.IsEmpty() {
+		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Can not remove from an empty map at key '%+v'", key))
+	} else if !mapping.HasKey(key) {
+		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%+v' does not exist.", key))
 	}
 	delete(mapping.items, key)
 	mapping.size--
