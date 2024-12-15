@@ -37,11 +37,13 @@ func (queue *Queue[Type]) Extend(items View[Type]) {
 
 // Access the data stored in the queue at a given index.
 // Returns a pointer to data stored in the queue at the given index.
+// If the queue is empty, an IndexOutOfRangeError is returned with a nil data pointer.
 // If the index is greater than the size of the queue, an IndexOutOfRangeError is returned with a nil data pointer.
 func (queue Queue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
-	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
-	if index > queue.size {
-		return nil, outOfRange
+	if queue.IsEmpty() {
+		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty queue at index %d.", index))
+	} else if index > queue.size {
+		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
 	}
 	return &queue.items[index], nil
 }
@@ -50,8 +52,7 @@ func (queue Queue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 // This method is currently not implemented.
 // If the given index is greater than the size of the queue, an IndexOutOfRangeError is returned.
 func (queue *Queue[_]) Remove(index uint64) *gopolutils.Exception {
-	var notImplemented *gopolutils.Exception = gopolutils.NewNamedException("NotImplementedError", "Can not remove by index in a queue. Try using the dequeue method.")
-	return notImplemented
+	return gopolutils.NewNamedException("NotImplementedError", "Can not remove by index in a queue. Try using the dequeue method.")
 }
 
 // Dequeue the first item in the queue.
@@ -62,9 +63,8 @@ func (queue *Queue[_]) Remove(index uint64) *gopolutils.Exception {
 // If the queue is evaluated to be empty, an Exception is returned with a nil data pointer.
 // If an Exception is returned, the queue is not modified.
 func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
-	var empty *gopolutils.Exception = gopolutils.NewException("Can not dequeue from an empty queue.")
 	if queue.IsEmpty() {
-		return nil, empty
+		return nil, gopolutils.NewException("Can not dequeue from an empty queue.")
 	}
 	var first Type
 	first, queue.items = queue.items[0], queue.items[1:]
@@ -76,9 +76,8 @@ func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 // Returns a pointer to the first item in the queue.
 // If the queue is evaluated to be empty, an Exception is returned with a nil data pointer.
 func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
-	var empty *gopolutils.Exception = gopolutils.NewException("Can not peek into an empty queue.")
 	if queue.IsEmpty() {
-		return nil, empty
+		return nil, gopolutils.NewException("Can not peek into an empty queue.")
 	}
 	return &queue.items[0], nil
 }

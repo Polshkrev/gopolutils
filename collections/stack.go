@@ -37,11 +37,13 @@ func (stack *Stack[Type]) Extend(items View[Type]) {
 
 // Access the data stored on the stack at a given index.
 // Returns a pointer to the data stored on the stack at the given index.
+// If the stack is evaluated to be empty, an IndexOutOfRangeError is returned with a nil data pointer.
 // If the index is greater than the size of the stack, an IndexOutOfRangeError is returned with a nil data pointer.
 func (stack Stack[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
-	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
-	if index > stack.size {
-		return nil, outOfRange
+	if stack.IsEmpty() {
+		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty stack at index %d.", index))
+	} else if index > stack.size {
+		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
 	}
 	return &stack.items[index], nil
 }
@@ -50,8 +52,7 @@ func (stack Stack[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 // This method is currently not implemented.
 // If the given index is greater than the size of the stack, an IndexOutOfRangeError is returned.
 func (stack *Stack[_]) Remove(index uint64) *gopolutils.Exception {
-	var notImplemented *gopolutils.Exception = gopolutils.NewNamedException("NotImplementedError", "Can not remove by index from a stack. Try using the pop method.")
-	return notImplemented
+	return gopolutils.NewNamedException("NotImplementedError", "Can not remove by index from a stack. Try using the pop method.")
 }
 
 // Pop the last appended item from the stack.
@@ -62,9 +63,8 @@ func (stack *Stack[_]) Remove(index uint64) *gopolutils.Exception {
 // If the stack is evaluated to be empty, an Exception is returned with a nil data pointer.
 // IF an Exception is returned, the stack is not modified.
 func (stack *Stack[Type]) Pop() (*Type, *gopolutils.Exception) {
-	var empty *gopolutils.Exception = gopolutils.NewException("Can not pop from an empty stack.")
 	if stack.IsEmpty() {
-		return nil, empty
+		return nil, gopolutils.NewException("Can not pop from an empty stack.")
 	}
 	var index int = len(stack.items) - 1
 	var last Type
@@ -80,9 +80,8 @@ func (stack *Stack[Type]) Pop() (*Type, *gopolutils.Exception) {
 // Returns a pointer to the last item in the stack.
 // If the stack is evaluated to be empty, an Exception is returned with a nil data pointer.
 func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
-	var empty *gopolutils.Exception = gopolutils.NewException("Can not peek from an empty stack.")
 	if stack.IsEmpty() {
-		return nil, empty
+		return nil, gopolutils.NewException("Can not peek from an empty stack.")
 	}
 	var index int = len(stack.items) - 1
 	return &stack.items[index], nil

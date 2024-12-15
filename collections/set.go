@@ -24,6 +24,7 @@ func NewSet[Type comparable]() *Set[Type] {
 }
 
 // Append an item to the set.
+// If the set can not insert the item, this is a critical error that should not happen in most cicumstances, so — as a precaution — an error is printed to standard error and the programme exists.
 func (set *Set[Type]) Append(item Type) {
 	if set.Contains(item) {
 		return
@@ -37,6 +38,7 @@ func (set *Set[Type]) Append(item Type) {
 }
 
 // Append multiple items to the set.
+// If the set can not insert the item, this is a critical error that should not happen in most cicumstances, so — as a precaution — an error is printed to standard error and the programme exists.
 func (set *Set[Type]) Extend(items View[Type]) {
 	var item Type
 	for _, item = range items.Collect() {
@@ -52,11 +54,14 @@ func (set Set[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 }
 
 // Remove an item in the set at a given index.
+// If the set is evaluated to be empty, an IndexOutOfRangeError is returned.
 // If the given index is greater than the size of the set, an IndexOutOfRangeError is returned.
 // If no item can be found at the given index, an IndexError is returned.
 // if an IndexError or an IndexOutOfRangError is returned, the set will not be modified.
 func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
-	if index > set.size {
+	if set.IsEmpty() {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty set at index %d.", index))
+	} else if index > set.size {
 		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access set of size %d at index %d.", set.size, index))
 	}
 	var i uint64
@@ -65,7 +70,10 @@ func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
 		if i != index {
 			continue
 		}
-		set.items.Remove(key)
+		var except *gopolutils.Exception = set.items.Remove(key)
+		if except != nil {
+			return except
+		}
 		set.size--
 		return nil
 	}
@@ -73,9 +81,12 @@ func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
 }
 
 // Remove an item within the set without an exception.
+// If the set is evaluated to be empty, the method will return without modifying the set.
 // If the item is not in the set, the method will return without modifying the set.
 func (set *Set[Type]) Discard(item Type) {
-	if !set.Contains(item) {
+	if set.IsEmpty() {
+		return
+	} else if !set.Contains(item) {
 		return
 	}
 	var except *gopolutils.Exception = set.items.Remove(item)
