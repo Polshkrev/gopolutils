@@ -65,7 +65,10 @@ func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
 		if i != index {
 			continue
 		}
-		set.items.Remove(key)
+		var except *gopolutils.Exception = set.items.Remove(key)
+		if except != nil {
+			return except
+		}
 		set.size--
 		return nil
 	}
