@@ -37,6 +37,7 @@ func (queue *Queue[Type]) Extend(items View[Type]) {
 
 // Access the data stored in the queue at a given index.
 // Returns a pointer to data stored in the queue at the given index.
+// If the queue is empty, an IndexOutOfRangeError is returned with a nil data pointer.
 // If the index is greater than the size of the queue, an IndexOutOfRangeError is returned with a nil data pointer.
 func (queue Queue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	if queue.IsEmpty() {
