@@ -34,6 +34,7 @@ func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Excepti
 
 // Access an element at a given key within the map.
 // Returns a pointer to the data stored at the given key.
+// If the map is empty, a KeyError is returned with a nil data pointer.
 // If the key is not in the map, a KeyError is returned with a nil data pointer.
 func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	if mapping.IsEmpty() {
@@ -68,6 +69,7 @@ func (mapping Map[_, Value]) Values() []Value {
 }
 
 // Remove an item stored at a given key within the map.
+// If the map is empty, a KeyError is returned.
 // If the given key is not stored in the map, a KeyError is returned.
 func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 	if mapping.IsEmpty() {
