@@ -37,9 +37,10 @@ func (array *Array[Type]) Extend(items View[Type]) {
 // Access the data stored in the array at a given index.
 // If the given index is greater than the size of the array, an IndexOutOfRangeError is returned with a nil data pointer.
 func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
-	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
-	if index > array.size {
-		return nil, outOfRange
+	if array.IsEmpty() {
+		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty array at index %d.", index))
+	} else if index > array.size {
+		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
 	}
 	return &array.items[index], nil
 }
@@ -48,9 +49,10 @@ func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 // If the given index is greater than the size of the array, an IndexOutOfRangeError is returned.
 // If an IndexOutOfRangeError is returned, the array is not modified.
 func (array *Array[Type]) Remove(index uint64) *gopolutils.Exception {
-	var outOfRange *gopolutils.Exception = gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
-	if index > array.size {
-		return outOfRange
+	if array.IsEmpty() {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove from an empty array at index %d.", index))
+	} else if index > array.size {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove element of array of size %d at index %d.", array.size, index))
 	}
 	array.items = append(array.items[:index], array.items[index+1:]...)
 	array.size--
