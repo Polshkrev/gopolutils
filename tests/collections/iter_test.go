@@ -18,6 +18,8 @@ func setupSuite(testing.TB) func(testing.TB) {
 }
 
 func TestInSucces(test *testing.T) {
+	var teardown func(testing.TB) = setupSuite(test)
+	defer teardown(test)
 	var item int = 0
 	var result bool = collections.In(arrayMock, item)
 	if !result {
@@ -26,6 +28,8 @@ func TestInSucces(test *testing.T) {
 }
 
 func TestInFail(test *testing.T) {
+	var teardown func(testing.TB) = setupSuite(test)
+	defer teardown(test)
 	var item int = 5
 	var result bool = collections.In(arrayMock, item)
 	if result {
