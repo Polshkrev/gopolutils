@@ -66,7 +66,7 @@ func TestEnumerationSucces(test *testing.T) {
 	var index uint64
 	var found bool = false
 	var find Enumeration[int] = *NewEnumeration[int](5, 5)
-	for index, item = range collections.Enumerate(*enumerationMocks) {
+	for index = range collections.Enumerate(*enumerationMocks) {
 		if *NewEnumeration[int](index, int(index)) != find {
 			continue
 		}
