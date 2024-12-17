@@ -31,7 +31,7 @@ func setupEnumMock(testing.TB) func(testing.TB) {
 	return func(testing.TB) {}
 }
 
-func setupArrayMock(testing.TB) func(testing.TB) {
+func setupArrayInMock(testing.TB) func(testing.TB) {
 	arrayMock.Append(0)
 	arrayMock.Append(1)
 	arrayMock.Append(2)
@@ -39,7 +39,7 @@ func setupArrayMock(testing.TB) func(testing.TB) {
 }
 
 func TestInSucces(test *testing.T) {
-	var teardown func(testing.TB) = setupArrayMock(test)
+	var teardown func(testing.TB) = setupArrayInMock(test)
 	defer teardown(test)
 	var item int = 0
 	var result bool = collections.In(arrayMock, item)
@@ -49,7 +49,7 @@ func TestInSucces(test *testing.T) {
 }
 
 func TestInFail(test *testing.T) {
-	var teardown func(testing.TB) = setupArrayMock(test)
+	var teardown func(testing.TB) = setupArrayInMock(test)
 	defer teardown(test)
 	var item int = 5
 	var result bool = collections.In(arrayMock, item)
@@ -61,7 +61,7 @@ func TestInFail(test *testing.T) {
 func TestEnumerationSucces(test *testing.T) {
 	var enumTeardown func(testing.TB) = setupEnumMock(test)
 	defer enumTeardown(test)
-	var arrayTeardown func(testing.TB) = setupArrayMock(test)
+	var arrayTeardown func(testing.TB) = setupArrayInMock(test)
 	defer arrayTeardown(test)
 	var index uint64
 	var found bool = false
