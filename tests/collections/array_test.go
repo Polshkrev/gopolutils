@@ -61,3 +61,13 @@ func TestArrayAtFail(test *testing.T) {
 		test.Errorf("Except at index '%d' is nil in array '%+v' with value '%d'.\n", 20, *arrayMock, *item)
 	}
 }
+
+func TestArrayRemoveSuccess(test *testing.T) {
+	var teardown func(testing.TB) = setupArrayMock(test)
+	defer teardown(test)
+	var item *int
+	var except *gopolutils.Exception = arrayMock.Remove(1)
+	if except != nil || collections.In(arrayMock, 1) {
+		test.Errorf("'%d' was not removed from array '%+v'. %s\n", 1, *arrayMock, except.Error())
+	}
+}
