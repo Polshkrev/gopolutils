@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	arrayMock *collections.Array[int] = collections.NewArray[int]()
+	arrayInMock *collections.Array[int] = collections.NewArray[int]()
 	enumerationMocks *collections.Array[Enumeration[int]] = collections.NewArray[Enumeration[int]]()
 )
 
@@ -32,9 +32,9 @@ func setupEnumMock(testing.TB) func(testing.TB) {
 }
 
 func setupArrayInMock(testing.TB) func(testing.TB) {
-	arrayMock.Append(0)
-	arrayMock.Append(1)
-	arrayMock.Append(2)
+	arrayInMock.Append(0)
+	arrayInMock.Append(1)
+	arrayInMock.Append(2)
 	return func(testing.TB) {}
 }
 
@@ -42,9 +42,9 @@ func TestInSucces(test *testing.T) {
 	var teardown func(testing.TB) = setupArrayInMock(test)
 	defer teardown(test)
 	var item int = 0
-	var result bool = collections.In(arrayMock, item)
+	var result bool = collections.In(arrayInMock, item)
 	if !result {
-		test.Errorf("Item '%d' is evaluated to not be in array '%+v'.", item, arrayMock)
+		test.Errorf("Item '%d' is evaluated to not be in array '%+v'.", item, arrayInMock)
 	}
 }
 
@@ -52,9 +52,9 @@ func TestInFail(test *testing.T) {
 	var teardown func(testing.TB) = setupArrayInMock(test)
 	defer teardown(test)
 	var item int = 5
-	var result bool = collections.In(arrayMock, item)
+	var result bool = collections.In(arrayInMock, item)
 	if result {
-		test.Errorf("Item '%d' is evaluated to be in array '%+v'.", item, arrayMock)
+		test.Errorf("Item '%d' is evaluated to be in array '%+v'.", item, arrayInMock)
 	}
 }
 
