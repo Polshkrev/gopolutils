@@ -2,6 +2,7 @@ package tests
 
 import (
 	"testing"
+	"reflect"
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
@@ -78,5 +79,29 @@ func TestArrayRemoveFail(test *testing.T) {
 	var except *gopolutils.Exception = mock.Remove(8)
 	if except == nil || !collections.In(mock, 1) {
 		test.Errorf("'%d' was not removed from array '%+v'.\n", 1, *mock)
+	}
+}
+
+func TestArrayCollectSuccess(test *testing.T) {
+	var mock *collections.Array[int] = collections.NewArray[int]()
+	mock.Append(0)
+	mock.Append(1)
+	mock.Append(2)
+	var expect []int = []int{0, 1, 2}
+	var result []int = mock.Collect()
+	if !reflect.DeepEqual(result, expect) {
+		test.Errorf("Araay collect was not retuned correctly: '%+v'.\n", *mock)
+	}
+}
+
+func TestArrayCollectFail(test *testing.T) {
+	var mock *collections.Array[int] = collections.NewArray[int]()
+	mock.Append(0)
+	mock.Append(1)
+	mock.Append(2)
+	var expect []int = []int{1, 2, 3}
+	var result []int = mock.Collect()
+	if reflect.DeepEqual(result, expect) {
+		test.Errorf("Araay collect was not retuned correctly: '%+v'.\n", *mock)
 	}
 }
