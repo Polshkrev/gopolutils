@@ -46,6 +46,19 @@ func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	return &value, nil
 }
 
+// Update a value within the mapping.
+// If the key does not exist in the mapping, a KeyError is returned.
+// If a KeyError is returned, the mapping is not modified.
+func (mapping Map[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
+	if mapping.IsEmpty() {
+		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
+	} else if !mapping.HasKey(key) {
+		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%+v' does not exist.", key))
+	}
+	mapping.items[key] = value
+	return nil
+}
+
 // Access a slice of unique keys within the map.
 // Returns a slice of unique keys within the map.
 func (mapping Map[Key, _]) Keys() []Key {

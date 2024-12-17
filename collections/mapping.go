@@ -11,6 +11,10 @@ type Mapping[Key, Value any] interface {
 	// Returns a pointer to the data stored at the given key.
 	// If the key is not in the mapping, a KeyError is returned with a nil data pointer.
 	At(key Key) (*Value, *gopolutils.Exception)
+	// Update a value within the mapping.
+	// If the key does not exist in the mapping, a KeyError is returned.
+	// If a KeyError is returned, the mapping is not modified.
+	Update(key Key, value Value) *gopolutils.Exception
 	// Access a slice of unique keys within the mapping.
 	// Returns a slice of unique keys within the mapping.
 	Keys() []Key
