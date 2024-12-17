@@ -69,3 +69,14 @@ func TestArrayRemoveSuccess(test *testing.T) {
 		test.Errorf("'%d' was not removed from array '%+v'.\n", 1, *mock)
 	}
 }
+
+func TestArrayRemoveFail(test *testing.T) {
+	var mock *collections.Array[int] = collections.NewArray[int]()
+	mock.Append(0)
+	mock.Append(1)
+	mock.Append(2)
+	var except *gopolutils.Exception = mock.Remove(8)
+	if except == nil || !collections.In(mock, 1) {
+		test.Errorf("'%d' was not removed from array '%+v'.\n", 1, *mock)
+	}
+}
