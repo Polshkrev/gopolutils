@@ -105,3 +105,26 @@ func TestArrayCollectFail(test *testing.T) {
 		test.Errorf("Araay collect was not retuned correctly: '%+v'.\n", *mock)
 	}
 }
+
+func TestArraySizeSuccess(test *testing.T) {
+	var mock *collections.Array[int] = collections.NewArray[int]()
+	mock.Append(0)
+	mock.Append(1)
+	mock.Append(2)
+	var size uint64 = mock.Size()
+	if size != 3 {
+		test.Errorf("Araay size was not retuned correctly: '%d'.\n", size)
+	}
+}
+
+func TestArraySizeFail(test *testing.T) {
+	var mock *collections.Array[int] = collections.NewArray[int]()
+	mock.Append(0)
+	mock.Append(1)
+	mock.Append(2)
+	mock.Append(4)
+	var size uint64 = mock.Size()
+	if size == 3 {
+		test.Errorf("Araay size was not retuned correctly: '%d'.\n", size)
+	}
+}
