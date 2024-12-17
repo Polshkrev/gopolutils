@@ -46,7 +46,17 @@ func TestArrayAtSuccess(test *testing.T) {
 	var item *int
 	var except *gopolutils.Exception
 	item, except = arrayMock.At(1)
-	if *item != 1 {
+	if *item != 1 || except != nil{
 		test.Errorf("Can not find '%d' in array '%+v'. %s\n", 1, *arrayMock, except.Error())
+	}
+}
+
+func TestArrayAtFail(test *testing.T) {
+	var teardown func(testing.TB) = setupArrayMock(test)
+	defer teardown(test)
+	var except *gopolutils.Exception
+	_, except = arrayMock.At(10)
+	if except == nil {
+		test.Errorf("Except at index '%d' is nil in array '%+v'.\n", 1, *arrayMock)
 	}
 }
