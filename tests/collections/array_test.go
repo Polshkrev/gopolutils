@@ -54,9 +54,10 @@ func TestArrayAtSuccess(test *testing.T) {
 func TestArrayAtFail(test *testing.T) {
 	var teardown func(testing.TB) = setupArrayMock(test)
 	defer teardown(test)
+	var item *int
 	var except *gopolutils.Exception
-	_, except = arrayMock.At(10)
+	item, except = arrayMock.At(10)
 	if except == nil {
-		test.Errorf("Except at index '%d' is nil in array '%+v'.\n", 1, *arrayMock)
+		test.Errorf("Except at index '%d' is nil in array '%+v' with value '%d'.\n", 10, *arrayMock, *item)
 	}
 }
