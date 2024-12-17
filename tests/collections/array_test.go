@@ -30,3 +30,22 @@ func TestArrayAppendSuccess(test *testing.T) {
 		test.Errorf("Can not find '%d' in array '%+v'\n", 1, *arrayMock)
 	}
 }
+
+func TestArrayAppendFail(test *testing.T) {
+	var teardown func(testing.TB) = setupArrayMock(test)
+	defer teardown(test)
+	if collections.In(arrayMock, 10) {
+		test.Errorf("Can not find '%d' in array '%+v'\n", 10, *arrayMock)
+	}
+}
+
+func TestArrayAtSuccess(test *testing.T) {
+	var teardown func(testing.TB) = setupArrayMock(test)
+	defer teardown(test)
+	var item *int
+	var except *gopolutils.Exception
+	item, except = arrayMock.At(1)
+	if *item != 1 {
+		test.Errorf("Can not find '%d' in array '%+v'. %s\n", 1, *arrayMock, except.Error())
+	}
+}
