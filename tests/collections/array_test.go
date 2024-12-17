@@ -90,7 +90,7 @@ func TestArrayCollectSuccess(test *testing.T) {
 	var expect []int = []int{0, 1, 2}
 	var result []int = mock.Collect()
 	if !reflect.DeepEqual(result, expect) {
-		test.Errorf("Araay collect was not retuned correctly: '%+v'.\n", *mock)
+		test.Errorf("Array collect was not retuned correctly: '%+v'.\n", *mock)
 	}
 }
 
@@ -102,7 +102,7 @@ func TestArrayCollectFail(test *testing.T) {
 	var expect []int = []int{1, 2, 3}
 	var result []int = mock.Collect()
 	if reflect.DeepEqual(result, expect) {
-		test.Errorf("Araay collect was not retuned correctly: '%+v'.\n", *mock)
+		test.Errorf("Array collect was not retuned correctly: '%+v'.\n", *mock)
 	}
 }
 
@@ -113,7 +113,7 @@ func TestArraySizeSuccess(test *testing.T) {
 	mock.Append(2)
 	var size uint64 = mock.Size()
 	if size != 3 {
-		test.Errorf("Araay size was not retuned correctly: '%d'.\n", size)
+		test.Errorf("Array size was not retuned correctly: '%d'.\n", size)
 	}
 }
 
@@ -125,6 +125,25 @@ func TestArraySizeFail(test *testing.T) {
 	mock.Append(4)
 	var size uint64 = mock.Size()
 	if size == 3 {
-		test.Errorf("Araay size was not retuned correctly: '%d'.\n", size)
+		test.Errorf("Array size was not retuned correctly: '%d'.\n", size)
+	}
+}
+
+func TestArrayIsEmptySuccess(test *testing.T) {
+	var mock *collections.Array[int] = collections.NewArray[int]()
+	mock.Append(0)
+	mock.Append(1)
+	mock.Append(2)
+	var result bool = mock.IsEmpty()
+	if result {
+		test.Errorf("Array is empty was not retuned correctly: '%t'.\n", result)
+	}
+}
+
+func TestArrayIsEmptyFail(test *testing.T) {
+	var mock *collections.Array[int] = collections.NewArray[int]()
+	var result bool = mock.IsEmpty()
+	if !result {
+		test.Errorf("Array is empty was not retuned correctly: '%t'.\n", result)
 	}
 }
