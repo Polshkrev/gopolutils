@@ -21,7 +21,7 @@ func TestMapInsertSuccess(test *testing.T) {
 	}
 }
 
-func TestMapInsertSuccess(test *testing.T) {
+func TestMapInsertFail(test *testing.T) {
 	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
 	var except *gopolutils.Exception = mapping.Insert(0, 0)
 	except = mapping.Insert(0, 0)
