@@ -147,3 +147,13 @@ func TestArrayIsEmptyFail(test *testing.T) {
 		test.Errorf("Array is empty was not retuned correctly: '%t'.\n", result)
 	}
 }
+
+func TestArrayItemsIsNotNil(test *testing.T) {
+	var array *collections.Array[int] = collections.NewArray[int]()
+	array.Append(0)
+	array.Append(1)
+	array.Append(2)
+	if array.Items() == nil {
+		test.Errorf("Array items is nil.\n")
+	}
+}

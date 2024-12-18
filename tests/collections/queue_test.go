@@ -75,13 +75,10 @@ func TestQueueDequeueSuccess(test *testing.T) {
 
 func TestQueueDequeueFail(test *testing.T) {
 	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var item *int
-	item, _ = mock.Dequeue()
-	if *item != 0 {
-		test.Errorf("Item is evaluated in dequeued queue '%+v' with value '%d'.\n", *mock, *item)
+	var except *gopolutils.Exception
+	_, except = mock.Dequeue()
+	if except == nil {
+		test.Errorf("Item is evaluated in dequeued queue '%+v'.\n", *mock)
 	}
 }
 
