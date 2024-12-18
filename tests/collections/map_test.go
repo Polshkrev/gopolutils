@@ -98,3 +98,45 @@ func TestMapHasKeyFail(test *testing.T) {
 		test.Errorf("Map has key did not return correctly: %+v.", *mapping)
 	}
 }
+
+func TestMapSizeSuccess(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	mapping.Insert(0, 0)
+	mapping.Insert(1, 1)
+	mapping.Insert(2, 2)
+	var size uint64 = mapping.Size()
+	if size != 3 {
+		test.Errorf("Array size was not retuned correctly: '%d'.\n", size)
+	}
+}
+
+func TestMapSizeFail(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	mapping.Insert(0, 0)
+	mapping.Insert(1, 1)
+	mapping.Insert(2, 2)
+	mapping.Insert(4, 4)
+	var size uint64 = mapping.Size()
+	if size == 3 {
+		test.Errorf("Array size was not retuned correctly: '%d'.\n", size)
+	}
+}
+
+func TestMapIsEmptySuccess(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	mapping.Insert(0, 0)
+	mapping.Insert(1, 1)
+	mapping.Insert(2, 2)
+	var result bool = mapping.IsEmpty()
+	if result {
+		test.Errorf("Array is empty was not retuned correctly: '%t'.\n", result)
+	}
+}
+
+func TestMapIsEmptyFail(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	var result bool = mapping.IsEmpty()
+	if !result {
+		test.Errorf("Array is empty was not retuned correctly: '%t'.\n", result)
+	}
+}
