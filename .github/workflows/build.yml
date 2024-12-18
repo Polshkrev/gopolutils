@@ -22,4 +22,4 @@ jobs:
           go-version: '^1.23.0'
 
       - name: Build Programme
-        run: go build -v .
+        run: go build -v ./...
