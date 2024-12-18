@@ -131,7 +131,7 @@ func TestSetDifferenceSuccess(test *testing.T) {
 	mockOne.Append(2)
 	var mockTwo *collections.Set[int] = collections.NewSet[int]()
 	mockTwo.Append(0)
-	mockTwo.Append(1)
+	mockTwo.Append(2)
 	var difference *collections.Set[int] = mockOne.Difference(*mockTwo)
 	var result bool = difference.Contains(2)
 	if !result {
