@@ -134,7 +134,7 @@ func TestSetDifferenceSuccess(test *testing.T) {
 	mockTwo.Append(2)
 	var difference *collections.Set[int] = mockOne.Difference(*mockTwo)
 	var result bool = difference.Contains(2)
-	if !result {
+	if result {
 		test.Errorf("Set difference contains was not retuned correctly: '%t'.\n", result)
 	}
 }
