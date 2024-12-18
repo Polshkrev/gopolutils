@@ -29,3 +29,28 @@ func TestMapInsertFail(test *testing.T) {
 		test.Errorf("Map insert returned nil: %+v %s.", *mapping, except.Error())
 	}
 }
+
+func TestMapAtSuccess(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	mapping.Insert(0, 0)
+	mapping.Insert(1, 1)
+	mapping.Insert(2, 2)
+	var item *int
+	var except *gopolutils.Exception
+	item, except = mapping.At(1)
+	if except != nil || *item != 1 {
+		test.Errorf("Map at did not return nil: %+v %s.", *mapping, except.Error())
+	}
+}
+
+func TestMapAtFail(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	mapping.Insert(0, 0)
+	mapping.Insert(1, 1)
+	mapping.Insert(2, 2)
+	var except *gopolutils.Exception
+	_, except = mapping.At(10)
+	if except == nil {
+		test.Errorf("Map at returned nil: %+v %s.", *mapping, except.Error())
+	}
+}
