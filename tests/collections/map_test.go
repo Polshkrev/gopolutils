@@ -76,3 +76,25 @@ func TestMapRemoveFail(test *testing.T) {
 		test.Errorf("Map remove returned nil: %+v.", *mapping)
 	}
 }
+
+func TestMapHasKeySuccess(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	mapping.Insert(0, 0)
+	mapping.Insert(1, 1)
+	mapping.Insert(2, 2)
+	var result bool = mapping.HasKey(1)
+	if !result {
+		test.Errorf("Map has key did not return correctly: %+v.", *mapping)
+	}
+}
+
+func TestMapHasKeyFail(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	mapping.Insert(0, 0)
+	mapping.Insert(1, 1)
+	mapping.Insert(2, 2)
+	var result bool = mapping.HasKey(10)
+	if result {
+		test.Errorf("Map has key did not return correctly: %+v.", *mapping)
+	}
+}
