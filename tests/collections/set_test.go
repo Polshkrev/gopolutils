@@ -2,7 +2,6 @@ package tests
 
 import (
 	"testing"
-	"reflect"
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
