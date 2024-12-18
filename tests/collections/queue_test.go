@@ -79,10 +79,9 @@ func TestQueueDequeueFail(test *testing.T) {
 	mock.Append(1)
 	mock.Append(2)
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Dequeue()
-	if except == nil || *item != 0 {
-		test.Errorf("Except is nil in dequeued queue '%+v' with value '%d'.\n", *mock, *item)
+	item, _ = mock.Dequeue()
+	if *item != 0 {
+		test.Errorf("Item is evaluated in dequeued queue '%+v' with value '%d'.\n", *mock, *item)
 	}
 }
 
@@ -118,10 +117,9 @@ func TestQueuePeekFail(test *testing.T) {
 	mock.Append(1)
 	mock.Append(2)
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Peek()
-	if except == nil || *item != 0 {
-		test.Errorf("Except is nil in peeked queue '%+v' with value '%d'.\n", *mock, *item)
+	item, _ = mock.Peek()
+	if *item != 0 {
+		test.Errorf("Item is evaluated in peeked queue '%+v' with value '%d'.\n", *mock, *item)
 	}
 }
 
