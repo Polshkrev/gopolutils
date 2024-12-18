@@ -29,8 +29,10 @@ func TestSetRemoveSuccess(test *testing.T) {
 	mock.Append(1)
 	mock.Append(2)
 	var except *gopolutils.Exception = mock.Remove(0)
-	if except != nil || collections.In(mock, 0) {
-		test.Errorf("Set '%+v' did not remove at index '%d' correctly: %s.\n", *mock, 0, except.Error())
+	if except != nil {
+		test.Errorf("Set '%+v' did not remove at index '%d' correctly: %s.\n", mock, 0, except.Error())
+	} else if collections.In(mock, 0) {
+		test.Errorf("Set '%+v' did not remove at index '%d' correctly.\n", mock, 0)
 	}
 }
 
