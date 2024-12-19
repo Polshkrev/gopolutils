@@ -71,7 +71,7 @@ func TestArrayUpdateSuccess(test *testing.T) {
 	var exceptAt *gopolutils.Exception
 	item, exceptAt = mock.At(0)
 	if except != nil || exceptAt != nil || *item != 3 {
-		test.Errorf("Can not find '%d' in array '%+v'. %s\n", 1, *mock, except.Error())
+		test.Errorf("Can not find '%d' in array '%+v'. %s\n", 0, *mock, except.Error())
 	}
 }
 
@@ -82,7 +82,7 @@ func TestArrayUpdateFail(test *testing.T) {
 	var exceptAt *gopolutils.Exception
 	item, exceptAt = mock.At(0)
 	if except == nil || exceptAt == nil || *item == 3 {
-		test.Errorf("Can not find '%d' in array '%+v'. %s\n", 1, *mock, except.Error())
+		test.Errorf("Can not find '%d' in array '%+v'.\n", 0, *mock)
 	}
 }
 
