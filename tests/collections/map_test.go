@@ -2,6 +2,7 @@ package tests
 
 import (
 	"testing"
+
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
@@ -52,6 +53,34 @@ func TestMapAtFail(test *testing.T) {
 	_, except = mapping.At(10)
 	if except == nil {
 		test.Errorf("Map at returned nil: %+v.", *mapping)
+	}
+}
+
+func TestMapUpdateSuccess(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	mapping.Insert(0, 0)
+	mapping.Insert(1, 1)
+	mapping.Insert(2, 2)
+	var except *gopolutils.Exception = mapping.Update(1, 2)
+	var result *int
+	var exceptAt *gopolutils.Exception
+	result, exceptAt = mapping.At(1)
+	if except != nil || exceptAt != nil || *result != 2 {
+		test.Errorf("Map update did not return nil: %+v %s, %s.", *mapping, except.Error(), exceptAt.Error())
+	}
+}
+
+func TestMapUpdateFail(test *testing.T) {
+	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
+	mapping.Insert(0, 0)
+	mapping.Insert(1, 1)
+	mapping.Insert(2, 2)
+	var except *gopolutils.Exception = mapping.Update(10, 2)
+	var result *int
+	var exceptAt *gopolutils.Exception
+	result, exceptAt = mapping.At(1)
+	if except == nil || exceptAt == nil || *result == 2 {
+		test.Errorf("Map update did not return nil: %+v.", *mapping)
 	}
 }
 
