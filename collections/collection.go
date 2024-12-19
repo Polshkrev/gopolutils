@@ -12,6 +12,11 @@ type Collection[Type any] interface {
 	// Returns a pointer to the data in the collection at the given index.
 	// If the given index is greater than the size of the collection, an IndexOutOfRangeError is returned with a nil data pointer.
 	At(index uint64) (*Type, *gopolutils.Exception)
+	// Update a value within the collection.
+	// If the given index is greater than the collection size, an IndexOutOfRangeError is returned.
+	// If the collection is empty, an IndexOutOfRangeError is returned.
+	// If an IndexOutOfRangeError is returned, the collection is not modified.
+	Update(index uint64, value Type) *gopolutils.Exception
 	// Remove the data in the collection at a given index.
 	// If the given index is greater than the size of the collection, an IndexOutOfRangeError is returned.
 	Remove(index uint64) *gopolutils.Exception
