@@ -48,6 +48,20 @@ func (stack Stack[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	return &stack.items[index], nil
 }
 
+// Update a value within the stack.
+// If the given index is greater than the stack size, an IndexOutOfRangeError is returned.
+// If the stack is empty, an IndexOutOfRangeError is returned.
+// If an IndexOutOfRangeError is returned, the stack is not modified.
+func (stack *Stack[Type]) Update(index uint64, value Type) *gopolutils.Exception {
+	if stack.IsEmpty() {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty stack at index %d.", index))
+	} else if index > stack.size {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
+	}
+	stack.items[index] = value
+	return nil
+}
+
 // Remove the data stored on the stack at a given index.
 // This method is currently not implemented.
 // If the given index is greater than the size of the stack, an IndexOutOfRangeError is returned.
