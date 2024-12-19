@@ -72,14 +72,10 @@ func TestMapUpdateSuccess(test *testing.T) {
 
 func TestMapUpdateFail(test *testing.T) {
 	var mapping *collections.Map[int, int] = collections.NewMap[int, int]()
-	mapping.Insert(0, 0)
-	mapping.Insert(1, 1)
-	mapping.Insert(2, 2)
-	var except *gopolutils.Exception = mapping.Update(10, 2)
-	var result *int
+	var except *gopolutils.Exception = mapping.Update(0, 2)
 	var exceptAt *gopolutils.Exception
-	result, exceptAt = mapping.At(1)
-	if except == nil || exceptAt == nil || *result == 2 {
+	_, exceptAt = mapping.At(0)
+	if except == nil || exceptAt == nil {
 		test.Errorf("Map update did not return nil: %+v.", *mapping)
 	}
 }
