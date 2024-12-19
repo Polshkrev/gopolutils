@@ -78,10 +78,9 @@ func TestArrayUpdateSuccess(test *testing.T) {
 func TestArrayUpdateFail(test *testing.T) {
 	var mock *collections.Array[int] = collections.NewArray[int]()
 	var except *gopolutils.Exception = mock.Update(0, 3)
-	var item *int
 	var exceptAt *gopolutils.Exception
-	item, exceptAt = mock.At(0)
-	if except == nil || exceptAt == nil || *item == 3 {
+	_, exceptAt = mock.At(0)
+	if except == nil || exceptAt == nil {
 		test.Errorf("Can not find '%d' in array '%+v'.\n", 0, *mock)
 	}
 }
