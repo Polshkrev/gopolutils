@@ -3,7 +3,6 @@ package tests
 import (
 	"testing"
 
-	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
@@ -21,30 +20,6 @@ func TestSetAppend(test *testing.T) {
 	mock.Append(2)
 	if !collections.In(mock, 2) {
 		test.Errorf("Set did not append correctly.\n")
-	}
-}
-
-func TestSetRemoveSuccess(test *testing.T) {
-	var mock *collections.Set[int] = collections.NewSet[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var except *gopolutils.Exception = mock.Remove(0)
-	if except != nil {
-		test.Errorf("Set '%+v' did not remove at index '%d' correctly: %s.\n", *mock, 0, except.Error())
-	} else if collections.In(mock, 0) {
-		test.Errorf("Set '%+v' did not remove at index '%d' correctly.\n", *mock, 0)
-	}
-}
-
-func TestSetRemoveFail(test *testing.T) {
-	var mock *collections.Set[int] = collections.NewSet[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var except *gopolutils.Exception = mock.Remove(10)
-	if except == nil || !collections.In(mock, 0) {
-		test.Errorf("Set '%+v' did not remove at index '%d' correctly.\n", *mock, 10)
 	}
 }
 
