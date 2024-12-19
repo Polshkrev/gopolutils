@@ -1,8 +1,9 @@
 package tests
 
 import (
-	"testing"
 	"reflect"
+	"testing"
+
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
@@ -42,7 +43,7 @@ func TestArrayAtSuccess(test *testing.T) {
 	var item *int
 	var except *gopolutils.Exception
 	item, except = mock.At(1)
-	if *item != 1 || except != nil{
+	if *item != 1 || except != nil {
 		test.Errorf("Can not find '%d' in array '%+v'. %s\n", 1, *mock, except.Error())
 	}
 }
@@ -57,6 +58,31 @@ func TestArrayAtFail(test *testing.T) {
 	item, except = mock.At(20)
 	if except == nil {
 		test.Errorf("Except at index '%d' is nil in array '%+v' with value '%d'.\n", 20, *mock, *item)
+	}
+}
+
+func TestArrayUpdateSuccess(test *testing.T) {
+	var mock *collections.Array[int] = collections.NewArray[int]()
+	mock.Append(0)
+	mock.Append(1)
+	mock.Append(2)
+	var except *gopolutils.Exception = mock.Update(0, 3)
+	var item *int
+	var exceptAt *gopolutils.Exception
+	item, exceptAt = mock.At(0)
+	if except != nil || exceptAt != nil || *item != 3 {
+		test.Errorf("Can not find '%d' in array '%+v'. %s\n", 1, *mock, except.Error())
+	}
+}
+
+func TestArrayUpdateFail(test *testing.T) {
+	var mock *collections.Array[int] = collections.NewArray[int]()
+	var except *gopolutils.Exception = mock.Update(0, 3)
+	var item *int
+	var exceptAt *gopolutils.Exception
+	item, exceptAt = mock.At(0)
+	if except == nil || exceptAt == nil || *item == 3 {
+		test.Errorf("Can not find '%d' in array '%+v'. %s\n", 1, *mock, except.Error())
 	}
 }
 

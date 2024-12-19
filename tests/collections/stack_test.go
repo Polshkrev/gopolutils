@@ -1,8 +1,9 @@
 package tests
 
 import (
-	"testing"
 	"reflect"
+	"testing"
+
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
@@ -57,6 +58,31 @@ func TestStackAtFail(test *testing.T) {
 	item, except = mock.At(20)
 	if except == nil {
 		test.Errorf("Except at index '%d' is nil in stack '%+v' with value '%d'.\n", 20, *mock, *item)
+	}
+}
+
+func TestStackUpdateSuccess(test *testing.T) {
+	var mock *collections.Stack[int] = collections.NewStack[int]()
+	mock.Append(0)
+	mock.Append(1)
+	mock.Append(2)
+	var except *gopolutils.Exception = mock.Update(0, 3)
+	var item *int
+	var exceptAt *gopolutils.Exception
+	item, exceptAt = mock.At(0)
+	if except != nil || exceptAt != nil || *item != 3 {
+		test.Errorf("Can not find '%d' in stack '%+v'. %s\n", 1, *mock, except.Error())
+	}
+}
+
+func TestStackUpdateFail(test *testing.T) {
+	var mock *collections.Stack[int] = collections.NewStack[int]()
+	var except *gopolutils.Exception = mock.Update(0, 3)
+	var item *int
+	var exceptAt *gopolutils.Exception
+	item, exceptAt = mock.At(0)
+	if except == nil || exceptAt == nil || *item == 3 {
+		test.Errorf("Can not find '%d' in stack '%+v'. %s\n", 1, *mock, except.Error())
 	}
 }
 
