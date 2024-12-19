@@ -48,6 +48,20 @@ func (queue Queue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	return &queue.items[index], nil
 }
 
+// Update a value within the queue.
+// If the given index is greater than the queue size, an IndexOutOfRangeError is returned.
+// If the queue is empty, an IndexOutOfRangeError is returned.
+// If an IndexOutOfRangeError is returned, the queue is not modified.
+func (queue *Queue[Type]) Update(index uint64, value Type) *gopolutils.Exception {
+	if queue.IsEmpty() {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty queue at index %d.", index))
+	} else if index > queue.size {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
+	}
+	queue.items[index] = value
+	return nil
+}
+
 // Remove the data stored in the queue at a given index.
 // This method is currently not implemented.
 // If the given index is greater than the size of the queue, an IndexOutOfRangeError is returned.
