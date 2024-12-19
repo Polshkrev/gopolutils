@@ -2,6 +2,7 @@ package tests
 
 import (
 	"testing"
+
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
@@ -66,6 +67,31 @@ func TestSetDiscardFail(test *testing.T) {
 	mock.Discard(10)
 	if !collections.In(mock, 0) {
 		test.Errorf("Set '%+v' did not remove at index '%d' correctly.\n", *mock, 10)
+	}
+}
+
+func TestQueueUpdateSuccess(test *testing.T) {
+	var mock *collections.Queue[int] = collections.NewQueue[int]()
+	mock.Append(0)
+	mock.Append(1)
+	mock.Append(2)
+	var except *gopolutils.Exception = mock.Update(0, 3)
+	var item *int
+	var exceptAt *gopolutils.Exception
+	item, exceptAt = mock.At(0)
+	if except != nil || exceptAt != nil || *item != 3 {
+		test.Errorf("Can not find '%d' in queue '%+v'. %s\n", 1, *mock, except.Error())
+	}
+}
+
+func TestQueueUpdateFail(test *testing.T) {
+	var mock *collections.Queue[int] = collections.NewQueue[int]()
+	var except *gopolutils.Exception = mock.Update(0, 3)
+	var item *int
+	var exceptAt *gopolutils.Exception
+	item, exceptAt = mock.At(0)
+	if except == nil || exceptAt == nil || *item == 3 {
+		test.Errorf("Can not find '%d' in queue '%+v'. %s\n", 1, *mock, except.Error())
 	}
 }
 
