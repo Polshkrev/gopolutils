@@ -53,6 +53,15 @@ func (set Set[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	return nil, gopolutils.NewNamedException("NotImplementedError", "Can not access a set by index.")
 }
 
+// Update a value within the set.
+// This method is not yet implemented.
+// If the given index is greater than the set size, an IndexOutOfRangeError is returned.
+// If the set is empty, an IndexOutOfRangeError is returned.
+// If an IndexOutOfRangeError is returned, the set is not modified.
+func (set *Set[Type]) Update(index uint64, value Type) *gopolutils.Exception {
+	return gopolutils.NewNamedException("NotImplementedError", "Can not update set by index yet.")
+}
+
 // Remove an item in the set at a given index.
 // If the set is evaluated to be empty, an IndexOutOfRangeError is returned.
 // If the given index is greater than the size of the set, an IndexOutOfRangeError is returned.
