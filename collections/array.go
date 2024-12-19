@@ -46,6 +46,20 @@ func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	return &array.items[index], nil
 }
 
+// Update a value within the collection.
+// If the given index is greater than the collection size, an IndexOutOfRangeError is returned.
+// If the collection is empty, an IndexOutOfRangeError is returned.
+// If an IndexOutOfRangeError is returned, the collection is not modified.
+func (array *Array[Type]) Update(index uint64, value Type) *gopolutils.Exception {
+	if array.IsEmpty() {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty array at index %d.", index))
+	} else if index > array.size {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
+	}
+	array.items[index] = value
+	return nil
+}
+
 // Remove the data stored in the array at a given index.
 // If the array is empty, an IndexOutOfRangeError is returned.
 // If the given index is greater than the size of the array, an IndexOutOfRangeError is returned.
