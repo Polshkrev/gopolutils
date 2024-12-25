@@ -116,6 +116,8 @@ func readerListDispatch[Type any](filePath string) ([]Type, *gopolutils.Exceptio
 	switch fileType {
 	case YAMLType:
 		return readRawList[Type](filePath, YAMLReader)
+	case "yml":
+		return readRawList[Type](filePath, YAMLReader)
 	case TOMLType:
 		return readRawList[Type](filePath, TOMLReader)
 	default:
@@ -162,6 +164,8 @@ func ReadObject[Type any](filePath string) (*Type, *gopolutils.Exception) {
 	}
 	switch fileType {
 	case YAMLType:
+		return readRawObject[Type](filePath, YAMLReader)
+	case "yml":
 		return readRawObject[Type](filePath, YAMLReader)
 	case TOMLType:
 		return readRawObject[Type](filePath, TOMLReader)
