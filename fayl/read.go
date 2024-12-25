@@ -21,7 +21,7 @@ const (
 	TOMLType string = "toml"
 )
 
-// Generic unmarshal type. The reader type takes in the raw file content and a pointer to the settings object.
+// Generic unmarshal type. The reader type takes in the raw file content and a pointer to the object.
 type Reader = func([]byte, any) error
 
 var (
