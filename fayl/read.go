@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/Polshkrev/gopolutils"
@@ -32,6 +33,17 @@ var (
 	TOMLReader Reader = toml.Unmarshal
 )
 
+// Helper function to get the file type of a given file path.
+// Returns the file type of the given filepath based on its extension.
+// If the file does not have a valid extension, or the extension can not be indexed, an Exception is returned with an empty string.
+func getFileType(filePath string) (string, *gopolutils.Exception) {
+	var index int = strings.LastIndexByte(filePath, '.')
+	if index < 0 {
+		return "", gopolutils.NewException("Can not determine index of file extension.")
+	}
+	return filePath[index+1:], nil
+}
+
 // Read the raw contents of a file.
 // Returns a byte slice representing the raw file content.
 // If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
@@ -49,6 +61,25 @@ func ReadFile(filePath string) ([]byte, *gopolutils.Exception) {
 		return nil, gopolutils.NewNamedException("IOError", readError.Error())
 	}
 	return file, nil
+}
+
+// Helper method to marshall a single object from a file.
+// Returns a pointer to the marshalled object type.
+// If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
+// If the given reader returns an error, an IOError is returned with a nil data pointer.
+func readRawObject[Type any](filePath string, reader Reader) (*Type, *gopolutils.Exception) {
+	var raw []byte
+	var readError *gopolutils.Exception
+	raw, readError = ReadFile(filePath)
+	if readError != nil {
+		return nil, readError
+	}
+	var result *Type = new(Type)
+	var marshallError error = reader(raw, result)
+	if marshallError != nil {
+		return nil, gopolutils.NewNamedException("IOError", marshallError.Error())
+	}
+	return result, nil
 }
 
 // Convert a slice to a collection.
@@ -80,21 +111,24 @@ func ReadJSONList[Type any](filePath string) (collections.View[Type], *gopolutil
 	return result, nil
 }
 
-// Read a json file as a view.
-// Returns a pointer to an object of data from a json file.
+// Read a file as an object.
+// Returns a pointer to an object of data from a file.
 // If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
 // Alternatively, if the data can not be marshalled, an IOError is returned with a nil data pointer.
-func ReadJSONObject[Type any](filePath string) (*Type, *gopolutils.Exception) {
-	var raw []byte
-	var rawError *gopolutils.Exception
-	raw, rawError = ReadFile(filePath)
-	if rawError != nil {
-		return nil, rawError
+// In addition, if the file type can not be evaluated, an Exception is returned with a nil data pointer.
+func ReadObject[Type any](filePath string) (*Type, *gopolutils.Exception) {
+	var fileType string
+	var except *gopolutils.Exception
+	fileType, except = getFileType(filePath)
+	if except != nil {
+		return nil, except
 	}
-	var rawObject *Type = new(Type)
-	var readError error = json.Unmarshal(raw, rawObject)
-	if readError != nil {
-		return nil, rawError
+	switch fileType {
+	case YAMLType:
+		return readRawObject[Type](filePath, YAMLReader)
+	case TOMLType:
+		return readRawObject[Type](filePath, TOMLReader)
+	default:
+		return readRawObject[Type](filePath, JSONReader)
 	}
-	return rawObject, nil
 }
