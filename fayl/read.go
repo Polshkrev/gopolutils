@@ -136,7 +136,7 @@ func sliceToCollection[Type any](items []Type, collection collections.Collection
 // If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
 // Alternatively, if the data can not be marshalled, an IOError is returned with a nil data pointer.
 // In addition, if the file type can not be evaluated, an Exception is returned with a nil data pointer.
-func ReadJSONList[Type any](filePath string) (collections.View[Type], *gopolutils.Exception) {
+func ReadList[Type any](filePath string) (collections.View[Type], *gopolutils.Exception) {
 	var raw []Type
 	var rawError *gopolutils.Exception
 	raw, rawError = readerListDispatch[Type](filePath)
