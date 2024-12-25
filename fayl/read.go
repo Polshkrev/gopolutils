@@ -101,6 +101,11 @@ func readRawList[Type any](filePath string, reader Reader) ([]Type, *gopolutils.
 	return result, nil
 }
 
+// Helper function to dispatch the reader function based on the type of the given file path.
+// Returns a slice of marshalled data from a file.
+// If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
+// Alternatively, if the data can not be marshalled, an IOError is returned with a nil data pointer.
+// In addition, if the file type can not be evaluated, an Exception is returned with a nil data pointer.
 func readerListDispatch[Type any](filePath string) ([]Type, *gopolutils.Exception) {
 	var fileType string
 	var except *gopolutils.Exception
