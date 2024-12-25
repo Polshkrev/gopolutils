@@ -82,6 +82,42 @@ func readRawObject[Type any](filePath string, reader Reader) (*Type, *gopolutils
 	return result, nil
 }
 
+// Helper method to marshall a slice of objects from a file.
+// Returns a pointer to the marshalled slice of objects.
+// If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
+// If the given reader returns an error, an IOError is returned with a nil data pointer.
+func readRawList[Type any](filePath string, reader Reader) ([]Type, *gopolutils.Exception) {
+	var raw []byte
+	var readError *gopolutils.Exception
+	raw, readError = ReadFile(filePath)
+	if readError != nil {
+		return nil, readError
+	}
+	var result []Type = make([]Type, len(raw))
+	var readerError error = reader(raw, &result)
+	if readerError != nil {
+		return nil, gopolutils.NewNamedException("IOError", readerError.Error())
+	}
+	return result, nil
+}
+
+func readerListDispatch[Type any](filePath string) ([]Type, *gopolutils.Exception) {
+	var fileType string
+	var except *gopolutils.Exception
+	fileType, except = getFileType(filePath)
+	if except != nil {
+		return nil, except
+	}
+	switch fileType {
+	case YAMLType:
+		return readRawList[Type](filePath, YAMLReader)
+	case TOMLType:
+		return readRawList[Type](filePath, TOMLReader)
+	default:
+		return readRawList[Type](filePath, JSONReader)
+	}
+}
+
 // Convert a slice to a collection.
 func sliceToCollection[Type any](items []Type, collection collections.Collection[Type]) {
 	var item Type
@@ -90,24 +126,20 @@ func sliceToCollection[Type any](items []Type, collection collections.Collection
 	}
 }
 
-// Read a json file as a view.
-// Returns a view into a json file containing a list of data.
+// Read a file as a view into a collection of objects.
+// Returns a view into a collection of a file containing a list of data.
 // If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
 // Alternatively, if the data can not be marshalled, an IOError is returned with a nil data pointer.
+// In addition, if the file type can not be evaluated, an Exception is returned with a nil data pointer.
 func ReadJSONList[Type any](filePath string) (collections.View[Type], *gopolutils.Exception) {
-	var raw []byte
+	var raw []Type
 	var rawError *gopolutils.Exception
-	raw, rawError = ReadFile(filePath)
+	raw, rawError = readerListDispatch[Type](filePath)
 	if rawError != nil {
 		return nil, rawError
 	}
 	var result collections.Collection[Type] = collections.NewArray[Type]()
-	var rawList []Type = make([]Type, 0)
-	var readError error = json.Unmarshal(raw, &rawList)
-	if readError != nil {
-		return nil, gopolutils.NewNamedException("IOError", readError.Error())
-	}
-	sliceToCollection[Type](rawList, result)
+	sliceToCollection[Type](raw, result)
 	return result, nil
 }
 
