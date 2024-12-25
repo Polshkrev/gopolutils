@@ -5,8 +5,31 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/BurntSushi/toml"
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
+	"gopkg.in/yaml.v2"
+)
+
+const (
+	// Default json file extension.
+	JSONType string = "json"
+	// Default yaml file extenstion.
+	YAMLType string = "yaml"
+	// Default toml file extension.
+	TOMLType string = "toml"
+)
+
+// Generic unmarshal type. The reader type takes in the raw file content and a pointer to the settings object.
+type Reader = func([]byte, any) error
+
+var (
+	// Default json reader.
+	JSONReader Reader = json.Unmarshal
+	// Default yaml reader.
+	YAMLReader Reader = yaml.Unmarshal
+	// Default toml reader.
+	TOMLReader Reader = toml.Unmarshal
 )
 
 // Read the raw contents of a file.
