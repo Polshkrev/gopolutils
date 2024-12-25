@@ -70,7 +70,7 @@ func Read(filePath string) ([]byte, *gopolutils.Exception) {
 func readRawObject[Type any](filePath string, reader Reader) (*Type, *gopolutils.Exception) {
 	var raw []byte
 	var readError *gopolutils.Exception
-	raw, readError = ReadFile(filePath)
+	raw, readError = Read(filePath)
 	if readError != nil {
 		return nil, readError
 	}
@@ -89,7 +89,7 @@ func readRawObject[Type any](filePath string, reader Reader) (*Type, *gopolutils
 func readRawList[Type any](filePath string, reader Reader) ([]Type, *gopolutils.Exception) {
 	var raw []byte
 	var readError *gopolutils.Exception
-	raw, readError = ReadFile(filePath)
+	raw, readError = Read(filePath)
 	if readError != nil {
 		return nil, readError
 	}
