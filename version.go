@@ -193,3 +193,9 @@ func (version Version) ToString() string {
 	}
 	return fmt.Sprintf("%s: %d.%d.%d - %s", version.Name(), version.Major(), version.Minor(), version.Patch(), version.Description())
 }
+
+// Render a string representation of the version object's numeric properties.
+// Returns the version object's numeric properties represented as a string.
+func (version Version) NumberString() string {
+	return fmt.Sprintf("%d.%d.%d", version.major, version.minor, version.patch)
+}
