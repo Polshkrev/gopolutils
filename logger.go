@@ -59,7 +59,7 @@ func lltostr(level LoggingLevel) string {
 type Logger struct {
 	name    string
 	level   LoggingLevel
-	outputs []*os.File
+	outputs [__AVAILABLE_OUTPUTS]*os.File
 }
 
 // Construct a new logger with a given name and default logging level.
@@ -69,13 +69,12 @@ func NewLogger(name string, level LoggingLevel) *Logger {
 	var logger *Logger = new(Logger)
 	logger.name = name
 	logger.level = level
-	logger.outputs = make([]*os.File, 0)
 	return logger
 }
 
 // Private method to append an output to the logger.
 func (logger *Logger) append(output *os.File) {
-	logger.outputs = append(logger.outputs, output)
+	logger.outputs[__OUTPUT_COUNT] = output
 }
 
 // Bind the standard output to the logger.
