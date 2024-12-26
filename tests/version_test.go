@@ -100,6 +100,41 @@ func TestVersionCompareFailure(test *testing.T) {
 	}
 }
 
+func TestVersionIsZeroTrue(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(0, 0, 0)
+	if !version.IsZero() {
+		test.Errorf("Version: '%+v' is not evaluated to be zero.", *version)
+	}
+}
+
+func TestVersionIsZeroFalse(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(1, 1, 1)
+	if version.IsZero() {
+		test.Errorf("Version: '%+v' is evaluated to be zero.", *version)
+	}
+}
+
+func TestVersionIsZeroMajorFalse(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
+	if version.IsZero() {
+		test.Errorf("Version: '%+v' is evaluated to be zero.", *version)
+	}
+}
+
+func TestVersionIsZeroMinorFalse(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(0, 1, 0)
+	if version.IsZero() {
+		test.Errorf("Version: '%+v' is evaluated to be zero.", *version)
+	}
+}
+
+func TestVersionIsZeroPatchFalse(test *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(0, 0, 1)
+	if version.IsZero() {
+		test.Errorf("Version: '%+v' is evaluated to be zero.", *version)
+	}
+}
+
 func TestVersionIsPublic(test *testing.T) {
 	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
 	var result bool = version.IsPublic()
