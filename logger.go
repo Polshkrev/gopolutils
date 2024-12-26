@@ -13,7 +13,7 @@ const (
 
 const (
 	// Format to structure the log timstamp. Copied from the time module docs.
-	__TIMESTAMP_FORMAT string = "2006-01-02 15:04:05" // I've tried other's; they don't work.
+	__TIMESTAMP_FORMAT string = "2006-01-02 15:04:05" // I've tried others; they don't work.
 )
 
 var (
@@ -75,6 +75,15 @@ func NewLogger(name string, level LoggingLevel) *Logger {
 // Private method to append an output to the logger.
 func (logger *Logger) append(output *os.File) {
 	logger.outputs[__OUTPUT_COUNT] = output
+}
+
+// Set the minimal logging level for the logger.
+// If the given logging level is less than or equal to the logging level already set in the logger, the method returns without modifying the logger.
+func (logger *Logger) SetLevel(level LoggingLevel) {
+	if level <= logger.level {
+		return
+	}
+	logger.level = level
 }
 
 // Bind the standard output to the logger.

@@ -133,6 +133,12 @@ func (version Version) Compare(operand Version) bool {
 	return version.CompareMajor(operand.Major()) && version.CompareMinor(operand.Minor()) && version.ComparePatch(operand.Patch())
 }
 
+// Determine if the version object is equal to zero.
+// Returns true if each of the version object's numeric properties are equal to zero, else false.
+func (version Version) IsZero() bool {
+	return version.major == 0 && version.minor == 0 && version.patch == 0
+}
+
 // Determine if the version object is public.
 // Returns true if the version object's major property is evaluated greater than or equal to 1.
 func (version Version) IsPublic() bool {
