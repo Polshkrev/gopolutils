@@ -7,6 +7,7 @@
     1. [Logger](/docs/en-UK/logger.md)
     2. [Version](/docs/en-UK/version.md)
     3. [Exception](/docs/en-UK/exception.md)
+    4. [Path](/docs/en-UK/path.md)
 3. [Collections](/docs/en-UK/collections/collections.md)
     1. Interfaces
         1. [Collection](/docs/en-UK/collections/collection.md)
