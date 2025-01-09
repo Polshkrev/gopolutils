@@ -63,10 +63,18 @@ func (stack *Stack[Type]) Update(index uint64, value Type) *gopolutils.Exception
 }
 
 // Remove the data stored on the stack at a given index.
-// This method is currently not implemented.
 // If the given index is greater than the size of the stack, an IndexOutOfRangeError is returned.
+// If the stack is empty, an IndexOutOfRangeError is returned.
+// If an IndexOutOfRangeError is returned, the stack is not modified.
 func (stack *Stack[_]) Remove(index uint64) *gopolutils.Exception {
-	return gopolutils.NewNamedException("NotImplementedError", "Can not remove by index from a stack. Try using the pop method.")
+	if stack.IsEmpty() {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove from an empty stack at index %d.", index))
+	} else if index > stack.size {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove element of stack of size %d at index %d.", stack.size, index))
+	}
+	stack.items = append(stack.items[:index], stack.items[index+1:]...)
+	stack.size--
+	return nil
 }
 
 // Pop the last appended item from the stack.
