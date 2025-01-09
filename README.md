@@ -5,4 +5,4 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/Polshkrev/gopolutils.svg)](https://pkg.go.dev/github.com/Polshkrev/gopolutils)
 
 - [en-UK](/docs/en-UK/README.md)
-- [ru-Ru](/docs/ru-RU/README.md)
+- [ru-RU](/docs/ru-RU/README.md)
