@@ -1,4 +1,4 @@
-# Pair
+# Пара
 Реализация кортежа типа pair де-факто. Вдохновлено [std::pair](https://en.cppreference.com/w/cpp/utility/pair) в c++.
 
 ## Оглавление
