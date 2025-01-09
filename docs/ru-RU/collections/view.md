@@ -1,0 +1,2 @@
+# Толкование
+Интерфейс, существующий для определения представления в структуре данных. Этот интерфейс вдохновлен методом [Rust Iterator::collect](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect)-а. Этот интерфейс тоже реализует интерфейс [Sized](/docs/en-UK/collections/sized.md).

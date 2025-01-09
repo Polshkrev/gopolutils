@@ -14,7 +14,7 @@ There are many ways to construct a version object. The default is to use the `Ne
 - A function with the "strings" keyword is self-explanatory as it constructs each of the string properties in the version object.
 - Any additional properties that are set in the constructor are named explicitly.
 ### Modify
-To set any of the properties in the version object, each property has a specific setter accociated with it.
+To set any of the properties in the version object, each property has a specific setter associated with it.
 To change any of the properties within the object the following functions are available:
 - Release: Increment the object's major value and set its minor and patch values to 0.
 - Update: Increment the object's minor value and set the object's patch version to 0 while not affecting the object's major value.
