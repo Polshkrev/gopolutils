@@ -155,7 +155,6 @@ func (logger *Logger) FullSetup(fileName string) *Exception {
 }
 
 // Log a message.
-//
 // If the default logging level of the logger is greater than the given logging level of the message, the message will not be logged.
 func (logger *Logger) Log(message string, level LoggingLevel) {
 	if level < logger.level {
@@ -169,7 +168,7 @@ func (logger *Logger) Log(message string, level LoggingLevel) {
 
 // Deallocate the logger.
 // If the logger has a file bound, the file will need to be closed with this method.
-// A good practice is to call the this method deferred even if a file is not bound;
+// A good practice is to call this method deferred even if a file is not bound;
 // this method will not close the standard output.
 func (logger *Logger) Close() {
 	var output *os.File
