@@ -59,7 +59,7 @@ func (set Set[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 // If the set is empty, an IndexOutOfRangeError is returned.
 // If an IndexOutOfRangeError is returned, the set is not modified.
 func (set *Set[Type]) Update(index uint64, value Type) *gopolutils.Exception {
-	return gopolutils.NewNamedException("NotImplementedError", "Can not update set by index yet.")
+	return gopolutils.NewNamedException("NotImplementedError", "Can not update a set by index yet.")
 }
 
 // Remove an item in the set at a given index.
@@ -69,7 +69,7 @@ func (set *Set[Type]) Update(index uint64, value Type) *gopolutils.Exception {
 // if an IndexError or an IndexOutOfRangError is returned, the set will not be modified.
 func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
 	if set.IsEmpty() {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty set at index %d.", index))
+		return gopolutils.NewNamedException("IndexOutOfRangeError", "Can not access an empty set.")
 	} else if index > set.size {
 		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access set of size %d at index %d.", set.size, index))
 	}
