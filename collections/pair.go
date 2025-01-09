@@ -33,3 +33,9 @@ func (pair *Pair[First, Second]) Swap(operand *Pair[First, Second]) {
 	*pair = *newPair
 	newPair = nil
 }
+
+// Get a tuple of each of the properties in the pair.
+// Returns a pointer to each of the properties in the pair.
+func (pair Pair[First, Second]) Items() (*First, *Second) {
+	return &pair.first, &pair.second
+}
