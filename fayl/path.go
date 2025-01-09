@@ -17,7 +17,7 @@ type Path struct {
 
 // Construct a new filesystem path.
 // Returns a pointer to a new path containing the current working directory.
-// If the current working dirctory can not be obtained, an OSError is printed to standard error and the programme exits.
+// If the current working directory can not be obtained, an OSError is printed to standard error and the programme exits.
 func NewPath() *Path {
 	var path *Path = new(Path)
 	var workingDirectory string
@@ -40,7 +40,7 @@ func PathFrom(path string) *Path {
 }
 
 // Construct a new filesystem path from its given parts.
-// Returns a new filesystem path containing the absolute path compose of the given parts.
+// Returns a new filesystem path containing the absolute path composed of the given parts.
 // If the absolute path of the given parts can not be obtained, an OSError is printed to standard error and the programme exits.
 func PathFromParts(folderName, fileName, fileType string) *Path {
 	var buffer strings.Builder = strings.Builder{}
