@@ -8,17 +8,17 @@ import (
 
 const (
 	// Output capacity.
-	__AVAILABLE_OUTPUTS uint8 = 2
+	availableOutputs uint8 = 2
 )
 
 const (
 	// Format to structure the log timstamp. Copied from the time module docs.
-	__TIMESTAMP_FORMAT string = "2006-01-02 15:04:05" // I've tried others; they don't work.
+	timestampFormat string = "2006-01-02 15:04:05"
 )
 
 var (
 	// Sef-explanatory.
-	__OUTPUT_COUNT uint8 = 0
+	outputCount uint8 = 0
 )
 
 // An enum representation of the severity of a log message.
@@ -59,7 +59,7 @@ func lltostr(level LoggingLevel) string {
 type Logger struct {
 	name    string
 	level   LoggingLevel
-	outputs [__AVAILABLE_OUTPUTS]*os.File
+	outputs [availableOutputs]*os.File
 }
 
 // Construct a new logger with a given name and default logging level.
@@ -74,7 +74,7 @@ func NewLogger(name string, level LoggingLevel) *Logger {
 
 // Private method to append an output to the logger.
 func (logger *Logger) append(output *os.File) {
-	logger.outputs[__OUTPUT_COUNT] = output
+	logger.outputs[outputCount] = output
 }
 
 // Set the minimal logging level for the logger.
@@ -89,11 +89,11 @@ func (logger *Logger) SetLevel(level LoggingLevel) {
 // Bind the standard output to the logger.
 // If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
 func (logger *Logger) AddConsole() *Exception {
-	if __OUTPUT_COUNT >= __AVAILABLE_OUTPUTS {
+	if outputCount >= availableOutputs {
 		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
 	}
 	logger.append(os.Stdout)
-	__OUTPUT_COUNT++
+	outputCount++
 	return nil
 }
 
@@ -101,7 +101,7 @@ func (logger *Logger) AddConsole() *Exception {
 // If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
 // If the given file can not be found, an Exception is returned.
 func (logger *Logger) AddFile(fileName string) *Exception {
-	if __OUTPUT_COUNT >= __AVAILABLE_OUTPUTS {
+	if outputCount >= availableOutputs {
 		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
 	}
 	var file *os.File
@@ -111,7 +111,7 @@ func (logger *Logger) AddFile(fileName string) *Exception {
 		return NewException(except.Error())
 	}
 	logger.append(file)
-	__OUTPUT_COUNT++
+	outputCount++
 	return nil
 }
 
@@ -122,7 +122,7 @@ func (logger *Logger) ConsoleOnly() *Exception {
 	if except != nil {
 		return except
 	}
-	__OUTPUT_COUNT = 2
+	outputCount = 2
 	return nil
 }
 
@@ -134,7 +134,7 @@ func (logger *Logger) FileOnly(fileName string) *Exception {
 	if except != nil {
 		return except
 	}
-	__OUTPUT_COUNT = 2
+	outputCount = 2
 	return nil
 }
 
@@ -197,7 +197,7 @@ func publishMessage(stream *os.File, timestamp, name, message string, level Logg
 // Returns a string representation of a correctly fotmatted timestamp.
 func getTimestamp() string {
 	var now time.Time = time.Now()
-	return now.Format(__TIMESTAMP_FORMAT)
+	return now.Format(timestampFormat)
 }
 
 // Determine if the given stream is a file.
