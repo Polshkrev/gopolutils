@@ -20,7 +20,10 @@
         4. [Queue](/docs/en-UK/collections/queue.md)
         5. [Stack](/docs/en-UK/collections/stack.md)
         6. [Pair](/docs/en-UK/collections/pair.md)
-    3. [Iterators](/docs/en-UK/collections/iterators.md)
+4. Fayl
+    1. [Read](/docs/en-UK/fayl/read.md)
+    2. [Path](/docs/en-UK/fayl/path.md)
+
 
 ### Install
 With a correctly configured Go toolchain:
