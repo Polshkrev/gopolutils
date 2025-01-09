@@ -63,10 +63,16 @@ func (queue *Queue[Type]) Update(index uint64, value Type) *gopolutils.Exception
 }
 
 // Remove the data stored in the queue at a given index.
-// This method is currently not implemented.
 // If the given index is greater than the size of the queue, an IndexOutOfRangeError is returned.
 func (queue *Queue[_]) Remove(index uint64) *gopolutils.Exception {
-	return gopolutils.NewNamedException("NotImplementedError", "Can not remove by index in a queue. Try using the dequeue method.")
+	if queue.IsEmpty() {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove from an empty queue at index %d.", index))
+	} else if index > queue.size {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove element of queue of size %d at index %d.", queue.size, index))
+	}
+	queue.items = append(queue.items[:index], queue.items[index+1:]...)
+	queue.size--
+	return nil
 }
 
 // Dequeue the first item in the queue.
