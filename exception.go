@@ -20,6 +20,18 @@ func (exception *Exception) assignName(name string) {
 	exception.assignRepr()
 }
 
+// Obtain the raw message of the exception without the name.
+// Returns the message of the exception.
+func (exception Exception) Message() string {
+	return exception.message
+}
+
+// Obtain the name of the exception.
+// Returns the name of the exception.
+func (exception Exception) Name() string {
+	return exception.name
+}
+
 // Construct a new exception with a default name and a given message.
 // Returns a pointer to a new exception.
 func NewException(message string) *Exception {
