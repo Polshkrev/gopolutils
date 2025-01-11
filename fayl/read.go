@@ -8,6 +8,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
+	"github.com/Polshkrev/goserialize"
 	"gopkg.in/yaml.v2"
 )
 
@@ -82,7 +83,7 @@ func Read(filePath Path) ([]byte, *gopolutils.Exception) {
 // Returns a pointer to the marshalled object type.
 // If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
 // If the given reader returns an error, an IOError is returned with a nil data pointer.
-func readRawObject[Type any](filePath Path, reader Reader) (*Type, *gopolutils.Exception) {
+func readRawObject[Type any](filePath Path, reader goserialize.Reader) (*Type, *gopolutils.Exception) {
 	var raw []byte
 	var readError *gopolutils.Exception
 	raw, readError = Read(filePath)
@@ -101,7 +102,7 @@ func readRawObject[Type any](filePath Path, reader Reader) (*Type, *gopolutils.E
 // Returns a pointer to the marshalled slice of objects.
 // If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
 // If the given reader returns an error, an IOError is returned with a nil data pointer.
-func readRawList[Type any](filePath Path, reader Reader) ([]Type, *gopolutils.Exception) {
+func readRawList[Type any](filePath Path, reader goserialize.Reader) ([]Type, *gopolutils.Exception) {
 	var raw []byte
 	var readError *gopolutils.Exception
 	raw, readError = Read(filePath)
@@ -129,14 +130,14 @@ func readerListDispatch[Type any](filePath Path) ([]Type, *gopolutils.Exception)
 		return nil, except
 	}
 	switch fileType {
-	case YAMLType:
-		return readRawList[Type](filePath, YAMLReader)
+	case goserialize.YAMLType:
+		return readRawList[Type](filePath, goserialize.YAMLReader)
 	case "yml":
-		return readRawList[Type](filePath, YAMLReader)
-	case TOMLType:
-		return readRawList[Type](filePath, TOMLReader)
+		return readRawList[Type](filePath, goserialize.YAMLReader)
+	case goserialize.TOMLType:
+		return readRawList[Type](filePath, goserialize.TOMLReader)
 	default:
-		return readRawList[Type](filePath, JSONReader)
+		return readRawList[Type](filePath, goserialize.JSONReader)
 	}
 }
 
@@ -180,13 +181,13 @@ func ReadObject[Type any](filePath Path) (*Type, *gopolutils.Exception) {
 		return nil, except
 	}
 	switch fileType {
-	case YAMLType:
-		return readRawObject[Type](filePath, YAMLReader)
+	case goserialize.YAMLType:
+		return readRawObject[Type](filePath, goserialize.YAMLReader)
 	case "yml":
-		return readRawObject[Type](filePath, YAMLReader)
-	case TOMLType:
-		return readRawObject[Type](filePath, TOMLReader)
+		return readRawObject[Type](filePath, goserialize.YAMLReader)
+	case goserialize.TOMLType:
+		return readRawObject[Type](filePath, goserialize.TOMLReader)
 	default:
-		return readRawObject[Type](filePath, JSONReader)
+		return readRawObject[Type](filePath, goserialize.JSONReader)
 	}
 }
