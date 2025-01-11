@@ -1,5 +1,4 @@
 # Read
-
 Functions to aid in the reading of file data.
 
 ## Table Of Contents
@@ -10,7 +9,7 @@ Functions to aid in the reading of file data.
 4. [ReadObject](#readobject)
 
 ### Types
-This module defines a few types to standardize reading a file.
+This module defines a few types to standardize reading a file. Due to the fact that a new serialization library has been released, all of the type aliases defined below are deprecated and will eventually be removed at a later version.
 
 #### Reader
 The reader type is designed to define an interface standardizing how a file reader function should be typed. As a first parametre, this function takes in a slice of bytes. This represents the file content. Typically, this is obtained through the [Read](#readfile) function in this module. As a second parametre, this function takes in a pointer to either a list or an object to serialize the content of the file. This type is aligned with the [json.Unmarshal](https://pkg.go.dev/encoding/json#Unmarshal) function in the standard library, as the usage is the same.
