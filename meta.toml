@@ -1,0 +1,23 @@
+[project]
+name = "gopolutils"
+author = "Polshkrev"
+description = "A collection of golang utilities."
+
+[project.version]
+major = 1
+minor = 10
+description = "The serialization update."
+
+[license]
+type = "MIT"
+path = "LICENSE"
+
+[urls]
+repository = "https://github.com/Polshkrev/gopolutils"
+go = "https://pkg.go.dev/github.com/Polshkrev/gopolutils"
+
+[paths]
+readme = "README.md"
+
+[commands]
+test = ["go", "test", "-v", "./tests/..."]
