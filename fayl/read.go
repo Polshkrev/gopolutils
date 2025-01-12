@@ -64,15 +64,15 @@ func getFileType(filePath string) (string, *gopolutils.Exception) {
 // Returns a byte slice representing the raw file content.
 // If the absolute path of the file can not be obtained, or the file can not be read, an IOError is returned with a nil data pointer.
 func Read(filePath Path) ([]byte, *gopolutils.Exception) {
-	var absolute string
+	var absolute *Path
 	var absoluteError *gopolutils.Exception
-	absolute, absoluteError = filePath.Suffix()
+	absolute, absoluteError = filePath.Absolute()
 	if absoluteError != nil {
 		return nil, gopolutils.NewNamedException("IOError", absoluteError.Message())
 	}
 	var file []byte
 	var readError error
-	file, readError = os.ReadFile(absolute)
+	file, readError = os.ReadFile(absolute.ToString())
 	if readError != nil {
 		return nil, gopolutils.NewNamedException("IOError", readError.Error())
 	}
