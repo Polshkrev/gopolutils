@@ -163,8 +163,7 @@ func ReadList[Type any](filePath Path) (collections.View[Type], *gopolutils.Exce
 	if rawError != nil {
 		return nil, rawError
 	}
-	var result collections.Collection[Type] = collections.NewArray[Type]()
-	sliceToCollection[Type](raw, result)
+	var result collections.View[Type] = goserialize.SliceToView[Type](raw)
 	return result, nil
 }
 
