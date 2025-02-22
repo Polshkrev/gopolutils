@@ -1,5 +1,4 @@
 .vscode
 bin
 build
-TODO.md
 main.go
