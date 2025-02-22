@@ -15,35 +15,35 @@ import (
 const (
 	// Default json file extension.
 	//
-	// Depricated: A new serialization library makes this obsolete.
+	// Deprecated: A new serialization library makes this obsolete.
 	JSONType string = "json"
 	// Default yaml file extenstion.
 	//
-	// Depricated: A new serialization library makes this obsolete.
+	// Deprecated: A new serialization library makes this obsolete.
 	YAMLType string = "yaml"
 	// Default toml file extension.
 	//
-	// Depricated: A new serialization library makes this obsolete.
+	// Deprecated: A new serialization library makes this obsolete.
 	TOMLType string = "toml"
 )
 
 // Generic unmarshal type. The reader type takes in the raw file content and a pointer to the object.
 //
-// Depricated: A new serialization library makes this obsolete.
+// Deprecated: A new serialization library makes this obsolete.
 type Reader = func([]byte, any) error
 
 var (
 	// Default json reader.
 	//
-	// Depricated: A new serialization library makes this obsolete.
+	// Deprecated: A new serialization library makes this obsolete.
 	JSONReader Reader = json.Unmarshal
 	// Default yaml reader.
 	//
-	// Depricated: A new serialization library makes this obsolete.
+	// Deprecated: A new serialization library makes this obsolete.
 	YAMLReader Reader = yaml.Unmarshal
 	// Default toml reader.
 	//
-	// Depricated: A new serialization library makes this obsolete.
+	// Deprecated: A new serialization library makes this obsolete.
 	TOMLReader Reader = toml.Unmarshal
 )
 
@@ -51,7 +51,7 @@ var (
 // Returns the file type of the given filepath based on its extension.
 // If the file does not have a valid extension, or the extension can not be indexed, an Exception is returned with an empty string.
 //
-// Depricated: As of gopolutils 1.7.0, this method has been made obsolete. Use the fayl.Path.Suffix method instead.
+// Deprecated: As of gopolutils 1.7.0, this method has been made obsolete. Use the fayl.Path.Suffix method instead.
 func getFileType(filePath string) (string, *gopolutils.Exception) {
 	var index int = strings.LastIndexByte(filePath, '.')
 	if index < 0 {
@@ -143,7 +143,7 @@ func readerListDispatch[Type any](filePath Path) ([]Type, *gopolutils.Exception)
 
 // Convert a slice to a collection.
 //
-// Depricated: A new serialization library makes this obsolete.
+// Deprecated: A new serialization library makes this obsolete.
 func sliceToCollection[Type any](items []Type, collection collections.Collection[Type]) {
 	var item Type
 	for _, item = range items {
