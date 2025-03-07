@@ -20,6 +20,11 @@ func (exception *Exception) assignName(name string) {
 	exception.assignRepr()
 }
 
+// Protected method to assign the message of an exception.
+func (exception *Exception) assignMessage(message string) {
+	exception.message = message
+}
+
 // Obtain the raw message of the exception without the name.
 // Returns the message of the exception.
 func (exception Exception) Message() string {
@@ -37,7 +42,7 @@ func (exception Exception) Name() string {
 func NewException(message string) *Exception {
 	var exception *Exception = new(Exception)
 	exception.assignName("Exception")
-	exception.message = message
+	exception.assignMessage(message)
 	exception.assignRepr()
 	return exception
 }
@@ -47,7 +52,7 @@ func NewException(message string) *Exception {
 func NewNamedException(name, message string) *Exception {
 	var exception *Exception = new(Exception)
 	exception.assignName(name)
-	exception.message = message
+	exception.assignMessage(message)
 	exception.assignRepr()
 	return exception
 }
@@ -56,4 +61,12 @@ func NewNamedException(name, message string) *Exception {
 // Returns a string representation of the exception.
 func (exception Exception) Error() string {
 	return exception.repr
+}
+
+// If the given exception is nil, the function panics, else this function returns the given result.
+func Must[Type any](result Type, except *Exception) Type {
+	if except != nil {
+		panic(except.Error())
+	}
+	return result
 }
