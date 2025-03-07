@@ -1,4 +1,23 @@
 # Changelog
+## v1.11.0 - 2025-03-07: The Must Update
+For future changes, refer to [TODO.md](../TODO.md).
+
+`Added`
+- A new changelog has appeared. lol.
+- `Exception`
+    - A new `Must` function has been added.
+    - A new private `assignMessage` method has been added.
+- `Logger`
+    - Added a public getter for the `level` property.
+    - Added a public getter and setter for the `name` property.
+    - Added a deprecation notice for the private `append` method.
+- `Docs`
+    - Added documentation for the `Must` function in `exception.md `.
+    - Added mention of the new getter and setter methods for the `level` and `name` property in `logger.md`.
+
+`Changed`
+- `Logger`
+    - The `SetLevel` function now simply sets the level of the logger rather than checking if the parametre and property are the same.
 ## v1.10.1 - 2025-01-12
 `Fixed`
 - `fayl`
