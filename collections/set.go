@@ -11,7 +11,6 @@ import (
 // Implementation of a set.
 type Set[Type comparable] struct {
 	items Mapping[Type, struct{}]
-	size  uint64
 }
 
 // Construct a new set.
@@ -19,7 +18,14 @@ type Set[Type comparable] struct {
 func NewSet[Type comparable]() *Set[Type] {
 	var set *Set[Type] = new(Set[Type])
 	set.items = NewMap[Type, struct{}]()
-	set.size = 0
+	return set
+}
+
+// Construct a new, concurrent-safe, set.
+// Returns a pointer to a new concurrent-safe set.
+func NewSafeSet[Type comparable]() *Set[Type] {
+	var set *Set[Type] = new(Set[Type])
+	set.items = NewSafeMap[Type, struct{}]()
 	return set
 }
 
@@ -34,7 +40,6 @@ func (set *Set[Type]) Append(item Type) {
 		fmt.Fprintln(os.Stderr, except.Error())
 		os.Exit(1)
 	}
-	set.size++
 }
 
 // Append multiple items to the set.
@@ -70,8 +75,8 @@ func (set *Set[Type]) Update(index uint64, value Type) *gopolutils.Exception {
 func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
 	if set.IsEmpty() {
 		return gopolutils.NewNamedException("IndexOutOfRangeError", "Can not access an empty set.")
-	} else if index > set.size {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access set of size %d at index %d.", set.size, index))
+	} else if index > set.Size() {
+		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access set of size %d at index %d.", set.Size(), index))
 	}
 	var i uint64
 	var key Type
@@ -83,7 +88,6 @@ func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
 		if except != nil {
 			return except
 		}
-		set.size--
 		return nil
 	}
 	return gopolutils.NewNamedException("IndexError", fmt.Sprintf("No item at index %d exists.", index))
@@ -104,13 +108,12 @@ func (set *Set[Type]) Discard(item Type) {
 		fmt.Fprintln(os.Stderr, except.Error())
 		os.Exit(1)
 	}
-	set.size--
 }
 
 // Access the size of the set.
 // Returns the size of the set as an unsigned 64-bit integer.
 func (set Set[_]) Size() uint64 {
-	return set.size
+	return set.items.Size()
 }
 
 // Determine if the given item is contained within the set.
@@ -157,7 +160,7 @@ func (set Set[Type]) Intersection(other Set[Type]) *Set[Type] {
 // Determine if the set is empty.
 // Returns true if the length of the underlying data stored in the set and the size of the set is equal to 0.
 func (set Set[_]) IsEmpty() bool {
-	return set.items.IsEmpty() && set.size == 0
+	return set.items.IsEmpty()
 }
 
 // Access a slice of the data within the set.
