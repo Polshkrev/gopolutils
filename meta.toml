@@ -5,8 +5,8 @@ description = "A collection of golang utilities."
 
 [project.version]
 major = 1
-minor = 11
-description = "The must update."
+minor = 12
+description = "The concurrent update."
 
 [license]
 type = "MIT"

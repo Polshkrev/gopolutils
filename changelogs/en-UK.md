@@ -1,7 +1,39 @@
 # Changelog
-## v1.11.0 - 2025-03-07: The Must Update
+## v1.12.0 - 2025-03-13: The Concurrent Update
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- Added `SafeArray` struct.
+- Added `SafeMap` struct.
+- Added `SafeQueue` struct.
+- Added `SafeStack` struct.
+- `Set`
+    - Added `NewSafeSet` function.
+- `fayl`
+    - Added private `readConcurrent` function.
+    - Added `runtime` dependency.
+- `Docs`
+    - Added `SafeArray` documentation.
+    - Added `SafeMap` documentation.
+    - Added `SafeQueue` documentation.
+    - Added `SafeStack` documentation.
+    - Added `NewSafeSet` function documentation.
+
+`Changed`
+- `fayl`
+    - `Read` is now concurrent.
+    - `Read` no longer uses the absolute path.
+    - The functions `Read`, `readRawObject`, `readRawList`, `readerListDispatch`, `ReadList`, and `ReadObject` now use a pointer to a `Path`.
+    - On `Linux`, `Path.Root` simply returns `/`.
+
+`Removed`
+- `Set`
+    - The `size` property has been removed.
+
+`Fixed`
+- `Docs`
+    - Fixed `Map` documentation now mentions the implementation of `View`.
+## v1.11.0 - 2025-03-07: The Must Update
 `Added`
 - A new changelog has appeared. lol.
 - `Exception`
@@ -12,7 +44,7 @@ For future changes, refer to [TODO.md](../TODO.md).
     - Added a public getter and setter for the `name` property.
     - Added a deprecation notice for the private `append` method.
 - `Docs`
-    - Added documentation for the `Must` function in `exception.md `.
+    - Added documentation for the `Must` function in `exception.md`.
     - Added mention of the new getter and setter methods for the `level` and `name` property in `logger.md`.
 
 `Changed`
