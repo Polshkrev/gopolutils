@@ -16,12 +16,16 @@
         4. [View](/docs/en-UK/collections/view.md)
     2. Structures
         1. [Array](/docs/en-UK/collections/array.md)
-        2. [Map](/docs/en-UK/collections/map.md)
-        3. [Set](/docs/en-UK/collections/set.md)
-        4. [Queue](/docs/en-UK/collections/queue.md)
-        5. [Stack](/docs/en-UK/collections/stack.md)
-        6. [Pair](/docs/en-UK/collections/pair.md)
-5. Fayl
+        2. [SafeArray](/docs/en-UK/collections/safe_array.md)
+        3. [Map](/docs/en-UK/collections/map.md)
+        4. [SafeMap](/docs/en-UK/collections/safe_map.md)
+        5. [Set](/docs/en-UK/collections/set.md)
+        6. [Queue](/docs/en-UK/collections/queue.md)
+        7. [SafeQueue](/docs/en-UK/collections/safe_queue.md)
+        8. [Stack](/docs/en-UK/collections/stack.md)
+        9. [SafeStack](/docs/en-UK/collections/safe_stack.md)
+        10. [Pair](/docs/en-UK/collections/pair.md)
+4. Fayl
     1. [Read](/docs/en-UK/fayl/read.md)
     2. [Path](/docs/en-UK/fayl/path.md)
 
