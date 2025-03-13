@@ -1,6 +1,6 @@
-# Map
+# SafeMap
 
-Implementation of a simple key-value pair mapping.
+Implementation of a simple, concurrent-safe, key-value pair mapping.
 
 ## Table Of Contents
 1. [Insert](#insert)
@@ -18,4 +18,4 @@ To remove from a map, there is a simple `Remove` method. This method takes in a 
 To access a value in the map, the `At` method is available. This method will take a given key where the value is mapped. This method will either return a pointer to the mapped value, and a nil exception pointer; or this method will return a nil data pointer and an exception. There is also an `Update` method available. This function takes the key where the value to be updated is mapped and the new value to assign to the given key.
 
 ### Implements
-This structure implements the `Mapping`, and `View` interfaces.
+This structure implements the `Mapping`, `View`, and `Sized` interfaces.

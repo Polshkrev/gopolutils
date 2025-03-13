@@ -2,11 +2,15 @@
 Implementation of a set data structure. "Under the hood", this structure uses the [mapping](/docs/en-UK/collections/mapping.md) interface.
 
 ## Table Of Contents
-1. [Append](#append)
-2. [Remove](#remove)
-3. [Access](#access)
-4. [Utilities](#utilities)
-5. [Implements](#implements)
+1. [Construction](#construction)
+2. [Append](#append)
+3. [Remove](#remove)
+4. [Access](#access)
+5. [Utilities](#utilities)
+6. [Implements](#implements)
+
+### Construction
+The convention in this library to construct a new collection is &mdash; of cource &mdash; the name of the collection prefixed with the keyword `New`. The set collection is no exception to this convention. To construct a new set, there are two methods defined: `NewSet` and `NewSafeSet`. The `NewSafeSet` function is indentical to the `NewSet` function except it constructs a `SafeMap` instead of a regular `Map` to use as the implementation.
 
 ### Append
 To append to a set, there are two methods that can be used; there is &mdash; of course &mdash; the `Append` method. This method appends a singular unique item to the set. There is also the `Extend` method. This method appends multiple unique items to the set in the form of a `View`.
