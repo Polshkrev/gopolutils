@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/Polshkrev/gopolutils"
@@ -40,6 +41,7 @@ func PathFrom(path string) *Path {
 }
 
 // Construct a new filesystem path from its given parts.
+// The fileType parametre is the file extension without the preceding dot.
 // Returns a new filesystem path containing the absolute path composed of the given parts.
 // If the absolute path of the given parts can not be obtained, an OSError is printed to standard error and the programme exits.
 func PathFromParts(folderName, fileName, fileType string) *Path {
@@ -122,6 +124,9 @@ func getRoot(filePath string) (string, *gopolutils.Exception) {
 // If the absolute path can not be obtained, an OSError is returned with a nil data pointer.
 // If the root of the filesystem can not be obtained, an OSError is returned with a nil data pointer.
 func (path Path) Root() (*Path, *gopolutils.Exception) {
+	if runtime.GOOS != "windows" {
+		return PathFrom("/"), nil
+	}
 	var absolute string
 	var absoluteError error
 	absolute, absoluteError = filepath.Abs(path.raw)
