@@ -1,7 +1,24 @@
 # Changelog
-## v1.13.0 - 2025-03-14
+## v1.14.0 - 2025-03-14
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `fayl`
+    - Added `Write` function.
+    - Added `WriteList` function.
+    - Added `WriteObject` function.
+- `Pair`
+    - Added `Flip` method.
+- `Docs`
+    - Added `Write` documentation.
+    - Added `WriteList` documentation.
+    - Added `WriteObject` documentation.
+    - Added `Pair.Flip` documentation.
+
+`Removed`
+- `Docs`
+    - Removed references to the use of an absolute path in `read.md`
+## v1.13.0 - 2025-03-14
 `Changed`
 - `BurntSushi/toml` is now an indirect dependency.
 - `gopkg.in/yaml.v2` is now an indirect dependency.
