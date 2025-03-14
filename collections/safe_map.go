@@ -16,8 +16,8 @@ type SafeMap[Key comparable, Value any] struct {
 
 // Consruct a new map.
 // Returns a pointer to a new empty map.
-func NewSafeMap[Key comparable, Value any]() *Map[Key, Value] {
-	var mapping *Map[Key, Value] = new(Map[Key, Value])
+func NewSafeMap[Key comparable, Value any]() *SafeMap[Key, Value] {
+	var mapping *SafeMap[Key, Value] = new(SafeMap[Key, Value])
 	mapping.items = make(map[Key]Value, 0)
 	mapping.size = 0
 	return mapping
