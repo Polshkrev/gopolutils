@@ -1,7 +1,9 @@
 # Changelog
+## v1.12.1 - 2025-03-14
+`Fixed`
+- `SafeMap`
+    - `NewSafeMap` now returns the correct type.
 ## v1.12.0 - 2025-03-13: The Concurrent Update
-For future changes, refer to [TODO.md](../TODO.md).
-
 `Added`
 - Added `SafeArray` struct.
 - Added `SafeMap` struct.
