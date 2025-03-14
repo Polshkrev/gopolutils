@@ -34,6 +34,12 @@ func (pair *Pair[First, Second]) Swap(operand *Pair[First, Second]) {
 	newPair = nil
 }
 
+// Flip the values of a pair.
+// Returns a new pair where the first value of the original pair is second and the second value of the original pair is first.
+func (pair *Pair[First, Second]) Flip() *Pair[Second, First] {
+	return NewPair(pair.second, pair.first)
+}
+
 // Get a tuple of each of the properties in the pair.
 // Returns a pointer to each of the properties in the pair.
 func (pair Pair[First, Second]) Items() (*First, *Second) {
