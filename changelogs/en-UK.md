@@ -1,4 +1,23 @@
 # Changelog
+## v1.13.0 - 2025-03-14
+For future changes, refer to [TODO.md](../TODO.md).
+
+`Changed`
+- `BurntSushi/toml` is now an indirect dependency.
+- `gopkg.in/yaml.v2` is now an indirect dependency.
+
+`Removed`
+- `fayl`
+    - `read.go`
+        - Removed all deprecated types.
+        - Removed `getFileType` deprecated function.
+        - Removed `sliceToCollection` deprecated function.
+        - Removed `encoding/json` dependency.
+        - Removed `strings` dependency.
+        - Removed `BurntSushi/toml` dependency.
+        - Removed `gopkg.in/yaml.v2` dependency.
+- `Logger`
+    - Removed `append` method.
 ## v1.12.1 - 2025-03-14
 `Fixed`
 - `SafeMap`
