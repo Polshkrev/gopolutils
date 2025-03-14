@@ -18,7 +18,6 @@ const (
 
 var (
 	// Sef-explanatory.
-	// TODO: Make this thread safe. Use a mutex.
 	outputCount uint8 = 0
 )
 
@@ -73,13 +72,6 @@ func NewLogger(name string, level LoggingLevel) *Logger {
 	return logger
 }
 
-// Private method to append an output to the logger.
-//
-// Deprecated: This is redundant.
-func (logger *Logger) append(output *os.File) {
-	logger.outputs[outputCount] = output
-}
-
 // Set the minimal logging level for the logger.
 func (logger *Logger) SetLevel(level LoggingLevel) {
 	logger.level = level
@@ -108,7 +100,7 @@ func (logger *Logger) AddConsole() *Exception {
 	if outputCount >= availableOutputs {
 		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
 	}
-	logger.append(os.Stdout)
+	logger.outputs[outputCount] = os.Stdout
 	outputCount++
 	return nil
 }
@@ -126,7 +118,7 @@ func (logger *Logger) AddFile(fileName string) *Exception {
 	if except != nil {
 		return NewException(except.Error())
 	}
-	logger.append(file)
+	logger.outputs[outputCount] = file
 	outputCount++
 	return nil
 }
