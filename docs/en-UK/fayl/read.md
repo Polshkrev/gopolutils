@@ -2,19 +2,9 @@
 Functions to aid in the reading of file data.
 
 ## Table Of Contents
-1. [Types](#types)
-    1. [Reader](#reader)
-2. [ReadFile](#readfile)
-3. [ReadList](#readlist)
-4. [ReadObject](#readobject)
-
-### Types
-This module defines a few types to standardize reading a file. Due to the fact that a new serialization library has been released, all of the type aliases defined below are deprecated and will eventually be removed at a later version.
-
-#### Reader
-The reader type is designed to define an interface standardizing how a file reader function should be typed. As a first parametre, this function takes in a slice of bytes. This represents the file content. Typically, this is obtained through the [Read](#readfile) function in this module. As a second parametre, this function takes in a pointer to either a list or an object to serialize the content of the file. This type is aligned with the [json.Unmarshal](https://pkg.go.dev/encoding/json#Unmarshal) function in the standard library, as the usage is the same.
-
-There are many default readers defined in this module. As stated previously, the `json.Unmarshal` function is avaiable under the `JSONReader` type alias. Under the same paradigm, there is also a `yaml` and `toml` reader available.
+1. [ReadFile](#readfile)
+2. [ReadList](#readlist)
+3. [ReadObject](#readobject)
 
 ### ReadFile
 For the puposes of documentation, this function is called `ReadFile`. In the source code, this function is simply called `Read`. This function reads a file from a given path parametre into a slice of bytes. This function uses the absolute path of the given path. If the function can not determine the absolute path of the given path, an `IOError` is returned with a `nil` data pointer. Alternatively, if the file can not be read, an `IOError` is returned with a `nil` data pointer.
