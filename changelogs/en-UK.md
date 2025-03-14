@@ -7,6 +7,9 @@ For future changes, refer to [TODO.md](../TODO.md).
     - Added `Write` function.
     - Added `WriteList` function.
     - Added `WriteObject` function.
+    - Added `writeConcurrent` function.
+    - Added `writeRawObject` function.
+    - Added `writeRawList` function.
 - `Pair`
     - Added `Flip` method.
 - `Docs`
