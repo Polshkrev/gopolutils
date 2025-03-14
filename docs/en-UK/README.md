@@ -27,7 +27,8 @@
         10. [Pair](/docs/en-UK/collections/pair.md)
 4. Fayl
     1. [Read](/docs/en-UK/fayl/read.md)
-    2. [Path](/docs/en-UK/fayl/path.md)
+    2. [Write](/docs/ru-RU/fayl/write.md)
+    3. [Path](/docs/en-UK/fayl/path.md)
 
 
 ### Install

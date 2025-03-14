@@ -26,7 +26,8 @@
         10. [Пара](/docs/ru-RU/collections/pair.md)
 4. Файл
     1. [Читать](/docs/ru-RU/fayl/read.md)
-    2. [Адрес](/docs/ru-RU/fayl/path.md)
+    2. [Записывать](/docs/ru-RU/fayl/write.md)
+    3. [Адрес](/docs/ru-RU/fayl/path.md)
 
 
 ### Установить
