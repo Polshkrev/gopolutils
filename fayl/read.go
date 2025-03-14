@@ -1,64 +1,12 @@
 package fayl
 
 import (
-	"encoding/json"
 	"os"
-	"strings"
 
-	"github.com/BurntSushi/toml"
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 	"github.com/Polshkrev/goserialize"
-	"gopkg.in/yaml.v2"
 )
-
-const (
-	// Default json file extension.
-	//
-	// Deprecated: A new serialization library makes this obsolete.
-	JSONType string = "json"
-	// Default yaml file extenstion.
-	//
-	// Deprecated: A new serialization library makes this obsolete.
-	YAMLType string = "yaml"
-	// Default toml file extension.
-	//
-	// Deprecated: A new serialization library makes this obsolete.
-	TOMLType string = "toml"
-)
-
-// Generic unmarshal type. The reader type takes in the raw file content and a pointer to the object.
-//
-// Deprecated: A new serialization library makes this obsolete.
-type Reader = func([]byte, any) error
-
-var (
-	// Default json reader.
-	//
-	// Deprecated: A new serialization library makes this obsolete.
-	JSONReader Reader = json.Unmarshal
-	// Default yaml reader.
-	//
-	// Deprecated: A new serialization library makes this obsolete.
-	YAMLReader Reader = yaml.Unmarshal
-	// Default toml reader.
-	//
-	// Deprecated: A new serialization library makes this obsolete.
-	TOMLReader Reader = toml.Unmarshal
-)
-
-// Helper function to get the file type of a given file path.
-// Returns the file type of the given filepath based on its extension.
-// If the file does not have a valid extension, or the extension can not be indexed, an Exception is returned with an empty string.
-//
-// Deprecated: As of gopolutils 1.7.0, this method has been made obsolete. Use the fayl.Path.Suffix method instead.
-func getFileType(filePath string) (string, *gopolutils.Exception) {
-	var index int = strings.LastIndexByte(filePath, '.')
-	if index < 0 {
-		return "", gopolutils.NewException("Can not determine index of file extension.")
-	}
-	return filePath[index+1:], nil
-}
 
 // Concurrently read a file pased on its given path.
 func readConcurrent(path *Path, dataChannel chan<- []byte, errorChannel chan<- error) {
@@ -145,16 +93,6 @@ func readerListDispatch[Type any](filePath *Path) ([]Type, *gopolutils.Exception
 		return readRawList[Type](filePath, goserialize.TOMLReader)
 	default:
 		return readRawList[Type](filePath, goserialize.JSONReader)
-	}
-}
-
-// Convert a slice to a collection.
-//
-// Deprecated: A new serialization library makes this obsolete.
-func sliceToCollection[Type any](items []Type, collection collections.Collection[Type]) {
-	var item Type
-	for _, item = range items {
-		collection.Append(item)
 	}
 }
 
