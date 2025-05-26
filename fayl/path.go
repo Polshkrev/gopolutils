@@ -16,6 +16,14 @@ type Path struct {
 	raw string
 }
 
+// Finite — incomplete — operating system values.
+type OS = string
+
+const (
+	// Windows operating system.
+	WINDOWS OS = "windows"
+)
+
 // Construct a new filesystem path.
 // Returns a pointer to a new path containing the current working directory.
 // If the current working directory can not be obtained, an OSError is printed to standard error and the programme exits.
@@ -124,7 +132,7 @@ func getRoot(filePath string) (string, *gopolutils.Exception) {
 // If the absolute path can not be obtained, an OSError is returned with a nil data pointer.
 // If the root of the filesystem can not be obtained, an OSError is returned with a nil data pointer.
 func (path Path) Root() (*Path, *gopolutils.Exception) {
-	if runtime.GOOS != "windows" {
+	if OS(runtime.GOOS) != WINDOWS { // ! This will error if value is not in enum list.
 		return PathFrom("/"), nil
 	}
 	var absolute string
