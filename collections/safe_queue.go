@@ -47,9 +47,9 @@ func (queue *SafeQueue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	if queue.IsEmpty() {
-		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty queue at index %d.", index))
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty queue at index %d.", index))
 	} else if index > queue.size {
-		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
+		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
 	}
 	return &queue.items[index], nil
 }
@@ -62,9 +62,9 @@ func (queue *SafeQueue[Type]) Update(index uint64, value Type) *gopolutils.Excep
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 	if queue.IsEmpty() {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty queue at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty queue at index %d.", index))
 	} else if index > queue.size {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
 	}
 	queue.items[index] = value
 	return nil
@@ -76,9 +76,9 @@ func (queue *SafeQueue[_]) Remove(index uint64) *gopolutils.Exception {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 	if queue.IsEmpty() {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove from an empty queue at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty queue at index %d.", index))
 	} else if index > queue.size {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove element of queue of size %d at index %d.", queue.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not remove element of queue of size %d at index %d.", queue.size, index))
 	}
 	queue.items = append(queue.items[:index], queue.items[index+1:]...)
 	queue.size--
@@ -96,7 +96,7 @@ func (queue *SafeQueue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 	if queue.IsEmpty() {
-		return nil, gopolutils.NewException("Can not dequeue from an empty queue.")
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not dequeue from an empty queue.")
 	}
 	var first Type
 	first, queue.items = queue.items[0], queue.items[1:]
@@ -111,7 +111,7 @@ func (queue *SafeQueue[Type]) Peek() (*Type, *gopolutils.Exception) {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	if queue.IsEmpty() {
-		return nil, gopolutils.NewException("Can not peek into an empty queue.")
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not peek into an empty queue.")
 	}
 	return &queue.items[0], nil
 }

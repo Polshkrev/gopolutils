@@ -41,9 +41,9 @@ func (queue *Queue[Type]) Extend(items View[Type]) {
 // If the index is greater than the size of the queue, an IndexOutOfRangeError is returned with a nil data pointer.
 func (queue Queue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	if queue.IsEmpty() {
-		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty queue at index %d.", index))
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty queue at index %d.", index))
 	} else if index > queue.size {
-		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
+		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
 	}
 	return &queue.items[index], nil
 }
@@ -54,9 +54,9 @@ func (queue Queue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 // If an IndexOutOfRangeError is returned, the queue is not modified.
 func (queue *Queue[Type]) Update(index uint64, value Type) *gopolutils.Exception {
 	if queue.IsEmpty() {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty queue at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty queue at index %d.", index))
 	} else if index > queue.size {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access queue of size %d at index %d.", queue.size, index))
 	}
 	queue.items[index] = value
 	return nil
@@ -66,9 +66,9 @@ func (queue *Queue[Type]) Update(index uint64, value Type) *gopolutils.Exception
 // If the given index is greater than the size of the queue, an IndexOutOfRangeError is returned.
 func (queue *Queue[_]) Remove(index uint64) *gopolutils.Exception {
 	if queue.IsEmpty() {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove from an empty queue at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty queue at index %d.", index))
 	} else if index > queue.size {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove element of queue of size %d at index %d.", queue.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not remove element of queue of size %d at index %d.", queue.size, index))
 	}
 	queue.items = append(queue.items[:index], queue.items[index+1:]...)
 	queue.size--
@@ -84,7 +84,7 @@ func (queue *Queue[_]) Remove(index uint64) *gopolutils.Exception {
 // If an Exception is returned, the queue is not modified.
 func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 	if queue.IsEmpty() {
-		return nil, gopolutils.NewException("Can not dequeue from an empty queue.")
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not dequeue from an empty queue.")
 	}
 	var first Type
 	first, queue.items = queue.items[0], queue.items[1:]
@@ -97,7 +97,7 @@ func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 // If the queue is evaluated to be empty, an Exception is returned with a nil data pointer.
 func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
 	if queue.IsEmpty() {
-		return nil, gopolutils.NewException("Can not peek into an empty queue.")
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not peek into an empty queue.")
 	}
 	return &queue.items[0], nil
 }
