@@ -33,7 +33,7 @@ func NewPath() *Path {
 	var err error
 	workingDirectory, err = os.Getwd()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, gopolutils.NewNamedException("OSError", err.Error()))
+		fmt.Fprintln(os.Stderr, gopolutils.NewNamedException(gopolutils.OSError, err.Error()))
 		os.Exit(1)
 	}
 	path.raw = workingDirectory
@@ -61,7 +61,7 @@ func PathFromParts(folderName, fileName, fileType string) *Path {
 	var absoluteError error
 	absolute, absoluteError = filepath.Abs(buffer.String())
 	if absoluteError != nil {
-		fmt.Fprintln(os.Stderr, gopolutils.NewNamedException("OSError", absoluteError.Error()))
+		fmt.Fprintln(os.Stderr, gopolutils.NewNamedException(gopolutils.OSError, absoluteError.Error()))
 		os.Exit(1)
 	}
 	return PathFrom(absolute)
@@ -83,7 +83,7 @@ func (path Path) Absolute() (*Path, *gopolutils.Exception) {
 	var absoluteError error
 	absolute, absoluteError = filepath.Abs(path.raw)
 	if absoluteError != nil {
-		return nil, gopolutils.NewNamedException("OSError", absoluteError.Error())
+		return nil, gopolutils.NewNamedException(gopolutils.OSError, absoluteError.Error())
 	}
 	return PathFrom(absolute), nil
 }
@@ -111,7 +111,7 @@ func (path *Path) AppendAs(item string) {
 func (path Path) Suffix() (string, *gopolutils.Exception) {
 	var index int = strings.LastIndexByte(path.raw, '.')
 	if index < 0 {
-		return "", gopolutils.NewNamedException("OSError", "Path does not have an associated suffix.")
+		return "", gopolutils.NewNamedException(gopolutils.OSError, "Path does not have an associated suffix.")
 	}
 	return path.raw[index+1:], nil
 }
@@ -122,7 +122,7 @@ func (path Path) Suffix() (string, *gopolutils.Exception) {
 func getRoot(filePath string) (string, *gopolutils.Exception) {
 	var index int = strings.IndexRune(filePath, filepath.Separator)
 	if index < 0 {
-		return "", gopolutils.NewNamedException("OSError", "Path does not have an associated root.")
+		return "", gopolutils.NewNamedException(gopolutils.OSError, "Path does not have an associated root.")
 	}
 	return filePath[:index], nil
 }
@@ -139,7 +139,7 @@ func (path Path) Root() (*Path, *gopolutils.Exception) {
 	var absoluteError error
 	absolute, absoluteError = filepath.Abs(path.raw)
 	if absoluteError != nil {
-		return nil, gopolutils.NewNamedException("OSError", absoluteError.Error())
+		return nil, gopolutils.NewNamedException(gopolutils.OSError, absoluteError.Error())
 	}
 	var root string
 	var rootExcept *gopolutils.Exception
@@ -159,7 +159,7 @@ func checkRoot(path Path) *gopolutils.Exception {
 	if rootExcept != nil {
 		return rootExcept
 	} else if strings.Compare(root.raw, path.raw) == 0 {
-		return gopolutils.NewNamedException("OSError", "Can not get parent of filesystem root.")
+		return gopolutils.NewNamedException(gopolutils.OSError, "Can not get parent of filesystem root.")
 	}
 	return nil
 }
