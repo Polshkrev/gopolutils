@@ -25,7 +25,7 @@ func NewMap[Key comparable, Value any]() *Map[Key, Value] {
 // If the key is already in the map, instead of just quietly not inserting into the map, a KeyEror is retruned.
 func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Exception {
 	if mapping.HasKey(key) {
-		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%v' already exists.", key))
+		return gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Key '%v' already exists.", key))
 	}
 	mapping.items[key] = value
 	mapping.size++
@@ -38,9 +38,9 @@ func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Excepti
 // If the key is not in the map, a KeyError is returned with a nil data pointer.
 func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	if mapping.IsEmpty() {
-		return nil, gopolutils.NewNamedException("KeyError", fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
+		return nil, gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
 	} else if !mapping.HasKey(key) {
-		return nil, gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%+v' does not exist.", key))
+		return nil, gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Key '%+v' does not exist.", key))
 	}
 	var value Value = mapping.items[key]
 	return &value, nil
@@ -51,9 +51,9 @@ func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 // If a KeyError is returned, the mapping is not modified.
 func (mapping Map[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
 	if mapping.IsEmpty() {
-		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
+		return gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
 	} else if !mapping.HasKey(key) {
-		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%+v' does not exist.", key))
+		return gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Key '%+v' does not exist.", key))
 	}
 	mapping.items[key] = value
 	return nil
@@ -86,9 +86,9 @@ func (mapping Map[_, Value]) Values() []Value {
 // If the given key is not stored in the map, a KeyError is returned.
 func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 	if mapping.IsEmpty() {
-		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Can not remove from an empty map at key '%+v'", key))
+		return gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Can not remove from an empty map at key '%+v'", key))
 	} else if !mapping.HasKey(key) {
-		return gopolutils.NewNamedException("KeyError", fmt.Sprintf("Key '%+v' does not exist.", key))
+		return gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Key '%+v' does not exist.", key))
 	}
 	delete(mapping.items, key)
 	mapping.size--

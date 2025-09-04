@@ -55,7 +55,7 @@ func (set *Set[Type]) Extend(items View[Type]) {
 // This method is not yet implemented.
 // If the index is greater than the size of the set, an IndexOutOfRangeError is returned with a nil data pointer.
 func (set Set[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
-	return nil, gopolutils.NewNamedException("NotImplementedError", "Can not access a set by index.")
+	return nil, gopolutils.NewNamedException(gopolutils.NotImplementedError, "Can not access a set by index.")
 }
 
 // Update a value within the set.
@@ -64,7 +64,7 @@ func (set Set[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 // If the set is empty, an IndexOutOfRangeError is returned.
 // If an IndexOutOfRangeError is returned, the set is not modified.
 func (set *Set[Type]) Update(index uint64, value Type) *gopolutils.Exception {
-	return gopolutils.NewNamedException("NotImplementedError", "Can not update a set by index yet.")
+	return gopolutils.NewNamedException(gopolutils.NotImplementedError, "Can not update a set by index yet.")
 }
 
 // Remove an item in the set at a given index.
@@ -74,9 +74,9 @@ func (set *Set[Type]) Update(index uint64, value Type) *gopolutils.Exception {
 // if an IndexError or an IndexOutOfRangError is returned, the set will not be modified.
 func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
 	if set.IsEmpty() {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", "Can not access an empty set.")
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty set.")
 	} else if index > set.Size() {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access set of size %d at index %d.", set.Size(), index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access set of size %d at index %d.", set.Size(), index))
 	}
 	var i uint64
 	var key Type
@@ -90,7 +90,7 @@ func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
 		}
 		return nil
 	}
-	return gopolutils.NewNamedException("IndexError", fmt.Sprintf("No item at index %d exists.", index))
+	return gopolutils.NewNamedException(gopolutils.IndexError, fmt.Sprintf("No item at index %d exists.", index))
 }
 
 // Remove an item within the set without an exception.

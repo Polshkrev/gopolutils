@@ -47,9 +47,9 @@ func (stack *SafeStack[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	stack.lock.RLock()
 	defer stack.lock.RUnlock()
 	if stack.IsEmpty() {
-		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty stack at index %d.", index))
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty stack at index %d.", index))
 	} else if index > stack.size {
-		return nil, gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
+		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
 	}
 	return &stack.items[index], nil
 }
@@ -62,9 +62,9 @@ func (stack *SafeStack[Type]) Update(index uint64, value Type) *gopolutils.Excep
 	stack.lock.Lock()
 	defer stack.lock.Unlock()
 	if stack.IsEmpty() {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access an empty stack at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty stack at index %d.", index))
 	} else if index > stack.size {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
 	}
 	stack.items[index] = value
 	return nil
@@ -78,9 +78,9 @@ func (stack *SafeStack[_]) Remove(index uint64) *gopolutils.Exception {
 	stack.lock.Lock()
 	defer stack.lock.Unlock()
 	if stack.IsEmpty() {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove from an empty stack at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty stack at index %d.", index))
 	} else if index > stack.size {
-		return gopolutils.NewNamedException("IndexOutOfRangeError", fmt.Sprintf("Can not remove element of stack of size %d at index %d.", stack.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not remove element of stack of size %d at index %d.", stack.size, index))
 	}
 	stack.items = append(stack.items[:index], stack.items[index+1:]...)
 	stack.size--
@@ -98,7 +98,7 @@ func (stack *SafeStack[Type]) Pop() (*Type, *gopolutils.Exception) {
 	stack.lock.Lock()
 	defer stack.lock.Unlock()
 	if stack.IsEmpty() {
-		return nil, gopolutils.NewException("Can not pop from an empty stack.")
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not pop from an empty stack.")
 	}
 	var index int = len(stack.items) - 1
 	var last Type
@@ -117,7 +117,7 @@ func (stack *SafeStack[Type]) Peek() (*Type, *gopolutils.Exception) {
 	stack.lock.RLock()
 	defer stack.lock.RUnlock()
 	if stack.IsEmpty() {
-		return nil, gopolutils.NewException("Can not peek from an empty stack.")
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not peek from an empty stack.")
 	}
 	var index int = len(stack.items) - 1
 	return &stack.items[index], nil
