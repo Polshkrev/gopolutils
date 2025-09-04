@@ -21,7 +21,7 @@ func Write(filePath *Path, content []byte) *gopolutils.Exception {
 	go writeConcurrent(filePath, content, errorChannel)
 	var writeError error = <-errorChannel
 	if writeError != nil {
-		return gopolutils.NewNamedException("IOError", writeError.Error())
+		return gopolutils.NewNamedException(gopolutils.IOError, writeError.Error())
 	}
 	return nil
 }
@@ -34,7 +34,7 @@ func writeRawObject[Type any](filePath *Path, content *Type, writer goserialize.
 	var marshalError error
 	data, marshalError = writer(content)
 	if marshalError != nil {
-		return gopolutils.NewNamedException("IOError", marshalError.Error())
+		return gopolutils.NewNamedException(gopolutils.IOError, marshalError.Error())
 	}
 	return Write(filePath, data)
 }
@@ -47,7 +47,7 @@ func writeRawList[Type any](filePath *Path, content []Type, writer goserialize.W
 	var marshalError error
 	data, marshalError = writer(content)
 	if marshalError != nil {
-		return gopolutils.NewNamedException("IOError", marshalError.Error())
+		return gopolutils.NewNamedException(gopolutils.IOError, marshalError.Error())
 	}
 	return Write(filePath, data)
 }

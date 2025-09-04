@@ -29,7 +29,7 @@ func Read(filePath *Path) ([]byte, *gopolutils.Exception) {
 	var file []byte = <-dataChannel
 	var readError error = <-errorChannel
 	if readError != nil {
-		return nil, gopolutils.NewNamedException("IOError", readError.Error())
+		return nil, gopolutils.NewNamedException(gopolutils.IOError, readError.Error())
 	}
 	return file, nil
 }
@@ -48,7 +48,7 @@ func readRawObject[Type any](filePath *Path, reader goserialize.Reader) (*Type, 
 	var result *Type = new(Type)
 	var marshallError error = reader(raw, result)
 	if marshallError != nil {
-		return nil, gopolutils.NewNamedException("IOError", marshallError.Error())
+		return nil, gopolutils.NewNamedException(gopolutils.IOError, marshallError.Error())
 	}
 	return result, nil
 }
@@ -67,7 +67,7 @@ func readRawList[Type any](filePath *Path, reader goserialize.Reader) ([]Type, *
 	var result []Type = make([]Type, len(raw))
 	var readerError error = reader(raw, &result)
 	if readerError != nil {
-		return nil, gopolutils.NewNamedException("IOError", readerError.Error())
+		return nil, gopolutils.NewNamedException(gopolutils.IOError, readerError.Error())
 	}
 	return result, nil
 }
