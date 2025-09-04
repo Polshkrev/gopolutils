@@ -151,7 +151,7 @@ func (version Version) IsPublic() bool {
 // If the version object is evaluated to have already been published, a ValueError is returned and no properties are modified.
 func (version *Version) Publish() *Exception {
 	if version.IsPublic() {
-		return NewNamedException("ValueError", "Version is already public.")
+		return NewNamedException(ValueError, "Version is already public.")
 	}
 	version.SetMajor(1)
 	version.SetMinor(0)

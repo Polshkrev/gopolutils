@@ -4,7 +4,7 @@ import "fmt"
 
 // Representation of a standardized exception.
 type Exception struct {
-	name    string
+	name    ExceptionName
 	repr    string
 	message string
 }
@@ -15,7 +15,7 @@ func (exception *Exception) assignRepr() {
 }
 
 // Protected method to assign the name of the exception.
-func (exception *Exception) assignName(name string) {
+func (exception *Exception) assignName(name ExceptionName) {
 	exception.name = name
 	exception.assignRepr()
 }
@@ -33,7 +33,7 @@ func (exception Exception) Message() string {
 
 // Obtain the name of the exception.
 // Returns the name of the exception.
-func (exception Exception) Name() string {
+func (exception Exception) Name() ExceptionName {
 	return exception.name
 }
 
@@ -41,7 +41,7 @@ func (exception Exception) Name() string {
 // Returns a pointer to a new exception.
 func NewException(message string) *Exception {
 	var exception *Exception = new(Exception)
-	exception.assignName("Exception")
+	exception.assignName(BaseException)
 	exception.assignMessage(message)
 	exception.assignRepr()
 	return exception
@@ -49,7 +49,7 @@ func NewException(message string) *Exception {
 
 // Construct a new exception with a given name and message.
 // Returns a pointer to a new exception.
-func NewNamedException(name, message string) *Exception {
+func NewNamedException(name ExceptionName, message string) *Exception {
 	var exception *Exception = new(Exception)
 	exception.assignName(name)
 	exception.assignMessage(message)
@@ -63,7 +63,7 @@ func (exception Exception) Error() string {
 	return exception.repr
 }
 
-// If the given exception is nil, the function panics, else this function returns the given result.
+// If the given exception is not nil, the function panics, else this function returns the given result.
 func Must[Type any](result Type, except *Exception) Type {
 	if except != nil {
 		panic(except.Error())

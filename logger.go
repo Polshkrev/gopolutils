@@ -52,7 +52,7 @@ func lltostr(level LoggingLevel) string {
 	case CRITICAL:
 		return "CRITICAL"
 	}
-	return "Unknown logging level." // unreachable
+	return NewNamedException(UnreachableError, "Unknown logging level.").Error() // unreachable
 }
 
 // A logger.
@@ -98,7 +98,7 @@ func (logger Logger) GetName() string {
 // If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
 func (logger *Logger) AddConsole() *Exception {
 	if outputCount >= availableOutputs {
-		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
+		return NewNamedException(ValueError, "The number of outputs has exceeded the maximum allowed.")
 	}
 	logger.outputs[outputCount] = os.Stdout
 	outputCount++
@@ -110,7 +110,7 @@ func (logger *Logger) AddConsole() *Exception {
 // If the given file can not be found, an Exception is returned.
 func (logger *Logger) AddFile(fileName string) *Exception {
 	if outputCount >= availableOutputs {
-		return NewNamedException("ValueError", "The number of outputs has exceeded the maximum allowed.")
+		return NewNamedException(ValueError, "The number of outputs has exceeded the maximum allowed.")
 	}
 	var file *os.File
 	var except error
