@@ -38,7 +38,7 @@ func (mapping *SafeMap[Key, Value]) Insert(key Key, value Value) *gopolutils.Exc
 
 // Access an element at a given key within the map.
 // Returns a pointer to the data stored at the given key.
-// If the map is empty, a KeyError is returned with a nil data pointer.
+// If the map is empty, a ValueError is returned with a nil data pointer.
 // If the key is not in the map, a KeyError is returned with a nil data pointer.
 func (mapping *SafeMap[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	mapping.lock.RLock()
@@ -53,8 +53,9 @@ func (mapping *SafeMap[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) 
 }
 
 // Update a value within the mapping.
+// If the mapping is empty, a ValueError is returned.
 // If the key does not exist in the mapping, a KeyError is returned.
-// If a KeyError is returned, the mapping is not modified.
+// If a non-nil Exception is returned, the mapping is not modified.
 func (mapping *SafeMap[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
@@ -94,7 +95,7 @@ func (mapping *SafeMap[_, Value]) Values() []Value {
 }
 
 // Remove an item stored at a given key within the map.
-// If the map is empty, a KeyError is returned.
+// If the map is empty, a ValueError is returned.
 // If the given key is not stored in the map, a KeyError is returned.
 func (mapping *SafeMap[Key, _]) Remove(key Key) *gopolutils.Exception {
 	mapping.lock.Lock()

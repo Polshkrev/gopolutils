@@ -39,8 +39,8 @@ func (array *SafeArray[Type]) Extend(items View[Type]) {
 }
 
 // Access the data stored in the array at a given index.
-// If the array is empty, an IndexOutOfRangeError is returned with a nil data pointer.
-// If the given index is greater than the size of the array, an IndexOutOfRangeError is returned with a nil data pointer.
+// If the array is empty, a ValueError is returned with a nil data pointer.
+// If the given index is greater than the size of the array, an OutOfRangeError is returned with a nil data pointer.
 func (array *SafeArray[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 	array.lock.RLock()
 	defer array.lock.RUnlock()
@@ -53,9 +53,9 @@ func (array *SafeArray[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 }
 
 // Update a value within the collection.
-// If the given index is greater than the collection size, an IndexOutOfRangeError is returned.
-// If the collection is empty, an IndexOutOfRangeError is returned.
-// If an IndexOutOfRangeError is returned, the collection is not modified.
+// If the collection is empty, a ValueError is returned.
+// If the given index is greater than the collection size, an OutOfRangeError is returned.
+// If a non-nil Exception is returned, the collection is not modified.
 func (array *SafeArray[Type]) Update(index uint64, value Type) *gopolutils.Exception {
 	array.lock.Lock()
 	defer array.lock.Unlock()
@@ -69,9 +69,9 @@ func (array *SafeArray[Type]) Update(index uint64, value Type) *gopolutils.Excep
 }
 
 // Remove the data stored in the array at a given index.
-// If the array is empty, an IndexOutOfRangeError is returned.
-// If the given index is greater than the size of the array, an IndexOutOfRangeError is returned.
-// If an IndexOutOfRangeError is returned, the array is not modified.
+// If the array is empty, a ValueError is returned.
+// If the given index is greater than the size of the array, an OutOfRangeError is returned.
+// If a non-nil Exception is returned, the array is not modified.
 func (array *SafeArray[Type]) Remove(index uint64) *gopolutils.Exception {
 	array.lock.Lock()
 	defer array.lock.Unlock()
