@@ -63,7 +63,14 @@ func (exception Exception) Error() string {
 	return exception.repr
 }
 
-// If the given exception is not nil, the function panics, else this function returns the given result.
+// Determine if the exception has a specific name.
+// Similar to the Errors.Is function in the standard library.
+// Returns true if the exception has the given name, else false.
+func (exception Exception) Is(name ExceptionName) bool {
+	return exception.name == name
+}
+
+// If the given exception is not nil, the function panics, else the function returns the given result.
 func Must[Type any](result Type, except *Exception) Type {
 	if except != nil {
 		panic(except.Error())
