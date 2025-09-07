@@ -107,7 +107,7 @@ func (logger *Logger) AddConsole() *Exception {
 
 // Bind a file to the logger.
 // If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
-// If the given file can not be found, an Exception is returned.
+// If the given file can not be found, an IOError is returned.
 func (logger *Logger) AddFile(fileName string) *Exception {
 	if outputCount >= availableOutputs {
 		return NewNamedException(ValueError, "The number of outputs has exceeded the maximum allowed.")
@@ -116,7 +116,7 @@ func (logger *Logger) AddFile(fileName string) *Exception {
 	var except error
 	file, except = os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if except != nil {
-		return NewException(except.Error())
+		return NewNamedException(IOError, except.Error())
 	}
 	logger.outputs[outputCount] = file
 	outputCount++
