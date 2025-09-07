@@ -19,7 +19,7 @@ Using `PathFrom` will construct a new path from a given path string. This constr
 #### PathFromParts
 Using `PathFromParts` will construct a path from a given folder name, file name, and file suffix. As an example:
 ```go
-var path *gopolutils.Path = gopolutils.PathFromParts(".", "test", "txt")
+var path *fayl.Path = fayl.PathFromParts(".", "test", "txt")
 // The path string should equal: "{currentDirectory}/test.txt"
 ```
 This constructor uses an operating system dependent path seperator.
