@@ -55,7 +55,7 @@ func writeRawList[Type any](filePath *Path, content []Type, writer goserialize.W
 // Write a view of a type into a file.
 // If the file can not be written, an IOError is returned.
 // Alternatively, if the data can not be marshalled, an IOError is returned.
-// In addition, if the file type can not be evaluated, an Exception is returned.
+// In addition, if the file type can not be evaluated, an OSError is returned.
 func WriteList[Type any](filePath *Path, content collections.View[Type]) *gopolutils.Exception {
 	var fileType string
 	var except *gopolutils.Exception
@@ -78,7 +78,7 @@ func WriteList[Type any](filePath *Path, content collections.View[Type]) *gopolu
 // Write a file as an object.
 // If the file can not be written, an IOError is returned.
 // Alternatively, if the data can not be marshalled, an IOError is returned.
-// In addition, if the file type can not be evaluated, an Exception is returned.
+// In addition, if the file type can not be evaluated, an OSError is returned.
 func WriteObject[Type any](filePath *Path, content *Type) *gopolutils.Exception {
 	var fileType string
 	var except *gopolutils.Exception
