@@ -25,3 +25,14 @@ func In[Type comparable](items View[Type], item Type) bool {
 	}
 	return false
 }
+
+// Chain a variadic list of views together.
+// Returns a new collection of the combination of each of the passed in views.
+func Chain[Type any](views ...View[Type]) Collection[Type] {
+	var result Collection[Type] = NewArray[Type]()
+	var view View[Type]
+	for _, view = range views {
+		result.Extend(view)
+	}
+	return result
+}
