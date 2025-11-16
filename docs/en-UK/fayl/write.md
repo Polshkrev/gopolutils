@@ -10,7 +10,7 @@ Functions to aid in the writing data to a file.
 For the puposes of documentation, this function is called `WriteFile`. In the source code, this function is simply called `Write`. This function writes a slice of bytes to the file with the given path parametre. If the file cannot be written, an `IOError` is returned.
 
 ### WriteList
-This function takes in a pointer to a filepath &mdash; either relative or absolute &mdash; and a [View](/docs/en-UK/collections/view.md) representing the list of serialized data to be writen to the file. If the file can not be written, an `IOError` is returned. Another exception that can be returned is, if the given data can not be marshalled, an `IOError` is returned.
+This function takes in a pointer to a filepath &mdash; either relative or absolute &mdash; and a [View](/docs/en-UK/collections/view.md) representing the list of serialized data to be writen to the file. If the file can not be written, an `IOError` is returned. Another exception that can be returned is, if the given data can not be marshalled, an `IOError` is returned. If the suffix of the file can not be determined, an `OSError` is returned.
 
 ### WriteObject
-This function takes in a pointer to a filepath &mdash; either relative or absolute &mdash; and a pointer to a type representing the serialized data to be written to the file. If the file can not be written, an `IOError` is returned. Another exception that can be returned is, if the given data can not be marshalled, an `IOError` is returned.
+This function takes in a pointer to a filepath &mdash; either relative or absolute &mdash; and a pointer to a type representing the serialized data to be written to the file. If the file can not be written, an `IOError` is returned. Another exception that can be returned is, if the given data can not be marshalled, an `IOError` is returned. If the suffix of the file can not be determined, an `OSError` is returned.
