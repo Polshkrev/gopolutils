@@ -1,6 +1,21 @@
 # Changelog
-## v1.14.0 - 2025-03-14
+## v1.15.0 - 2025-11-16
 For future changes, refer to [TODO.md](../TODO.md).
+
+`Added`
+- A new `ExceptionName` enum has been added.
+- `Exception`
+    - A new `Is` method has been added.
+- `fayl`
+    - A new **incomplete** `OS` enum has been added.
+- `Tests`
+    - Added `Exception` tests.
+
+`Changed`
+- `Docs`
+    - All documentation &mdash; in both russian and english &mdash; has been updated to reflect any aforementioned changes.
+
+## v1.14.0 - 2025-03-14
 
 `Added`
 - `fayl`
