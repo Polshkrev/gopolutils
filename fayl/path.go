@@ -22,6 +22,22 @@ type OS = string
 const (
 	// Windows operating system.
 	WINDOWS OS = "windows"
+	// Mac operating system.
+	MAC OS = "darwin"
+	// Linux operating system.
+	LINUX OS = "linux"
+	// Android operating system.
+	ANDROID OS = "android"
+	// FreeBSD operating system.
+	FREEBSD OS = "freebsd"
+	// Representation of Apple's IOS.
+	IOS OS = "ios"
+	// Representation of a web-based operating system.
+	JS OS = "js"
+	// NetBSD operating system.
+	NETBSD OS = "netbsd"
+	// OpenBSD operating system.
+	OPENBSD OS = "openbsd"
 )
 
 // Construct a new filesystem path.
