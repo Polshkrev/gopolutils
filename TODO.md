@@ -3,3 +3,4 @@
 
 Collections:
 - [ ] Implement different iterators i.e. Reversed.
+- [ ] Add an iterative `RemoveFrom` and `RemoveUntil` functions.
