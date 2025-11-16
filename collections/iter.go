@@ -13,6 +13,19 @@ func Enumerate[Type any](items View[Type]) func(func(uint64, Type) bool) {
 	}
 }
 
+// Implementation of a reverse function iterator.
+// Returns a function iterator of a reversed view.
+func Reverse[Type any](items View[Type]) func(func(uint64, Type) bool) {
+	return func(yield func(uint64, Type) bool) {
+		var i uint64
+		for i = items.Size() - 1; i <= 0; i-- {
+			if !yield(i, items.Collect()[i]) {
+				return
+			}
+		}
+	}
+}
+
 // Determine if a given item is within a given slice of items.
 // Returns true if the given item is present within the given slice of items.
 func In[Type comparable](items View[Type], item Type) bool {
