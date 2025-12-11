@@ -70,6 +70,8 @@ func WriteList[Type any](filePath *Path, content collections.View[Type]) *gopolu
 		return writeRawList[Type](filePath, content.Collect(), goserialize.YAMLWriter)
 	case goserialize.TOMLType:
 		return writeRawList[Type](filePath, content.Collect(), goserialize.TOMLWriter)
+	case goserialize.CSVType:
+		return writeRawList[Type](filePath, content.Collect(), goserialize.CSVWriter)
 	default:
 		return writeRawList[Type](filePath, content.Collect(), goserialize.JSONWriter)
 	}
@@ -93,6 +95,8 @@ func WriteObject[Type any](filePath *Path, content *Type) *gopolutils.Exception 
 		return writeRawObject[Type](filePath, content, goserialize.YAMLWriter)
 	case goserialize.TOMLType:
 		return writeRawObject[Type](filePath, content, goserialize.TOMLWriter)
+	case goserialize.CSVType:
+		return writeRawObject[Type](filePath, content, goserialize.CSVWriter)
 	default:
 		return writeRawObject[Type](filePath, content, goserialize.JSONWriter)
 	}
