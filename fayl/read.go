@@ -91,6 +91,8 @@ func readerListDispatch[Type any](filePath *Path) ([]Type, *gopolutils.Exception
 		return readRawList[Type](filePath, goserialize.YAMLReader)
 	case goserialize.TOMLType:
 		return readRawList[Type](filePath, goserialize.TOMLReader)
+	case goserialize.CSVType:
+		return readRawList[Type](filePath, goserialize.CSVReader)
 	default:
 		return readRawList[Type](filePath, goserialize.JSONReader)
 	}
@@ -131,6 +133,8 @@ func ReadObject[Type any](filePath *Path) (*Type, *gopolutils.Exception) {
 		return readRawObject[Type](filePath, goserialize.YAMLReader)
 	case goserialize.TOMLType:
 		return readRawObject[Type](filePath, goserialize.TOMLReader)
+	case goserialize.CSVType:
+		return readRawObject[Type](filePath, goserialize.CSVReader)
 	default:
 		return readRawObject[Type](filePath, goserialize.JSONReader)
 	}
