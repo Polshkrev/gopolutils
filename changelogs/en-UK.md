@@ -1,4 +1,8 @@
 # Changelog
+## v1.16.0 - 2025-12-11
+`Added`
+- Added `trimmer-io/go-csv` as an indirect dependency.
+
 ## v1.15.0 - 2025-11-16
 For future changes, refer to [TODO.md](../TODO.md).
 
