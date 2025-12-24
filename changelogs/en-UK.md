@@ -1,4 +1,9 @@
 # Changelog
+## v1.17.0 - 2025-12-24
+`Added`
+- `iter`
+    - Added `Reverse` iterator.
+    - Added `Chain` iterator.
 ## v1.16.0 - 2025-12-11
 `Added`
 - Added `trimmer-io/go-csv` as an indirect dependency.
