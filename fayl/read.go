@@ -84,14 +84,12 @@ func readerListDispatch[Type any](filePath *Path) ([]Type, *gopolutils.Exception
 	if except != nil {
 		return nil, except
 	}
-	switch SuffixToString[fileType] {
-	case goserialize.YAMLType:
+	switch fileType {
+	case Yaml:
 		return readRawList[Type](filePath, goserialize.YAMLReader)
-	case "yml":
-		return readRawList[Type](filePath, goserialize.YAMLReader)
-	case goserialize.TOMLType:
+	case Toml:
 		return readRawList[Type](filePath, goserialize.TOMLReader)
-	case goserialize.CSVType:
+	case Csv:
 		return readRawList[Type](filePath, goserialize.CSVReader)
 	default:
 		return readRawList[Type](filePath, goserialize.JSONReader)
@@ -126,14 +124,12 @@ func ReadObject[Type any](filePath *Path) (*Type, *gopolutils.Exception) {
 	if except != nil {
 		return nil, except
 	}
-	switch SuffixToString[fileType] {
-	case goserialize.YAMLType:
+	switch fileType {
+	case Yaml:
 		return readRawObject[Type](filePath, goserialize.YAMLReader)
-	case "yml":
-		return readRawObject[Type](filePath, goserialize.YAMLReader)
-	case goserialize.TOMLType:
+	case Toml:
 		return readRawObject[Type](filePath, goserialize.TOMLReader)
-	case goserialize.CSVType:
+	case Csv:
 		return readRawObject[Type](filePath, goserialize.CSVReader)
 	default:
 		return readRawObject[Type](filePath, goserialize.JSONReader)

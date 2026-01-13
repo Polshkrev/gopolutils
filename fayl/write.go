@@ -63,14 +63,12 @@ func WriteList[Type any](filePath *Path, content collections.View[Type]) *gopolu
 	if except != nil {
 		return except
 	}
-	switch SuffixToString[fileType] {
-	case goserialize.YAMLType:
+	switch fileType {
+	case Yaml:
 		return writeRawList[Type](filePath, content.Collect(), goserialize.YAMLWriter)
-	case "yml":
-		return writeRawList[Type](filePath, content.Collect(), goserialize.YAMLWriter)
-	case goserialize.TOMLType:
+	case Toml:
 		return writeRawList[Type](filePath, content.Collect(), goserialize.TOMLWriter)
-	case goserialize.CSVType:
+	case Csv:
 		return writeRawList[Type](filePath, content.Collect(), goserialize.CSVWriter)
 	default:
 		return writeRawList[Type](filePath, content.Collect(), goserialize.JSONWriter)
@@ -88,14 +86,12 @@ func WriteObject[Type any](filePath *Path, content *Type) *gopolutils.Exception 
 	if except != nil {
 		return except
 	}
-	switch SuffixToString[fileType] {
-	case goserialize.YAMLType:
+	switch fileType {
+	case Yaml:
 		return writeRawObject[Type](filePath, content, goserialize.YAMLWriter)
-	case "yml":
-		return writeRawObject[Type](filePath, content, goserialize.YAMLWriter)
-	case goserialize.TOMLType:
+	case Toml:
 		return writeRawObject[Type](filePath, content, goserialize.TOMLWriter)
-	case goserialize.CSVType:
+	case Csv:
 		return writeRawObject[Type](filePath, content, goserialize.CSVWriter)
 	default:
 		return writeRawObject[Type](filePath, content, goserialize.JSONWriter)
