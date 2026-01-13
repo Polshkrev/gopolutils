@@ -56,7 +56,7 @@ func TestStringFromSuffixHasMappedSameValue(test *testing.T) {
 func TestStringFromDoesNotHaveMappedDifferentValue(test *testing.T) {
 	var expect string = "go"
 	var value fayl.Suffix = fayl.C
-	var item fayl.Suffix
+	var item string
 	var except *gopolutils.Exception
 	item, except = fayl.SuffixFromString(value)
 	if except != nil {
