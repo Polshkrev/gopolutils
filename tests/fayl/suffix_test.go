@@ -1,9 +1,13 @@
 package tests
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/Polshkrev/gopolutils/fayl"
+)
 
 func TestSuffixCountHasNotChanged(test *testing.T) {
-	const expected uint16 = 33
+	const expected uint8 = 34
 	if fayl.SuffixCount != expected {
 		test.Errorf("SuffixCount has changed. Have: %d. Expected: %d\n", fayl.SuffixCount, expected)
 	}
