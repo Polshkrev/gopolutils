@@ -16,28 +16,6 @@ type Path struct {
 	raw string
 }
 
-// Finite — incomplete — operating system values.
-type OS = gopolutils.StringEnum
-
-const (
-	// Windows operating system.
-	WINDOWS OS = "windows"
-	// Mac operating system.
-	MAC OS = "darwin"
-	// Linux operating system.
-	LINUX OS = "linux"
-	// Android operating system.
-	ANDROID OS = "android"
-	// FreeBSD operating system.
-	FREEBSD OS = "freebsd"
-	// Representation of Apple's IOS.
-	IOS OS = "ios"
-	// NetBSD operating system.
-	NETBSD OS = "netbsd"
-	// OpenBSD operating system.
-	OPENBSD OS = "openbsd"
-)
-
 // Construct a new filesystem path.
 // Returns a pointer to a new path containing the current working directory.
 // If the current working directory can not be obtained, an OSError is printed to standard error and the programme exits.
@@ -129,13 +107,7 @@ func (path Path) Suffix() (Suffix, *gopolutils.Exception) {
 		return None, gopolutils.NewNamedException(gopolutils.OSError, "Path does not have an associated suffix.")
 	}
 	var raw string = path.raw[index+1:]
-	var ok bool
-	var suffix Suffix
-	suffix, ok = StringToSuffix[raw]
-	if !ok {
-		return None, gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("'%s' can not be found in global map.", raw))
-	}
-	return suffix, nil
+	return SuffixFromString(raw)
 }
 
 // Obtain the string representation of the root of the filesystem.

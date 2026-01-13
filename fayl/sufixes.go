@@ -1,6 +1,11 @@
 package fayl
 
-import "github.com/Polshkrev/gopolutils"
+import (
+	"fmt"
+	"sync"
+
+	"github.com/Polshkrev/gopolutils"
+)
 
 // Representation of a file suffix i.e. ".go", ".c", ".h", et cetera.
 type Suffix = gopolutils.Enum
@@ -49,8 +54,9 @@ const (
 )
 
 var (
+	stringLock sync.Mutex
 	// Mapping of the string representation of the file suffix to its corresponding enum value. This mapping is not concurrent safe.
-	StringToSuffix map[string]Suffix = map[string]Suffix{
+	stringToSuffix map[string]Suffix = map[string]Suffix{
 		"7z":    Zip,
 		"a":     A,
 		"asm":   Asm,
@@ -87,13 +93,16 @@ var (
 		"txt":   Txt,
 		"xml":   Xml,
 		"yaml":  Yaml,
+		"yml":   Yaml,
 		"zip":   Zip,
 	}
 )
 
 var (
+	// Concurrent safe lock from mapping [suffixToString]
+	suffixLock sync.Mutex
 	// Mapping of [Suffix] enum values to their corresponding string value.
-	SuffixToString map[Suffix]string = map[Suffix]string{
+	suffixToString map[Suffix]string = map[Suffix]string{
 		A:      "a",
 		Asm:    "asm",
 		Bat:    "bat",
@@ -131,3 +140,33 @@ var (
 		Zip:    "zip",
 	}
 )
+
+// Obtain a [Suffix] from a raw string.
+// Returns a path suffix obtained from [stringToSuffix].
+// If the path suffix is not defined in stringToSuffix, a `KeyError` is returned with the `None` suffix value.
+func SuffixFromString(suffix string) (Suffix, *gopolutils.Exception) {
+	stringLock.Lock()
+	defer stringLock.Unlock()
+	var ok bool
+	var item Suffix
+	item, ok = stringToSuffix[suffix]
+	if !ok {
+		return None, gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("'%s' is not defined in mapping.", suffix))
+	}
+	return item, nil
+}
+
+// Obtain a string from a [Suffix].
+// Returns a string obtained from [suffixToString].
+// If the path suffix is not defined in suffixToString, a `KeyError` is returned with an empty string.
+func StringFromSuffix(suffix Suffix) (string, *gopolutils.Exception) {
+	suffixLock.Lock()
+	defer suffixLock.Unlock()
+	var ok bool
+	var item Suffix
+	item, ok = suffixToString[suffix]
+	if !ok {
+		return "", gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("'%s' is not defined in mapping.", suffix))
+	}
+	return item, nil
+}
