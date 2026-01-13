@@ -1,7 +1,13 @@
 # Changelog
-## v1.18.0 - 2026-01-13
+## v1.19.0 - 2026-01-13
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Changed`
+- `Logger`
+    - `LoggingLevel` is now an `Enum`.
+- `Exception`
+    - `ExceptionName` is now an `StringEnum`.
+## v1.18.0 - 2026-01-13
 `Added`
 - Added `Enum` type.
 - Added `StringEnum` type.
