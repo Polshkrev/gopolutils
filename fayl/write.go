@@ -57,13 +57,13 @@ func writeRawList[Type any](filePath *Path, content []Type, writer goserialize.W
 // Alternatively, if the data can not be marshalled, an IOError is returned.
 // In addition, if the file type can not be evaluated, an OSError is returned.
 func WriteList[Type any](filePath *Path, content collections.View[Type]) *gopolutils.Exception {
-	var fileType string
+	var fileType Suffix
 	var except *gopolutils.Exception
 	fileType, except = filePath.Suffix()
 	if except != nil {
 		return except
 	}
-	switch fileType {
+	switch SuffixToString[fileType] {
 	case goserialize.YAMLType:
 		return writeRawList[Type](filePath, content.Collect(), goserialize.YAMLWriter)
 	case "yml":
@@ -82,13 +82,13 @@ func WriteList[Type any](filePath *Path, content collections.View[Type]) *gopolu
 // Alternatively, if the data can not be marshalled, an IOError is returned.
 // In addition, if the file type can not be evaluated, an OSError is returned.
 func WriteObject[Type any](filePath *Path, content *Type) *gopolutils.Exception {
-	var fileType string
+	var fileType Suffix
 	var except *gopolutils.Exception
 	fileType, except = filePath.Suffix()
 	if except != nil {
 		return except
 	}
-	switch fileType {
+	switch SuffixToString[fileType] {
 	case goserialize.YAMLType:
 		return writeRawObject[Type](filePath, content, goserialize.YAMLWriter)
 	case "yml":

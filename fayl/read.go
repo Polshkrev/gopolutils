@@ -78,13 +78,13 @@ func readRawList[Type any](filePath *Path, reader goserialize.Reader) ([]Type, *
 // Alternatively, if the data can not be marshalled, an IOError is returned with a nil data pointer.
 // In addition, if the file type can not be evaluated, an Exception is returned with a nil data pointer.
 func readerListDispatch[Type any](filePath *Path) ([]Type, *gopolutils.Exception) {
-	var fileType string
+	var fileType Suffix
 	var except *gopolutils.Exception
 	fileType, except = filePath.Suffix()
 	if except != nil {
 		return nil, except
 	}
-	switch fileType {
+	switch SuffixToString[fileType] {
 	case goserialize.YAMLType:
 		return readRawList[Type](filePath, goserialize.YAMLReader)
 	case "yml":
@@ -120,13 +120,13 @@ func ReadList[Type any](filePath *Path) (collections.View[Type], *gopolutils.Exc
 // Alternatively, if the data can not be marshalled, an IOError is returned with a nil data pointer.
 // In addition, if the file type can not be evaluated, an Exception is returned with a nil data pointer.
 func ReadObject[Type any](filePath *Path) (*Type, *gopolutils.Exception) {
-	var fileType string
+	var fileType Suffix
 	var except *gopolutils.Exception
 	fileType, except = filePath.Suffix()
 	if except != nil {
 		return nil, except
 	}
-	switch fileType {
+	switch SuffixToString[fileType] {
 	case goserialize.YAMLType:
 		return readRawObject[Type](filePath, goserialize.YAMLReader)
 	case "yml":
