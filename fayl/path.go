@@ -17,7 +17,7 @@ type Path struct {
 }
 
 // Finite — incomplete — operating system values.
-type OS = string
+type OS = gopolutils.StringEnum
 
 const (
 	// Windows operating system.
