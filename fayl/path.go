@@ -32,8 +32,6 @@ const (
 	FREEBSD OS = "freebsd"
 	// Representation of Apple's IOS.
 	IOS OS = "ios"
-	// Representation of a web-based operating system.
-	JS OS = "js"
 	// NetBSD operating system.
 	NETBSD OS = "netbsd"
 	// OpenBSD operating system.
