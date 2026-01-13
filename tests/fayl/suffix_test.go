@@ -7,7 +7,7 @@ import (
 )
 
 func TestSuffixCountHasNotChanged(test *testing.T) {
-	const expected uint8 = 33
+	const expected uint8 = 34
 	if fayl.SuffixCount != expected {
 		test.Errorf("SuffixCount has changed. Have: %d. Expected: %d\n", fayl.SuffixCount, expected)
 	}
