@@ -58,7 +58,7 @@ func TestStringFromDoesNotHaveMappedDifferentValue(test *testing.T) {
 	var value fayl.Suffix = fayl.C
 	var item string
 	var except *gopolutils.Exception
-	item, except = fayl.SuffixFromString(value)
+	item, except = fayl.StringFromSuffix(value)
 	if except != nil {
 		test.Errorf("%s\n", except.Error())
 	} else if item == expect {
