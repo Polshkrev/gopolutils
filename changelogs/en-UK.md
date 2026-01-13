@@ -1,4 +1,24 @@
 # Changelog
+## v1.18.0 - 2026-01-13
+For future changes, refer to [TODO.md](../TODO.md).
+
+`Added`
+- Added `Enum` type.
+- Added `StringEnum` type.
+- `fayl`
+    - Added `Suffix` enum.
+    - Added `SuffixToString` global map.
+    - Added `StringToSuffix` global map.
+- `tests`
+    - `fayl`
+        - Added `Suffix` tests.
+`Changed`
+- `fayl`
+    - `OS` is now a `StringEnum`
+    - `Path.Suffix` now returns a `Suffix` enum.
+`Removed`
+- `fayl`
+    - Removed `JS` from `OS` enum.
 ## v1.17.0 - 2025-12-24
 `Added`
 - `iter`
@@ -9,15 +29,13 @@
 - Added `trimmer-io/go-csv` as an indirect dependency.
 
 ## v1.15.0 - 2025-11-16
-For future changes, refer to [TODO.md](../TODO.md).
-
 `Added`
 - A new `ExceptionName` enum has been added.
 - `Exception`
     - A new `Is` method has been added.
 - `fayl`
     - A new **incomplete** `OS` enum has been added.
-- `Tests`
+- `tests`
     - Added `Exception` tests.
 
 `Changed`
@@ -212,7 +230,7 @@ For future changes, refer to [TODO.md](../TODO.md).
     - Added `SetLevel` method.
 - `Version`
     - Added `IsZero` method.
-- `Tests`
+- `tests`
     - `Version`
         - Added `IsZero` tests.
 - `Docs`
@@ -259,7 +277,7 @@ For future changes, refer to [TODO.md](../TODO.md).
     - The public `ReadJSONObject` function now returns an `Exception` along with a type pointer.
 
 `Removed`
-- `Tests`
+- `tests`
     - `Set`
         - Removed `Remove` tests. LOL.
 ## v1.3.0 - 2024-12-19
@@ -274,7 +292,7 @@ For future changes, refer to [TODO.md](../TODO.md).
     - Added `Update` method.
 - `Stack`
     - Added `Update` method.
-- `Tests`
+- `tests`
     - `Array`
         - Added `Update` tests.
     - `Map`
@@ -302,7 +320,7 @@ For future changes, refer to [TODO.md](../TODO.md).
     - Added the `Set` english documentation.
     - Added the `Stack` english documentation.
     - Added the `Exception` english documentation.
-- `Tests`
+- `tests`
     - Added `Array` tests.
     - Added `Iter` tests.
     - Added `Map` tests.
@@ -316,7 +334,7 @@ For future changes, refer to [TODO.md](../TODO.md).
 ## v1.1.1 - 2024-12-18
 `Added`
 - Added the `-v` flag to the test command in `test.yml`
-- `Tests`
+- `tests`
     - Added `Iter` tests.
     - Added `Version` tests.
 
@@ -404,7 +422,7 @@ For future changes, refer to [TODO.md](../TODO.md).
     - Added documentation comments.
 - `Exception`
     - Added documentation comments.
-- `Tests`
+- `tests`
     - Added `Pair` tests.
 - `Docs`
     - Added `Go Reference` link to `README.md`.
@@ -413,7 +431,7 @@ For future changes, refer to [TODO.md](../TODO.md).
 - Added `Pair` struct.
 - Added `build.yml`.
 - Added `test.yml`.
-- `Tests`
+- `tests`
     - `Version`
         - Added `TestNewVersionZerosOut` test case.
 - `Docs`
