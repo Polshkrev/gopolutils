@@ -6,123 +6,128 @@ import "github.com/Polshkrev/gopolutils"
 type Suffix = gopolutils.Enum
 
 const (
-	ASM Suffix = iota
-	BAT
+	A Suffix = iota
+	Asm
+	Bat
 	C
-	CLASS
-	CPP
-	CS
-	CSS
-	CSV
-	DB
-	DLL
-	EXE
-	GO
-	HEADER
-	HTML
-	JAR
-	JAVA
-	JS
-	JSON
-	LIB
-	LOG
-	MD
+	Class
+	Cpp
+	Cs
+	Css
+	Csv
+	Db
+	Dll
+	Exe
+	Go
+	Header
+	Html
+	Jar
+	Java
+	Js
+	Json
+	Lib
+	Log
+	Md
+	None
 	O
-	PY
-	RS
-	SH
-	SO
-	SQL
-	TEX
-	TOML
-	TXT
-	XML
-	YAML
-	ZIP
+	Py
+	Rs
+	Sh
+	So
+	Sql
+	Tex
+	Toml
+	Txt
+	Xml
+	Yaml
+	Zip
 )
 
 const (
 	// Total amount of supported file suffixes.
-	SuffixCount uint8 = ZIP
+	SuffixCount uint8 = Zip
 )
 
 var (
 	// Mapping of the string representation of the file suffix to its corresponding enum value. This mapping is not concurrent safe.
 	StringToSuffix map[string]Suffix = map[string]Suffix{
-		"7z":    ZIP,
-		"asm":   ASM,
-		"bat":   BAT,
+		"7z":    Zip,
+		"a":     A,
+		"asm":   Asm,
+		"bat":   Bat,
 		"c":     C,
-		"class": CLASS,
-		"cpp":   CPP,
-		"cs":    CS,
-		"css":   CSS,
-		"csv":   CSV,
-		"db":    DB,
-		"dll":   DLL,
-		"exe":   EXE,
-		"go":    GO,
-		"h":     HEADER,
-		"hpp":   HEADER,
-		"html":  HTML,
-		"jar":   JAR,
-		"java":  JAVA,
-		"js":    JS,
-		"json":  JSON,
-		"lib":   LIB,
-		"log":   LOG,
-		"md":    MD,
+		"class": Class,
+		"cpp":   Cpp,
+		"cs":    Cs,
+		"css":   Css,
+		"csv":   Csv,
+		"db":    Db,
+		"dll":   Dll,
+		"exe":   Exe,
+		"go":    Go,
+		"h":     Header,
+		"hpp":   Header,
+		"html":  Html,
+		"jar":   Jar,
+		"java":  Java,
+		"js":    Js,
+		"json":  Json,
+		"lib":   Lib,
+		"log":   Log,
+		"md":    Md,
 		"o":     O,
-		"py":    PY,
-		"rar":   ZIP,
-		"rs":    RS,
-		"sh":    SH,
-		"so":    SO,
-		"sql":   SQL,
-		"tex":   TEX,
-		"toml":  TOML,
-		"txt":   TXT,
-		"xml":   XML,
-		"yaml":  YAML,
-		"zip":   ZIP,
+		"py":    Py,
+		"rar":   Zip,
+		"rs":    Rs,
+		"sh":    Sh,
+		"so":    So,
+		"sql":   Sql,
+		"tex":   Tex,
+		"toml":  Toml,
+		"txt":   Txt,
+		"xml":   Xml,
+		"yaml":  Yaml,
+		"zip":   Zip,
 	}
 )
 
 var (
 	// Mapping of [Suffix] enum values to their corresponding string value.
 	SuffixToString map[Suffix]string = map[Suffix]string{
-		ASM:    "asm",
-		BAT:    "bat",
+		A:      "a",
+		Asm:    "asm",
+		Bat:    "bat",
 		C:      "c",
-		CLASS:  "class",
-		CPP:    "cpp",
-		CS:     "cs",
-		CSS:    "css",
-		CSV:    "csv",
-		DB:     "db",
-		DLL:    "dll",
-		EXE:    "exe",
-		GO:     "go",
-		HEADER: "h",
-		HTML:   "html",
-		JAR:    "jar",
-		JAVA:   "java",
-		JS:     "js",
-		JSON:   "json",
-		LIB:    "lib",
-		LOG:    "log",
-		MD:     "md",
+		Class:  "class",
+		Cpp:    "cpp",
+		Cs:     "cs",
+		Css:    "css",
+		Csv:    "csv",
+		Db:     "db",
+		Dll:    "dll",
+		Exe:    "exe",
+		Go:     "go",
+		Header: "h",
+		Html:   "html",
+		Jar:    "jar",
+		Java:   "java",
+		Js:     "js",
+		Json:   "json",
+		Lib:    "lib",
+		Log:    "log",
+		Md:     "md",
+		None:   "",
 		O:      "o",
-		PY:     "py",
-		RS:     "rs",
-		SH:     "sh",
-		SO:     "so",
-		SQL:    "sql",
-		TEX:    "tex",
-		TOML:   "toml",
-		TXT:    "txt",
-		XML:    "xml",
-		YAML:   "yaml",
-		ZIP:    "zip",
+		Py:     "py",
+		Rs:     "rs",
+		Sh:     "sh",
+		So:     "so",
+		Sql:    "sql",
+		Tex:    "tex",
+		Toml:   "toml",
+		Txt:    "txt",
+		Xml:    "xml",
+		Yaml:   "yaml",
+		Zip:    "zip",
 	}
 )

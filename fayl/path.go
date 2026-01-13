@@ -121,13 +121,21 @@ func (path *Path) AppendAs(item string) {
 }
 
 // Obtain the suffix of the filesystem path.
-// If the suffix can not be obtained, an OSError is returned with an empty string.
-func (path Path) Suffix() (string, *gopolutils.Exception) {
+// If the suffix can not be obtained, an OSError is returned with a `None` suffix value.
+// If the string representation of the suffix is not found within the global map, a `KeyError` is returned with a `None` suffix value.
+func (path Path) Suffix() (Suffix, *gopolutils.Exception) {
 	var index int = strings.LastIndexByte(path.raw, '.')
 	if index < 0 {
-		return "", gopolutils.NewNamedException(gopolutils.OSError, "Path does not have an associated suffix.")
+		return None, gopolutils.NewNamedException(gopolutils.OSError, "Path does not have an associated suffix.")
 	}
-	return path.raw[index+1:], nil
+	var raw string = path.raw[index+1:]
+	var ok bool
+	var suffix Suffix
+	suffix, ok = StringToSuffix[raw]
+	if !ok {
+		return None, gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("'%s' can not be found in global map.", raw))
+	}
+	return suffix, nil
 }
 
 // Obtain the string representation of the root of the filesystem.
