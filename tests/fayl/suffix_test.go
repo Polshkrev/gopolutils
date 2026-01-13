@@ -49,7 +49,7 @@ func TestStringFromSuffixHasMappedSameValue(test *testing.T) {
 	if except != nil {
 		test.Errorf("%s\n", except.Error())
 	} else if item != expect {
-		test.Errorf("Value '%s' is not mapped correctly. '%s' has a different mapped value.", value, value)
+		test.Errorf("Value '%s' is not mapped correctly. '%s' has a different mapped value.", "go", "go")
 	}
 }
 
@@ -62,6 +62,6 @@ func TestStringFromDoesNotHaveMappedDifferentValue(test *testing.T) {
 	if except != nil {
 		test.Errorf("%s\n", except.Error())
 	} else if item == expect {
-		test.Errorf("Value '%s' is not mapped correctly. '%s' has the same mapped value.", value, value)
+		test.Errorf("Value '%s' is not mapped correctly. '%s' has the same mapped value.", "go", "go")
 	}
 }
