@@ -1,5 +1,7 @@
 package fayl
 
+import "github.com/Polshkrev/gopolutils"
+
 // Finite — incomplete — operating system values.
 type OS = gopolutils.StringEnum
 

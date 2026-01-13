@@ -163,7 +163,7 @@ func StringFromSuffix(suffix Suffix) (string, *gopolutils.Exception) {
 	suffixLock.Lock()
 	defer suffixLock.Unlock()
 	var ok bool
-	var item Suffix
+	var item string
 	item, ok = suffixToString[suffix]
 	if !ok {
 		return "", gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("'%s' is not defined in mapping.", suffix))
