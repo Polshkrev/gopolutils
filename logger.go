@@ -22,7 +22,7 @@ var (
 )
 
 // An enum representation of the severity of a log message.
-type LoggingLevel = uint8
+type LoggingLevel = Enum
 
 const (
 	// Lowest severity log message. Used to log debug information for development.
