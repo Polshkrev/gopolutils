@@ -1,7 +1,20 @@
 # Changelog
-## v1.19.0 - 2026-01-13
+## v1.20.0 - 2026-01-16: The Suffix Update
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `fayl`
+    - Added `SuffixFromString` function.
+    - Added `StringFromSuffix` function.
+
+`Changed`
+- `fayl`
+    - Both the `SuffixToString` and the `StringToSuffix` global map have been made private.
+
+`Removed`
+- `fayl`
+    - `yml` serialization support has been removed.
+## v1.19.0 - 2026-01-13
 `Changed`
 - `Logger`
     - `LoggingLevel` is now an `Enum`.
@@ -18,10 +31,12 @@ For future changes, refer to [TODO.md](../TODO.md).
 - `tests`
     - `fayl`
         - Added `Suffix` tests.
+
 `Changed`
 - `fayl`
     - `OS` is now a `StringEnum`
     - `Path.Suffix` now returns a `Suffix` enum.
+
 `Removed`
 - `fayl`
     - Removed `JS` from `OS` enum.
