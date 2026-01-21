@@ -26,30 +26,30 @@ type LoggingLevel = Enum
 
 const (
 	// Lowest severity log message. Used to log debug information for development.
-	DEBUG LoggingLevel = iota
+	Debug LoggingLevel = iota
 	// Used to log info that should be read. It is not an error, but is not a debug message.
-	INFO
+	Info
 	// Used to log a non-crashing warning, such as a file already existing when calling a create function.
-	WARNING
+	Warning
 	// Used to log a non-crashing error. This level should be the default when logging an error.
-	ERROR
+	Error
 	// Used to log a crashing error. Used to log a message of a panic or breaking state.
-	CRITICAL
+	Critical
 )
 
 // Represent a logging level as a string.
 // Returns a string representation of a logging level.
 func lltostr(level LoggingLevel) string {
 	switch level {
-	case DEBUG:
+	case Debug:
 		return "DEBUG"
-	case INFO:
+	case Info:
 		return "INFO"
-	case WARNING:
+	case Warning:
 		return "WARNING"
-	case ERROR:
+	case Error:
 		return "ERROR"
-	case CRITICAL:
+	case Critical:
 		return "CRITICAL"
 	}
 	return NewNamedException(UnreachableError, "Unknown logging level.").Error() // unreachable
