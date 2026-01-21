@@ -44,11 +44,19 @@ func PathFrom(path string) *Path {
 // The fileType parametre is the file extension without the preceding dot.
 // Returns a new filesystem path containing the absolute path composed of the given parts.
 // If the absolute path of the given parts can not be obtained, an OSError is printed to standard error and the programme exits.
-func PathFromParts(folderName, fileName, fileType string) *Path {
+// If the path suffix is not defined in suffixToString, a `KeyError` is printed to standard error and the programme exits.
+func PathFromParts(folderName, fileName string, fileType Suffix) *Path {
 	var buffer strings.Builder = strings.Builder{}
 	buffer.WriteString(filepath.Join(folderName, fileName))
 	buffer.WriteByte('.')
-	buffer.WriteString(fileType)
+	var suffixString string
+	var suffixExcept *gopolutils.Exception
+	suffixString, suffixExcept = StringFromSuffix(fileType)
+	if suffixExcept != nil {
+		fmt.Fprintln(os.Stderr, suffixExcept.Error())
+		os.Exit(1)
+	}
+	buffer.WriteString(suffixString)
 	var absolute string
 	var absoluteError error
 	absolute, absoluteError = filepath.Abs(buffer.String())
