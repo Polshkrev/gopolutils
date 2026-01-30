@@ -170,9 +170,14 @@ func (set Set[Type]) Collect() []Type {
 	return set.items.Keys()
 }
 
+// Convert a collection into a set.
+func (set *Set[Type]) From(collection Collection[Type]) {
+	set.Extend(collection)
+}
+
 // Transfer the data within the set to a linear array.
-// Returns the set as an array.
-func (set Set[Type]) ToArray() *Array[Type] {
+// Returns a collection containing all the elements within the set.
+func (set Set[Type]) Into() Collection[Type] {
 	var array *Array[Type] = NewArray[Type]()
 	array.Extend(set)
 	return array
