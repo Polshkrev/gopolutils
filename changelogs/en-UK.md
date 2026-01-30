@@ -1,5 +1,5 @@
 # Changelog
-## v1.21.0 - 2026-01-16
+## v1.21.0 - 2026-01-30
 For future changes, refer to [TODO.md](../TODO.md).
 
 `Added`
