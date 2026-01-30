@@ -96,14 +96,8 @@ func (path *Path) Append(item Path) {
 // Append a filesystem path as a string to a path object.
 // If the absolute path can not be obtained, an OSError is printed to standard error and the programme exits.
 func (path *Path) AppendAs(item string) {
-	var absolute *Path
-	var except *gopolutils.Exception
-	absolute, except = PathFrom(item).Absolute()
-	if except != nil {
-		fmt.Fprintln(os.Stderr, except.Error())
-		os.Exit(1)
-	}
-	path.Append(*absolute)
+	var itemPath *Path = PathFrom(item)
+	path.Append(*itemPath)
 }
 
 // Obtain the suffix of the filesystem path.
