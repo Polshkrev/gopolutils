@@ -25,4 +25,4 @@ Accessing a set is not allowed. There is no method defined to allow for access o
 This structure has two other methods defined: `Difference` and `Intersection`. As the name suggests, the `Difference` method takes an operand set and returns a pointer to a new set containing all the items in the operand set that are not contained within the original set. The `Intersection` method is the exact opposite of the `Difference` method. The `Intersection` method takes an operand set and returns a pointer to a new set containing all the items that are contained within both sets.
 
 ### Implements
-This structure implements the `Collection`, `View`, and `Sized` interfaces.
+This structure implements the `Collection`, `View`, `Wrapper`, and `Sized` interfaces.
