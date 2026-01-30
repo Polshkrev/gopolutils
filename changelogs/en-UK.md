@@ -1,7 +1,26 @@
 # Changelog
-## v1.20.0 - 2026-01-16: The Suffix Update
+## v1.21.0 - 2026-01-16
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `collections`
+    - Added `Wrapper` type.
+    - `Set`
+        - To adhere to the new `Wrapper` type, a new `From` method has been added.
+
+`Changed`
+- `fayl`
+    - `PathFromParts` now takes in a `Suffix` type instead of a string for the `fileType` parametre.
+- `collections`
+    - `Set`
+        - To adhere to the new `Wrapper` type, `ToArray` has been renamed to `Into`.
+- `Logger`
+    - All `LoggingLevel` enum values are now idiomatic `PascalCase`.
+
+`Fixed`
+- `fayl`
+    - `Path.AppendAs` no longer appends the absolute path of the operand.
+## v1.20.0 - 2026-01-16: The Suffix Update
 `Added`
 - `fayl`
     - Added `SuffixFromString` function.
