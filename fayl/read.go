@@ -8,7 +8,7 @@ import (
 	"github.com/Polshkrev/goserialize"
 )
 
-// Concurrently read a file pased on its given path.
+// Concurrently read a file passed on its given path.
 func readConcurrent(path *Path, dataChannel chan<- []byte, errorChannel chan<- error) {
 	var data []byte
 	var readError error
