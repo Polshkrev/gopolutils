@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	arrayInMock *collections.Array[int] = collections.NewArray[int]()
+	arrayInMock      *collections.Array[int]              = collections.NewArray[int]()
 	enumerationMocks *collections.Array[Enumeration[int]] = collections.NewArray[Enumeration[int]]()
 )
 
