@@ -1,7 +1,14 @@
 # Changelog
-## v1.21.0 - 2026-01-30
+## v1.22.0 - 2026-02-06
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- Updated the [github.com/Polshkrev/goserialize](https://github.com/Polshkrev/goserialize/blob/main/changelogs/en-UK.md#v070---2026-02-06) dependency to its latest version.
+- `fayl`
+    - Added `Tar` and `Gz` suffix enum values.
+- `Docs`
+    - Added documentation for the `Wrapper` interface.
+## v1.21.0 - 2026-01-30
 `Added`
 - `collections`
     - Added `Wrapper` type.
