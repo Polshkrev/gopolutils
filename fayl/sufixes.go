@@ -24,6 +24,7 @@ const (
 	Dll
 	Exe
 	Go
+	Gz
 	Header
 	Html
 	Jar
@@ -40,6 +41,7 @@ const (
 	Sh
 	So
 	Sql
+	Tar
 	Tex
 	Toml
 	Txt
@@ -71,6 +73,7 @@ var (
 		"dll":   Dll,
 		"exe":   Exe,
 		"go":    Go,
+		"gz":    Gz,
 		"h":     Header,
 		"hpp":   Header,
 		"html":  Html,
@@ -88,6 +91,7 @@ var (
 		"sh":    Sh,
 		"so":    So,
 		"sql":   Sql,
+		"tar":   Tar,
 		"tex":   Tex,
 		"toml":  Toml,
 		"txt":   Txt,
@@ -116,6 +120,7 @@ var (
 		Dll:    "dll",
 		Exe:    "exe",
 		Go:     "go",
+		Gz:     "gz",
 		Header: "h",
 		Html:   "html",
 		Jar:    "jar",
@@ -132,6 +137,7 @@ var (
 		Sh:     "sh",
 		So:     "so",
 		Sql:    "sql",
+		Tar:    "tar",
 		Tex:    "tex",
 		Toml:   "toml",
 		Txt:    "txt",
