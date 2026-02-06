@@ -31,7 +31,6 @@ func (pair *Pair[First, Second]) Swap(operand *Pair[First, Second]) {
 	var newPair *Pair[First, Second] = NewPair(*operand.First(), *operand.Second())
 	*operand = *pair
 	*pair = *newPair
-	newPair = nil
 }
 
 // Flip the values of a pair.
