@@ -14,6 +14,7 @@
         2. [Mapping](/docs/en-UK/collections/mapping.md)
         3. [Sized](/docs/en-UK/collections/sized.md)
         4. [View](/docs/en-UK/collections/view.md)
+        5. [Wrapper](/docs/en-UK/collections/wrapper.md)
     2. Structures
         1. [Array](/docs/en-UK/collections/array.md)
         2. [SafeArray](/docs/en-UK/collections/safe_array.md)

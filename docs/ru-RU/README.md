@@ -13,6 +13,7 @@
         2. [Сопоставление](/docs/ru-RU/collections/mapping.md)
         3. [Размерный](/docs/ru-RU/collections/sized.md)
         4. [Толкование](/docs/ru-RU/collections/view.md)
+        5. [Обёртка](/docs/ru-RU/collections/wrapper.md)
     2. Структуры
         1. [Список](/docs/ru-RU/collections/array.md)
         2. [Конкурентный Список](/docs/ru-RU/collections/safe_array.md)
