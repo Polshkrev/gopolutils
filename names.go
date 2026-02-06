@@ -12,7 +12,7 @@ const (
 	AssertionError         ExceptionName = "AssertionError"         // For any failed assertion.
 	EOFError               ExceptionName = "EOFError"               // When reaching the end of a file or buffer.
 	LookupError            ExceptionName = "LookupError"            // When any miscellaneous lookup fails.
-	OutOfRangeError        ExceptionName = "OutOfRangeError"        // For any indexed access outside of the alotted range.
+	OutOfRangeError        ExceptionName = "OutOfRangeError"        // For any indexed access outside of the allotted range.
 	IndexError             ExceptionName = "IndexError"             // For any indexed access.
 	KeyError               ExceptionName = "KeyError"               // For any keyed access.
 	OSError                ExceptionName = "OSError"                // For any miscellaneous operating system exception.

@@ -63,7 +63,7 @@ type Logger struct {
 }
 
 // Construct a new logger with a given name and default logging level.
-// The default logging level passed into this constructor is the minimum level of severity that will be ouput by the logger.
+// The default logging level passed into this constructor is the minimum level of severity that will be output by the logger.
 // Returns a pointer to a new logger.
 func NewLogger(name string, level LoggingLevel) *Logger {
 	var logger *Logger = new(Logger)
@@ -193,7 +193,7 @@ func (logger *Logger) Close() {
 	}
 }
 
-// Private method to seperate the responsibility of the log method.
+// Private method to separate the responsibility of the log method.
 // This is the method that actually logs the message to the given stream.
 func publishMessage(stream *os.File, timestamp, name, message string, level LoggingLevel) {
 	fmt.Fprintf(stream, "%s:%s[%s] - %s\n", timestamp, name, lltostr(level), message)
