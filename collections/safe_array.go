@@ -11,7 +11,7 @@ import (
 type SafeArray[Type any] struct {
 	lock  sync.RWMutex
 	items []Type
-	size  uint64
+	size  gopolutils.Size
 }
 
 // Construct a new array.
@@ -39,9 +39,9 @@ func (array *SafeArray[Type]) Extend(items View[Type]) {
 }
 
 // Access the data stored in the array at a given index.
-// If the array is empty, a ValueError is returned with a nil data pointer.
-// If the given index is greater than the size of the array, an OutOfRangeError is returned with a nil data pointer.
-func (array *SafeArray[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
+// If the array is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
+// If the given index is greater than the size of the array, an [gopolutils.OutOfRangeError] is returned with a nil data pointer.
+func (array *SafeArray[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	array.lock.RLock()
 	defer array.lock.RUnlock()
 	if array.IsEmpty() {
@@ -53,10 +53,10 @@ func (array *SafeArray[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 }
 
 // Update a value within the collection.
-// If the collection is empty, a ValueError is returned.
-// If the given index is greater than the collection size, an OutOfRangeError is returned.
-// If a non-nil Exception is returned, the collection is not modified.
-func (array *SafeArray[Type]) Update(index uint64, value Type) *gopolutils.Exception {
+// If the collection is empty, a [gopolutils.ValueError] is returned.
+// If the given index is greater than the collection size, an [gopolutils.OutOfRangeError] is returned.
+// If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the collection is not modified.
+func (array *SafeArray[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	array.lock.Lock()
 	defer array.lock.Unlock()
 	if array.IsEmpty() {
@@ -69,10 +69,10 @@ func (array *SafeArray[Type]) Update(index uint64, value Type) *gopolutils.Excep
 }
 
 // Remove the data stored in the array at a given index.
-// If the array is empty, a ValueError is returned.
-// If the given index is greater than the size of the array, an OutOfRangeError is returned.
-// If a non-nil Exception is returned, the array is not modified.
-func (array *SafeArray[Type]) Remove(index uint64) *gopolutils.Exception {
+// If the array is empty, a [gopolutils.ValueError] is returned.
+// If the given index is greater than the size of the array, an [gopolutils.OutOfRangeError] is returned.
+// If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the array is not modified.
+func (array *SafeArray[Type]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	array.lock.Lock()
 	defer array.lock.Unlock()
 	if array.IsEmpty() {
@@ -103,7 +103,7 @@ func (array *SafeArray[Type]) Collect() []Type {
 
 // Access the size of the array.
 // Returns the size of the array as an unsigned 64-bit integer.
-func (array *SafeArray[_]) Size() uint64 {
+func (array *SafeArray[_]) Size() gopolutils.Size {
 	array.lock.RLock()
 	defer array.lock.RUnlock()
 	return array.size

@@ -9,7 +9,7 @@ import (
 // Implementation of a classical dynamic array.
 type Array[Type any] struct {
 	items []Type
-	size  uint64
+	size  gopolutils.Size
 }
 
 // Construct a new array.
@@ -35,9 +35,10 @@ func (array *Array[Type]) Extend(items View[Type]) {
 }
 
 // Access the data stored in the array at a given index.
-// If the array is empty, a ValueError is returned with a nil data pointer.
-// If the given index is greater than the size of the array, an OutOfRangeError is returned with a nil data pointer.
-func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
+// Returns a pointer to the data in the collection at the given index.
+// If the array is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
+// If the given index is greater than the size of the array, an [gopolutils.OutOfRangeError] is returned with a nil data pointer.
+func (array Array[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	if array.IsEmpty() {
 		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty array at index %d.", index))
 	} else if index > array.size {
@@ -47,10 +48,10 @@ func (array Array[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 }
 
 // Update a value within the collection.
-// If the collection is empty, an ValueError is returned.
-// If the given index is greater than the collection size, an OutOfRangeError is returned.
-// If an OutOfRangeError is returned, the collection is not modified.
-func (array *Array[Type]) Update(index uint64, value Type) *gopolutils.Exception {
+// If the collection is empty, a [gopolutils.ValueError] is returned.
+// If the given index is greater than the collection size, an [gopolutils.OutOfRangeError] is returned.
+// If an [gopolutils.OutOfRangeError] is returned, the collection is not modified.
+func (array *Array[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	if array.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty array at index %d.", index))
 	} else if index > array.size {
@@ -61,10 +62,10 @@ func (array *Array[Type]) Update(index uint64, value Type) *gopolutils.Exception
 }
 
 // Remove the data stored in the array at a given index.
-// If the array is empty, an ValueError is returned.
-// If the given index is greater than the size of the array, an OutOfRangeError is returned.
-// If an OutOfRangeError is returned, the array is not modified.
-func (array *Array[Type]) Remove(index uint64) *gopolutils.Exception {
+// If the array is empty, an [gopolutils.ValueError] is returned.
+// If the given index is greater than the size of the array, an [gopolutils.OutOfRangeError] is returned.
+// If an [gopolutils.OutOfRangeError] is returned, the array is not modified.
+func (array *Array[Type]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	if array.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty array at index %d.", index))
 	} else if index > array.size {
@@ -89,7 +90,7 @@ func (array Array[Type]) Collect() []Type {
 
 // Access the size of the array.
 // Returns the size of the array as an unsigned 64-bit integer.
-func (array Array[_]) Size() uint64 {
+func (array Array[_]) Size() gopolutils.Size {
 	return array.size
 }
 

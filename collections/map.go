@@ -9,7 +9,7 @@ import (
 // A collection of key-value pairs.
 type Map[Key comparable, Value any] struct {
 	items map[Key]Value
-	size  uint64
+	size  gopolutils.Size
 }
 
 // Consruct a new map.
@@ -22,8 +22,8 @@ func NewMap[Key comparable, Value any]() *Map[Key, Value] {
 }
 
 // Insert a key-value pair into the map.
-// If the key is already in the map, instead of just quietly not inserting into the map, a KeyEror is retruned.
-// If a non-nil Exception is returned, the mapping is not modified.
+// If the key is already in the map, instead of just quietly not inserting into the map, a [gopolutils.KeyEror] is retruned.
+// If a [gopolutils.KeyError] is returned, the mapping is not modified.
 func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Exception {
 	if mapping.HasKey(key) {
 		return gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Key '%v' already exists.", key))
@@ -35,8 +35,8 @@ func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Excepti
 
 // Access an element at a given key within the map.
 // Returns a pointer to the data stored at the given key.
-// If the map is empty, a ValueError is returned with a nil data pointer.
-// If the key is not in the map, a KeyError is returned with a nil data pointer.
+// If the map is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
+// If the key is not in the map, a [gopolutils.KeyError] is returned with a nil data pointer.
 func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	if mapping.IsEmpty() {
 		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
@@ -48,9 +48,9 @@ func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 }
 
 // Update a value within the mapping.
-// If the map is empty, a ValueError is returned with a nil data pointer.
-// If the key does not exist in the mapping, a KeyError is returned.
-// If a non-nil Exception is returned, the mapping is not modified.
+// If the map is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
+// If the key does not exist in the mapping, a [gopolutils.KeyError] is returned.
+// If a [gopolutils.ValueError] or a [gopolutils.KeyError] is returned, the mapping is not modified.
 func (mapping Map[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
 	if mapping.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
@@ -84,9 +84,9 @@ func (mapping Map[_, Value]) Values() []Value {
 }
 
 // Remove an item stored at a given key within the map.
-// If the map is empty, a ValueError is returned.
-// If the given key is not stored in the map, a KeyError is returned.
-// If a non-nil Exception is returned, the mapping is not modified.
+// If the map is empty, a [gopolutils.ValueError] is returned.
+// If the given key is not stored in the map, a [gopolutils.KeyError] is returned.
+// If a [gopolutils.ValueError] or a [gopolutils.KeyError] is returned, the mapping is not modified.
 func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 	if mapping.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty map at key '%+v'", key))
@@ -108,7 +108,7 @@ func (mapping Map[Key, _]) HasKey(key Key) bool {
 
 // Acces the size of the map.
 // Returns the size of the map as an unsigned 64-bit integer.
-func (mapping Map[_, _]) Size() uint64 {
+func (mapping Map[_, _]) Size() gopolutils.Size {
 	return mapping.size
 }
 

@@ -1,10 +1,12 @@
 package collections
 
+import "github.com/Polshkrev/gopolutils"
+
 // Implementation of a python-like enumeration function iterator.
 // Returns an enumerated function iterator.
-func Enumerate[Type any](items View[Type]) func(func(uint64, Type) bool) {
-	return func(yield func(uint64, Type) bool) {
-		var i uint64
+func Enumerate[Type any](items View[Type]) func(func(gopolutils.Size, Type) bool) {
+	return func(yield func(gopolutils.Size, Type) bool) {
+		var i gopolutils.Size
 		for i = 0; i <= items.Size()-1; i++ {
 			if !yield(i, items.Collect()[i]) {
 				return
@@ -15,9 +17,9 @@ func Enumerate[Type any](items View[Type]) func(func(uint64, Type) bool) {
 
 // Implementation of a reverse function iterator.
 // Returns a function iterator of a reversed view.
-func Reverse[Type any](items View[Type]) func(func(uint64, Type) bool) {
-	return func(yield func(uint64, Type) bool) {
-		var i uint64
+func Reverse[Type any](items View[Type]) func(func(gopolutils.Size, Type) bool) {
+	return func(yield func(gopolutils.Size, Type) bool) {
+		var i gopolutils.Size
 		for i = items.Size() - 1; i <= 0; i-- {
 			if !yield(i, items.Collect()[i]) {
 				return

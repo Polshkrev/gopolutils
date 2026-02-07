@@ -11,7 +11,7 @@ import (
 type SafeMap[Key comparable, Value any] struct {
 	lock  sync.RWMutex
 	items map[Key]Value
-	size  uint64
+	size  gopolutils.Size
 }
 
 // Consruct a new map.
@@ -24,7 +24,7 @@ func NewSafeMap[Key comparable, Value any]() *SafeMap[Key, Value] {
 }
 
 // Insert a key-value pair into the map.
-// If the key is already in the map, instead of just quietly not inserting into the map, a KeyEror is retruned.
+// If the key is already in the map, instead of just quietly not inserting into the map, a [gopolutils.KeyEror] is retruned.
 func (mapping *SafeMap[Key, Value]) Insert(key Key, value Value) *gopolutils.Exception {
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
@@ -38,8 +38,8 @@ func (mapping *SafeMap[Key, Value]) Insert(key Key, value Value) *gopolutils.Exc
 
 // Access an element at a given key within the map.
 // Returns a pointer to the data stored at the given key.
-// If the map is empty, a ValueError is returned with a nil data pointer.
-// If the key is not in the map, a KeyError is returned with a nil data pointer.
+// If the map is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
+// If the key is not in the map, a [gopolutils.KeyError] is returned with a nil data pointer.
 func (mapping *SafeMap[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
@@ -53,9 +53,9 @@ func (mapping *SafeMap[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) 
 }
 
 // Update a value within the mapping.
-// If the mapping is empty, a ValueError is returned.
-// If the key does not exist in the mapping, a KeyError is returned.
-// If a non-nil Exception is returned, the mapping is not modified.
+// If the mapping is empty, a [gopolutils.ValueError] is returned.
+// If the key does not exist in the mapping, a [gopolutils.KeyError] is returned.
+// If a [gopolutils.ValueError] or a [gopolutils.KeyError] is returned, the mapping is not modified.
 func (mapping *SafeMap[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
@@ -95,8 +95,9 @@ func (mapping *SafeMap[_, Value]) Values() []Value {
 }
 
 // Remove an item stored at a given key within the map.
-// If the map is empty, a ValueError is returned.
-// If the given key is not stored in the map, a KeyError is returned.
+// If the map is empty, a [gopolutils.ValueError] is returned.
+// If the given key is not stored in the map, a [gopolutils.KeyError] is returned.
+// If a [gopolutils.ValueError] or a [gopolutils.KeyError] is returned, the mapping is not modified.
 func (mapping *SafeMap[Key, _]) Remove(key Key) *gopolutils.Exception {
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
@@ -122,7 +123,7 @@ func (mapping *SafeMap[Key, _]) HasKey(key Key) bool {
 
 // Acces the size of the map.
 // Returns the size of the map as an unsigned 64-bit integer.
-func (mapping *SafeMap[_, _]) Size() uint64 {
+func (mapping *SafeMap[_, _]) Size() gopolutils.Size {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
 	return mapping.size
