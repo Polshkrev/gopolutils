@@ -11,7 +11,7 @@ import (
 type SafeQueue[Type any] struct {
 	lock  sync.RWMutex
 	items []Type
-	size  uint64
+	size  gopolutils.Size
 }
 
 // Construct a new queue.
@@ -41,9 +41,9 @@ func (queue *SafeQueue[Type]) Extend(items View[Type]) {
 
 // Access the data stored in the queue at a given index.
 // Returns a pointer to data stored in the queue at the given index.
-// If the queue is empty, a ValueError is returned with a nil data pointer.
-// If the index is greater than the size of the queue, an OutOfRangeError is returned with a nil data pointer.
-func (queue *SafeQueue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
+// If the queue is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
+// If the index is greater than the size of the queue, an [gopolutils.OutOfRangeError] is returned with a nil data pointer.
+func (queue *SafeQueue[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	if queue.IsEmpty() {
@@ -55,10 +55,10 @@ func (queue *SafeQueue[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
 }
 
 // Update a value within the queue.
-// If the queue is empty, a ValueError is returned.
-// If the given index is greater than the queue size, an OutOfRangeError is returned.
-// If a non-nil Exception is returned, the queue is not modified.
-func (queue *SafeQueue[Type]) Update(index uint64, value Type) *gopolutils.Exception {
+// If the queue is empty, a [gopolutils.ValueError] is returned.
+// If the given index is greater than the queue size, an [gopolutils.OutOfRangeError] is returned.
+// If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the queue is not modified.
+func (queue *SafeQueue[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 	if queue.IsEmpty() {
@@ -71,10 +71,10 @@ func (queue *SafeQueue[Type]) Update(index uint64, value Type) *gopolutils.Excep
 }
 
 // Remove the data stored in the queue at a given index.
-// If the queue is empty, a ValueError is returned.
-// If the given index is greater than the size of the queue, an OutOfRangeError is returned.
-// If a non-nil Exception is returned, the queue is not modified.
-func (queue *SafeQueue[_]) Remove(index uint64) *gopolutils.Exception {
+// If the queue is empty, a [gopolutils.ValueError] is returned.
+// If the given index is greater than the size of the queue, an [gopolutils.OutOfRangeError] is returned.
+// If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the queue is not modified.
+func (queue *SafeQueue[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 	if queue.IsEmpty() {
@@ -92,8 +92,8 @@ func (queue *SafeQueue[_]) Remove(index uint64) *gopolutils.Exception {
 // This is the implementation of a "Fist In First Out" data structure.
 // Returns a pointer to the first item in the queue.
 // Like the name suggests, when an item is dequeued, the item is removed from the queue.
-// If the queue is evaluated to be empty, a ValueError is returned with a nil data pointer.
-// If a non-nil Exception is returned, the queue is not modified.
+// If the queue is evaluated to be empty, a [gopolutils.ValueError] is returned with a nil data pointer.
+// If a [gopolutils.ValueError] is returned, the queue is not modified.
 func (queue *SafeQueue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
@@ -108,7 +108,7 @@ func (queue *SafeQueue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 
 // Access the first element in the queue.
 // Returns a pointer to the first item in the queue.
-// If the queue is evaluated to be empty, a ValueError is returned with a nil data pointer.
+// If the queue is evaluated to be empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 func (queue *SafeQueue[Type]) Peek() (*Type, *gopolutils.Exception) {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
@@ -144,7 +144,7 @@ func (queue *SafeQueue[Type]) Items() *[]Type {
 
 // Access the size of the queue.
 // Returns the size of the queue as an unsigned 64-bit integer.
-func (queue *SafeQueue[_]) Size() uint64 {
+func (queue *SafeQueue[_]) Size() gopolutils.Size {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	return queue.size

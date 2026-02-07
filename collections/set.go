@@ -53,33 +53,33 @@ func (set *Set[Type]) Extend(items View[Type]) {
 
 // This method is not yet implemented.
 // Access the data stored at a given index within the set.
-// If the set is empty, a ValueError is returned.
-// If the index is greater than the size of the set, an OutOfRangeError is returned with a nil data pointer.
-func (set Set[Type]) At(index uint64) (*Type, *gopolutils.Exception) {
+// If the set is empty, a [gopolutils.ValueError] is returned.
+// If the index is greater than the size of the set, an [gopolutils.OutOfRangeError] is returned with a nil data pointer.
+func (set Set[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	return nil, gopolutils.NewNamedException(gopolutils.NotImplementedError, "Can not access a set by index.")
 }
 
 // Update a value within the set.
 // This method is not yet implemented.
-// If the given index is greater than the set size, an IndexOutOfRangeError is returned.
-// If the set is empty, an IndexOutOfRangeError is returned.
-// If an IndexOutOfRangeError is returned, the set is not modified.
-func (set *Set[Type]) Update(index uint64, value Type) *gopolutils.Exception {
+// If the given index is greater than the set size, an [gopolutils.OutOfRangeError] is returned.
+// If the set is empty, an [gopolutils.OutOfRangeError] is returned.
+// If an [gopolutils.OutOfRangeError] is returned, the set is not modified.
+func (set *Set[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	return gopolutils.NewNamedException(gopolutils.NotImplementedError, "Can not update a set by index yet.")
 }
 
 // Remove an item in the set at a given index.
-// If the set is evaluated to be empty, a ValueError is returned.
-// If the given index is greater than the size of the set, an OutOfRangeError is returned.
-// If no item can be found at the given index, an IndexError is returned.
-// if a non-nil Exception is returned, the set will not be modified.
-func (set *Set[Type]) Remove(index uint64) *gopolutils.Exception {
+// If the set is evaluated to be empty, a [gopolutils.ValueError] is returned.
+// If the given index is greater than the size of the set, an [gopolutils.OutOfRangeError] is returned.
+// If no item can be found at the given index, an [gopolutils.IndexError] is returned.
+// if a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the set will not be modified.
+func (set *Set[Type]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	if set.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty set.")
 	} else if index > set.Size() {
 		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access set of size %d at index %d.", set.Size(), index))
 	}
-	var i uint64
+	var i gopolutils.Size
 	var key Type
 	for i, key = range Enumerate(set) {
 		if i != index {
@@ -113,7 +113,7 @@ func (set *Set[Type]) Discard(item Type) {
 
 // Access the size of the set.
 // Returns the size of the set as an unsigned 64-bit integer.
-func (set Set[_]) Size() uint64 {
+func (set Set[_]) Size() gopolutils.Size {
 	return set.items.Size()
 }
 
@@ -187,7 +187,7 @@ func (set Set[Type]) Into() Collection[Type] {
 // Returns a string representation of the set.
 func (set Set[Type]) ToString() string {
 	var item Type
-	var i uint64
+	var i gopolutils.Size
 	var buffer strings.Builder = strings.Builder{}
 	buffer.WriteString("{")
 	for i, item = range Enumerate(set) {
