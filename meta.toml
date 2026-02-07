@@ -4,8 +4,9 @@ author = "Polshkrev"
 description = "A collection of golang utilities."
 
 [project.version]
+name = "The Entry Update"
 major = 1
-minor = 22
+minor = 23
 
 [license]
 type = "MIT"
@@ -13,10 +14,12 @@ path = "LICENSE"
 
 [urls]
 repository = "https://github.com/Polshkrev/gopolutils"
-go = "https://pkg.go.dev/github.com/Polshkrev/gopolutils"
+reference = "https://pkg.go.dev/github.com/Polshkrev/gopolutils"
+report = "https://goreportcard.com/report/github.com/Polshkrev/gopolutils"
 
 [paths]
 readme = "README.md"
+todo = "TODO.md"
 
 [commands]
 test = ["go", "test", "-v", "./tests/..."]

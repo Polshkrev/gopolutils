@@ -1,7 +1,20 @@
 # Changelog
-## v1.22.0 - 2026-02-06
+## v1.23.0 - 2026-02-07: The Entry Update
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- Added `Size` type.
+- Added `doc.go` file.
+- `fayl`
+    - Added `Entry` type.
+    - Added `doc.go` file.
+- `collections`
+    - Added `doc.go` file.
+
+`Changed`
+- `Docs`
+    - All documentation &mdash; in both russian and english &mdash; has been updated to reflect any aforementioned changes.
+## v1.22.0 - 2026-02-06
 `Added`
 - Updated the [github.com/Polshkrev/goserialize](https://github.com/Polshkrev/goserialize/blob/main/changelogs/en-UK.md#v070---2026-02-06) dependency to its latest version.
 - `fayl`
