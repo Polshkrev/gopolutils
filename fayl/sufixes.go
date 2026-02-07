@@ -148,8 +148,8 @@ var (
 )
 
 // Obtain a [Suffix] from a raw string.
-// Returns a path suffix obtained from [stringToSuffix].
-// If the path suffix is not defined in stringToSuffix, a `KeyError` is returned with the `None` suffix value.
+// Returns a path suffix obtained from a mapping of strings to suffixes.
+// If the path suffix is not defined in the mapping, a [gopolutils.KeyError] is returned with the `None` suffix value.
 func SuffixFromString(suffix string) (Suffix, *gopolutils.Exception) {
 	stringLock.Lock()
 	defer stringLock.Unlock()
@@ -163,8 +163,8 @@ func SuffixFromString(suffix string) (Suffix, *gopolutils.Exception) {
 }
 
 // Obtain a string from a [Suffix].
-// Returns a string obtained from [suffixToString].
-// If the path suffix is not defined in suffixToString, a `KeyError` is returned with an empty string.
+// Returns a string obtained from a mapping of suffixes to strings.
+// If the path suffix is not defined in the mapping, a [gopolutils.KeyError] is returned with an empty string.
 func StringFromSuffix(suffix Suffix) (string, *gopolutils.Exception) {
 	suffixLock.Lock()
 	defer suffixLock.Unlock()
