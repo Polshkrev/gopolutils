@@ -21,7 +21,7 @@ var (
 	outputCount uint8 = 0
 )
 
-// An enum representation of the severity of a log message.
+// An [Enum] representation of the severity of a log message.
 type LoggingLevel = Enum
 
 const (
@@ -37,8 +37,9 @@ const (
 	Critical
 )
 
-// Represent a logging level as a string.
+// Represent a [LoggingLevel] as a string.
 // Returns a string representation of a logging level.
+// If the logging level is not defined in the enum, an [UnreachableError] is returned.
 func lltostr(level LoggingLevel) string {
 	switch level {
 	case Debug:
@@ -148,7 +149,7 @@ func (logger *Logger) FileOnly(fileName string) *Exception {
 
 // Bind both a file and the standard output to the logger.
 // If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
-// If the given file can not be found, an Exception is returned.
+// If the given file can not be found, an [Exception] is returned.
 func (logger *Logger) FullSetup(fileName string) *Exception {
 	var except *Exception = logger.AddConsole()
 	if except != nil {

@@ -64,7 +64,7 @@ func (exception Exception) Error() string {
 }
 
 // Determine if the exception has a specific name.
-// Similar to the Errors.Is function in the standard library.
+// Similar to the [errors.Is] function in the standard library.
 // Returns true if the exception has the given name, else false.
 func (exception Exception) Is(name ExceptionName) bool {
 	return exception.name == name
