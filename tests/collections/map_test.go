@@ -129,7 +129,7 @@ func TestMapSizeSuccess(test *testing.T) {
 	mapping.Insert(0, 0)
 	mapping.Insert(1, 1)
 	mapping.Insert(2, 2)
-	var size uint64 = mapping.Size()
+	var size gopolutils.Size = mapping.Size()
 	if size != 3 {
 		test.Errorf("Array size was not retuned correctly: '%d'.\n", size)
 	}
@@ -141,7 +141,7 @@ func TestMapSizeFail(test *testing.T) {
 	mapping.Insert(1, 1)
 	mapping.Insert(2, 2)
 	mapping.Insert(4, 4)
-	var size uint64 = mapping.Size()
+	var size gopolutils.Size = mapping.Size()
 	if size == 3 {
 		test.Errorf("Array size was not retuned correctly: '%d'.\n", size)
 	}

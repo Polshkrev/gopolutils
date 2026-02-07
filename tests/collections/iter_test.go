@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
@@ -12,11 +13,11 @@ var (
 )
 
 type Enumeration[Type any] struct {
-	Index uint64
+	Index gopolutils.Size
 	Item  Type
 }
 
-func NewEnumeration[Type any](index uint64, item Type) *Enumeration[Type] {
+func NewEnumeration[Type any](index gopolutils.Size, item Type) *Enumeration[Type] {
 	var enumeration *Enumeration[Type] = new(Enumeration[Type])
 	enumeration.Index = index
 	enumeration.Item = item
@@ -24,7 +25,7 @@ func NewEnumeration[Type any](index uint64, item Type) *Enumeration[Type] {
 }
 
 func setupEnumMock(testing.TB) func(testing.TB) {
-	var index uint64
+	var index gopolutils.Size
 	for index = range 10 {
 		enumerationMocks.Append(*NewEnumeration[int](index, int(index)))
 	}
@@ -63,7 +64,7 @@ func TestEnumerationSucces(test *testing.T) {
 	defer enumTeardown(test)
 	var arrayTeardown func(testing.TB) = setupArrayInMock(test)
 	defer arrayTeardown(test)
-	var index uint64
+	var index gopolutils.Size
 	var found bool = false
 	var find Enumeration[int] = *NewEnumeration[int](5, 5)
 	for index = range collections.Enumerate(*enumerationMocks) {

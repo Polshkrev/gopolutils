@@ -187,7 +187,7 @@ func TestQueueSizeSuccess(test *testing.T) {
 	mock.Append(0)
 	mock.Append(1)
 	mock.Append(2)
-	var size uint64 = mock.Size()
+	var size gopolutils.Size = mock.Size()
 	if size != 3 {
 		test.Errorf("Queue size was not retuned correctly: '%d'.\n", size)
 	}
@@ -199,7 +199,7 @@ func TestQueueSizeFail(test *testing.T) {
 	mock.Append(1)
 	mock.Append(2)
 	mock.Append(4)
-	var size uint64 = mock.Size()
+	var size gopolutils.Size = mock.Size()
 	if size == 3 {
 		test.Errorf("Queue size was not retuned correctly: '%d'.\n", size)
 	}
