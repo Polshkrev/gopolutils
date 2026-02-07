@@ -5,9 +5,9 @@ class Collection~Type~ {
     <<интерфейс>>
     +Append(Type Item)*
     +Extend(View~Type~ items)*
-    +At(uint64 index) ~*Type, *Exception~*
-    +Update(uint64 index, Type value) *Exception*
-    +Remove(uint64 index) *Exception*
+    +At(Size index) ~*Type, *Exception~*
+    +Update(Size index, Type value) *Exception*
+    +Remove(Size index) *Exception*
     +Items() *[]Type*
     +View~Type~$
 }
@@ -32,7 +32,7 @@ class View~Type~ {
 
 class Sized {
     <<интерфейс>>
-    +Size() uint64*
+    +Size() Size*
     +IsEmpty() bool*
 }
 
@@ -95,21 +95,21 @@ class Pair~First, Second~ {
 
 class Array~Type~ {
     -[]Type items
-    -uint64 size
+    -Size size
     +Append(Type Item)
     +Extend(View~Type~ items)
-    +At(uint64 index) ~*Type, *Exception~
-    +Update(uint64 index, Type value) *Exception
-    +Remove(uint64 index) *Exception
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    +Remove(Size index) *Exception
     +Items() *[]Type
     +Collect() []Type
-    +Size() uint64
+    +Size() Size
     +IsEmpty() bool
 }
 
 class Map~Key, Value~ {
     -map~Key, Value~ items
-    -uint64 size
+    -Size size
     +Insert(Key key, Value value) *Exception
     +At(Key key) ~*Value, *Exception~
     +Update(Key key, Value value) *Exception
@@ -118,61 +118,61 @@ class Map~Key, Value~ {
     +Remove(Key key) *Exception
     +HasKey(Key key) bool
     +Collect() []Pair~Key, Value~
-    +Size() uint64
+    +Size() Size
     +IsEmpty() bool
 }
 
 class Queue~Type~ {
     -[]Type items
-    -uint64 size
+    -Size size
     +Append(Type Item)
     +Extend(View~Type~ items)
-    +At(uint64 index) ~*Type, *Exception~
-    +Update(uint64 index, Type value) *Exception
-    +Remove(uint64 index) *Exception
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    +Remove(Size index) *Exception
     +Dequeue() ~*Type, *Exception~
     +Peek() ~*Type, *Exception~
     +Items() *[]Type
     +Collect() []Type
-    +Size() uint64
+    +Size() Size
     +IsEmpty() bool
 }
 
 class Stack~Type~ {
     -[]Type items
-    -uint64 size
+    -Size size
     +Append(Type Item)
     +Extend(View~Type~ items)
-    +At(uint64 index) ~*Type, *Exception~
-    +Update(uint64 index, Type value) *Exception
-    +Remove(uint64 index) *Exception
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    +Remove(Size index) *Exception
     +Pop() ~*Type, *Exception~
     *Peek() ~*Type, *Exception~
     +Items() *[]Type
     +Collect() []Type
-    +Size() uint64
+    +Size() Size
     +IsEmpty() bool
 }
 
 class SafeArray~Type~ {
     -RWMutex lock
     -[]Type items
-    -uint64 size
+    -Size size
     +Append(Type Item)
     +Extend(View~Type~ items)
-    +At(uint64 index) ~*Type, *Exception~
-    +Update(uint64 index, Type value) *Exception
-    +Remove(uint64 index) *Exception
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    +Remove(Size index) *Exception
     +Items() *[]Type
     +Collect() []Type
-    +Size() uint64
+    +Size() Size
     +IsEmpty() bool
 }
 
 class SafeMap~Key, Value~ {
     -RWMutex lock
     -map~Key, Value~ items
-    -uint64 size
+    -Size size
     +Insert(Key key, Value value) *Exception
     +At(Key key) ~*Value, *Exception~
     +Update(Key key, Value value) *Exception
@@ -181,41 +181,41 @@ class SafeMap~Key, Value~ {
     +Remove(Key key) *Exception
     +HasKey(Key key) bool
     +Collect() []Pair~Key, Value~
-    +Size() uint64
+    +Size() Size
     +IsEmpty() bool
 }
 
 class SafeQueue~Type~ {
     -RWMutex lock
     -[]Type items
-    -uint64 size
+    -Size size
     +Append(Type Item)
     +Extend(View~Type~ items)
-    +At(uint64 index) ~*Type, *Exception~
-    +Update(uint64 index, Type value) *Exception
-    +Remove(uint64 index) *Exception
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    +Remove(Size index) *Exception
     +Dequeue() ~*Type, *Exception~
     +Peek() ~*Type, *Exception~
     +Items() *[]Type
     +Collect() []Type
-    +Size() uint64
+    +Size() Size
     +IsEmpty() bool
 }
 
 class SafeStack~Type~ {
     -RWMutex lock
     -[]Type items
-    -uint64 size
+    -Size size
     +Append(Type Item)
     +Extend(View~Type~ items)
-    +At(uint64 index) ~*Type, *Exception~
-    +Update(uint64 index, Type value) *Exception
-    +Remove(uint64 index) *Exception
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    +Remove(Size index) *Exception
     +Pop() ~*Type, *Exception~
     *Peek() ~*Type, *Exception~
     +Items() *[]Type
     +Collect() []Type
-    +Size() uint64
+    +Size() Size
     +IsEmpty() bool
 }
 
@@ -223,9 +223,9 @@ class Set~Type~ {
     -Mapping~Type, nil~ items
     +Append(Type Item)
     +Extend(View~Type~ items)
-    +At(uint64 index) ~*Type, *Exception~
-    +Update(uint64 index, Type value) *Exception
-    +Remove(uint64 index) *Exception
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    +Remove(Size index) *Exception
     +Discard(Type item) ~*Type, *Exception~
     +Contains(Type item) bool
     +Difference(Set~Type~ other) *Set~Type~
@@ -234,7 +234,7 @@ class Set~Type~ {
     +ToString() String
     +Items() *[]Type
     +Collect() []Type
-    +Size() uint64
+    +Size() Size
     +IsEmpty() bool
 }
 
