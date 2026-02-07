@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
@@ -50,7 +51,7 @@ func TestSetSizeSuccess(test *testing.T) {
 	mock.Append(0)
 	mock.Append(1)
 	mock.Append(2)
-	var size uint64 = mock.Size()
+	var size gopolutils.Size = mock.Size()
 	if size != 3 {
 		test.Errorf("Set size was not retuned correctly: '%d'.\n", size)
 	}
@@ -58,7 +59,7 @@ func TestSetSizeSuccess(test *testing.T) {
 
 func TestSetSizeFail(test *testing.T) {
 	var mock *collections.Set[int] = collections.NewSet[int]()
-	var size uint64 = mock.Size()
+	var size gopolutils.Size = mock.Size()
 	if size != 0 {
 		test.Errorf("Set size was not retuned correctly: '%d'.\n", size)
 	}
