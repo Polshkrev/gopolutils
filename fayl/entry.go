@@ -80,7 +80,7 @@ func assignType(path string) (EntryType, *gopolutils.Exception) {
 	var infoError error
 	info, infoError = os.Stat(path)
 	if infoError != nil {
-		return nil, gopolutils.NewNamedException(gopolutils.IOError, infoError.Error())
+		return "", gopolutils.NewNamedException(gopolutils.IOError, infoError.Error())
 	}
 	if info.IsDir() {
 		return Directory, nil
