@@ -1,14 +1,15 @@
-package collections
+package safe
 
 import (
 	"fmt"
 	"sync"
 
 	"github.com/Polshkrev/gopolutils"
+	"github.com/Polshkrev/gopolutils/collections"
 )
 
 // A concurrent-safe collection of key-value pairs.
-type SafeMap[Key comparable, Value any] struct {
+type Map[Key comparable, Value any] struct {
 	lock  sync.RWMutex
 	items map[Key]Value
 	size  gopolutils.Size
@@ -16,8 +17,8 @@ type SafeMap[Key comparable, Value any] struct {
 
 // Consruct a new map.
 // Returns a pointer to a new empty map.
-func NewSafeMap[Key comparable, Value any]() *SafeMap[Key, Value] {
-	var mapping *SafeMap[Key, Value] = new(SafeMap[Key, Value])
+func NewMap[Key comparable, Value any]() *Map[Key, Value] {
+	var mapping *Map[Key, Value] = new(Map[Key, Value])
 	mapping.items = make(map[Key]Value, 0)
 	mapping.size = 0
 	return mapping
@@ -25,7 +26,7 @@ func NewSafeMap[Key comparable, Value any]() *SafeMap[Key, Value] {
 
 // Insert a key-value pair into the map.
 // If the key is already in the map, instead of just quietly not inserting into the map, a [gopolutils.KeyEror] is retruned.
-func (mapping *SafeMap[Key, Value]) Insert(key Key, value Value) *gopolutils.Exception {
+func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Exception {
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
 	if mapping.HasKey(key) {
@@ -40,7 +41,7 @@ func (mapping *SafeMap[Key, Value]) Insert(key Key, value Value) *gopolutils.Exc
 // Returns a pointer to the data stored at the given key.
 // If the map is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 // If the key is not in the map, a [gopolutils.KeyError] is returned with a nil data pointer.
-func (mapping *SafeMap[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
+func (mapping *Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
 	if mapping.IsEmpty() {
@@ -56,7 +57,7 @@ func (mapping *SafeMap[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) 
 // If the mapping is empty, a [gopolutils.ValueError] is returned.
 // If the key does not exist in the mapping, a [gopolutils.KeyError] is returned.
 // If a [gopolutils.ValueError] or a [gopolutils.KeyError] is returned, the mapping is not modified.
-func (mapping *SafeMap[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
+func (mapping *Map[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
 	if mapping.IsEmpty() {
@@ -70,7 +71,7 @@ func (mapping *SafeMap[Key, Value]) Update(key Key, value Value) *gopolutils.Exc
 
 // Access a slice of unique keys within the map.
 // Returns a slice of unique keys within the map.
-func (mapping *SafeMap[Key, _]) Keys() []Key {
+func (mapping *Map[Key, _]) Keys() []Key {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
 	var keys []Key = make([]Key, 0)
@@ -83,7 +84,7 @@ func (mapping *SafeMap[Key, _]) Keys() []Key {
 
 // Access a slice of unique values within the map.
 // Returns a slice of unique values within the map.
-func (mapping *SafeMap[_, Value]) Values() []Value {
+func (mapping *Map[_, Value]) Values() []Value {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
 	var values []Value = make([]Value, 0)
@@ -98,7 +99,7 @@ func (mapping *SafeMap[_, Value]) Values() []Value {
 // If the map is empty, a [gopolutils.ValueError] is returned.
 // If the given key is not stored in the map, a [gopolutils.KeyError] is returned.
 // If a [gopolutils.ValueError] or a [gopolutils.KeyError] is returned, the mapping is not modified.
-func (mapping *SafeMap[Key, _]) Remove(key Key) *gopolutils.Exception {
+func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
 	if mapping.IsEmpty() {
@@ -113,7 +114,7 @@ func (mapping *SafeMap[Key, _]) Remove(key Key) *gopolutils.Exception {
 
 // Determine if a given key is stored in the map.
 // Returns true if the key is stored in the map.
-func (mapping *SafeMap[Key, _]) HasKey(key Key) bool {
+func (mapping *Map[Key, _]) HasKey(key Key) bool {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
 	var found bool
@@ -123,7 +124,7 @@ func (mapping *SafeMap[Key, _]) HasKey(key Key) bool {
 
 // Acces the size of the map.
 // Returns the size of the map as an unsigned 64-bit integer.
-func (mapping *SafeMap[_, _]) Size() gopolutils.Size {
+func (mapping *Map[_, _]) Size() gopolutils.Size {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
 	return mapping.size
@@ -131,7 +132,7 @@ func (mapping *SafeMap[_, _]) Size() gopolutils.Size {
 
 // Determine if the map is empty.
 // Returns true if the length of the underlying data and the size of the map is equal to 0.
-func (mapping *SafeMap[_, _]) IsEmpty() bool {
+func (mapping *Map[_, _]) IsEmpty() bool {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
 	return len(mapping.items) == 0 && mapping.size == 0
@@ -139,14 +140,34 @@ func (mapping *SafeMap[_, _]) IsEmpty() bool {
 
 // Collect a map into a view.
 // Returns a slice containing each of the key-value pairs within the map.
-func (mapping *SafeMap[Key, Value]) Collect() []Pair[Key, Value] {
+func (mapping *Map[Key, Value]) Collect() []collections.Pair[Key, Value] {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
-	var result []Pair[Key, Value] = make([]Pair[Key, Value], 0, mapping.size)
+	var result []collections.Pair[Key, Value] = make([]collections.Pair[Key, Value], 0, mapping.size)
 	var key Key
 	var value Value
 	for key, value = range mapping.items {
-		result = append(result, *NewPair(key, value))
+		result = append(result, *collections.NewPair(key, value))
 	}
 	return result
+}
+
+// Lock the internal mutex of the mapping for both reading and writing.
+func (mapping *Map[_, _]) Lock() {
+	mapping.lock.Lock()
+}
+
+// Unlock the internal mutex of the mapping for both reading and writing.
+func (mapping *Map[_, _]) Unlock() {
+	mapping.lock.Unlock()
+}
+
+// Lock the internal mutex of the mapping for reading.
+func (mapping *Map[_, _]) RLock() {
+	mapping.lock.RLock()
+}
+
+// Unock the internal mutex of the mapping for reading.
+func (mapping *Map[Key, Value]) RUnlock() {
+	mapping.lock.RUnlock()
 }

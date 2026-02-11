@@ -45,8 +45,9 @@ func In[Type comparable](items View[Type], item Type) bool {
 // Returns a new collection of the combination of each of the passed in views.
 func Chain[Type any](views ...View[Type]) Collection[Type] {
 	var result Collection[Type] = NewArray[Type]()
-	var view View[Type]
-	for _, view = range views {
+	var i int
+	for i = range views {
+		var view View[Type] = views[i]
 		result.Extend(view)
 	}
 	return result
