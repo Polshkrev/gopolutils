@@ -1,14 +1,33 @@
 # Changelog
-## v1.23.0 - 2026-02-07: The Entry Update
+## v1.24.0 - 2026-02-07: The Safe Update
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- Added new `collections/safe` package.
+- `safe`
+    - Added new `Collection` interface.
+    - Added new `Mapping` interface.
+
+`Changed`
+- `collections`
+    - All concurrent collections have been moved to the new `collections/safe` package.
+- `Docs`
+    - All documentation &mdash; in both russian and english &mdash; for the concurrent collections have been moved to the new `collections/safe` documentation folder.
+    - All diagrams &mdash; in both russian and english &mdash; have been updated.
+    - `fayl`
+        - Added documentation for the `Entry` type.
+
+`Removed`
+- `collections`
+    - Removed `SafeSet` constructor for the `Set` type.
+## v1.23.0 - 2026-02-07: The Entry Update
 `Added`
 - Added `Size` type.
 - Added `doc.go` file.
 - `fayl`
     - Added `Entry` type.
     - Added `doc.go` file.
-- `collections`
+- `collections` package.
     - Added `doc.go` file.
 
 `Changed`
