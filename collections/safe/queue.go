@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/Polshkrev/gopolutils"
+	"github.com/Polshkrev/gopolutils/collections"
 )
 
 // Implementation of a concurrent-safe queue data structure.
@@ -32,7 +33,7 @@ func (queue *Queue[Type]) Append(item Type) {
 }
 
 // Append multiple items to the queue.
-func (queue *Queue[Type]) Extend(items View[Type]) {
+func (queue *Queue[Type]) Extend(items collections.View[Type]) {
 	var i int
 	for i = range items.Collect() {
 		var item Type = items.Collect()[i]
