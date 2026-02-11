@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Polshkrev/gopolutils"
+	"github.com/Polshkrev/gopolutils/collections/safe"
 )
 
 // Representation of the different finite types of files.
@@ -19,7 +20,7 @@ const (
 type Entry struct {
 	path    *Path
 	kind    EntryType
-	content []byte
+	content safe.Collection[byte]
 }
 
 // Construct a new file entry based on a given [Path]. The path and therefore corresponding entry may be ephemeral.
@@ -28,7 +29,7 @@ func NewEntry(path *Path) *Entry {
 	var entry *Entry = new(Entry)
 	entry.path = path
 	entry.kind = File
-	entry.content = make([]byte, 0)
+	entry.content = safe.NewArray[byte]()
 	return entry
 }
 
@@ -47,7 +48,7 @@ func (entry Entry) Type() EntryType {
 // Obtain the contents of the file.
 // This method does not open a file.
 // Returns the byte content stored in the file entry.
-func (entry Entry) Content() []byte {
+func (entry Entry) Content() safe.Collection[byte] {
 	return entry.content
 }
 
@@ -62,7 +63,7 @@ func (entry *Entry) SetType(kind EntryType) {
 }
 
 // Set the content of the file entry.
-func (entry *Entry) SetContent(content []byte) {
+func (entry *Entry) SetContent(content safe.Collection[byte]) {
 	entry.content = content
 }
 
@@ -165,7 +166,7 @@ func (entry Entry) Copy(destination *Entry) *gopolutils.Exception {
 			return except
 		}
 	}
-	var except *gopolutils.Exception = Write(destination.Path(), entry.Content())
+	var except *gopolutils.Exception = Write(destination.Path(), entry.Content().Collect())
 	if except != nil {
 		return except
 	}
