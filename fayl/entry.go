@@ -150,12 +150,6 @@ func (entry Entry) MakeDirectory() *gopolutils.Exception {
 	return nil
 }
 
-// Concurrently write content to a path.
-func concurrentWrite(path string, content []byte, errorChannel chan<- error) {
-	errorChannel <- os.WriteFile(path, content, 0644)
-	defer close(errorChannel)
-}
-
 // Copy an entry into a given destination.
 // After the copy has been completed on the filesystem, the given internal content of the destination entry is set to the internal content of the original entry.
 // If the destination entry does not initially exist and subsequently can not be created, an [gopolutils.IOError] is returned.
