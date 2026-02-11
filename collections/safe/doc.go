@@ -13,4 +13,4 @@ Implementations:
   - [Queue]
   - [Stack]
 */
-package collections
+package safe
