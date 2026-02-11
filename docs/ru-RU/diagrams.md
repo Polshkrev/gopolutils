@@ -1,4 +1,5 @@
 # Диаграммы
+## Скопления
 ```mermaid
 classDiagram
 class Collection~Type~ {
@@ -24,10 +25,35 @@ class Mapping~Key, Value~ {
     +View~Pair~Key, Value~~$
 }
 
+class SafeCollection~Type~ {
+    <<интерфейс>>
+    +Lock()*
+    +Unlock()*
+    +RLock()*
+    +RUnlock()*
+    +Collection~Type~$
+}
+
+class SafeMapping~Key, Value~ {
+    <<интерфейс>>
+    +Lock()*
+    +Unlock()*
+    +RLock()*
+    +RUnlock()*
+    +Mapping~Key, Value~$
+}
+
 class View~Type~ {
     <<интерфейс>>
     +Collect() []Type*
     +Sized$
+}
+
+class Wrapper~Type~ {
+    <<интерфейс>>
+    +Into() Collection~Type~*
+    +From(View~Type~)*
+    +View~Type~$
 }
 
 class Sized {
@@ -239,6 +265,7 @@ class Set~Type~ {
 }
 
 Collection o-- View : Агрегат
+Collection o-- Wrapper : Агрегат
 View o-- Sized : Агрегат
 
 Collection <|.. Array : Реализует
@@ -249,6 +276,10 @@ Collection <|.. SafeArray : Реализует
 Collection <|.. SafeQueue : Реализует
 Collection <|.. SafeStack : Реализует
 
+SafeCollection <|.. SafeArray : Реализует
+SafeCollection <|.. SafeQueue : Реализует
+SafeCollection <|.. SafeStack : Реализует
+
 View <|.. Array : Реализует
 View <|.. Queue : Реализует
 View <|.. Stack : Реализует
@@ -256,6 +287,10 @@ View <|.. Set : Реализует
 View <|.. SafeArray : Реализует
 View <|.. SafeQueue : Реализует
 View <|.. SafeStack : Реализует
+
+Wrapper <|.. Set : Реализует
+Wrapper <.. View : Поддержка
+Wrapper <.. Collection : Поддержка
 
 Sized <|.. Array : Реализует
 Sized <|.. Queue : Реализует
@@ -267,6 +302,7 @@ Sized <|.. SafeStack : Реализует
 
 Mapping <|.. Map : Реализует
 Mapping <|.. SafeMap : Реализует
+SafeMapping <|.. SafeMap : Реализует
 Mapping ..* Set : Композит
 Mapping <.. Pair : Поддержка
 Map <.. Pair : Поддержка

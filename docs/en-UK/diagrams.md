@@ -1,4 +1,5 @@
 # Diagrams
+## Collections
 ```mermaid
 classDiagram
 class Collection~Type~ {
@@ -24,10 +25,35 @@ class Mapping~Key, Value~ {
     +View~Pair~Key, Value~~$
 }
 
+class SafeCollection~Type~ {
+    <<interface>>
+    +Lock()*
+    +Unlock()*
+    +RLock()*
+    +RUnlock()*
+    +Collection~Type~$
+}
+
+class SafeMapping~Key, Value~ {
+    <<interface>>
+    +Lock()*
+    +Unlock()*
+    +RLock()*
+    +RUnlock()*
+    +Mapping~Key, Value~$
+}
+
 class View~Type~ {
     <<interface>>
     +Collect() []Type*
     +Sized$
+}
+
+class Wrapper~Type~ {
+    <<interface>>
+    +Into() Collection~Type~*
+    +From(View~Type~)*
+    +View~Type~$
 }
 
 class Sized {
@@ -239,6 +265,7 @@ class Set~Type~ {
 }
 
 Collection o-- View : Aggregate
+Collection o-- Wrapper : Aggregate
 View o-- Sized : Aggregate
 
 Collection <|.. Array : Implements
@@ -249,6 +276,10 @@ Collection <|.. SafeArray : Implements
 Collection <|.. SafeQueue : Implements
 Collection <|.. SafeStack : Implements
 
+SafeCollection <|.. SafeArray : Implements
+SafeCollection <|.. SafeQueue : Implements
+SafeCollection <|.. SafeStack : Implements
+
 View <|.. Array : Implements
 View <|.. Queue : Implements
 View <|.. Stack : Implements
@@ -256,6 +287,10 @@ View <|.. Set : Implements
 View <|.. SafeArray : Implements
 View <|.. SafeQueue : Implements
 View <|.. SafeStack : Implements
+
+Wrapper <|.. Set : Implements
+Wrapper <.. View : Dependency
+Wrapper <.. Collection : Dependency
 
 Sized <|.. Array : Implements
 Sized <|.. Queue : Implements
@@ -267,6 +302,7 @@ Sized <|.. SafeStack : Implements
 
 Mapping <|.. Map : Implements
 Mapping <|.. SafeMap : Implements
+SafeMapping <|.. SafeMap : Implements
 Mapping ..* Set : Composite
 Mapping <.. Pair : Dependency
 Map <.. Pair : Dependency
