@@ -1,7 +1,5 @@
 # Path
-
 A go implementation of [Python's Pathlib](https://docs.python.org/3/library/pathlib.html).
-
 ## Table Of Contents
 1. [Usage](#usage)
     1. [Construction](#construction)

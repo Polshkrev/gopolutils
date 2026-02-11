@@ -29,6 +29,7 @@
     1. [Read](/docs/en-UK/fayl/read.md)
     2. [Write](/docs/ru-RU/fayl/write.md)
     3. [Path](/docs/en-UK/fayl/path.md)
+    4. [Entry](/docs/en-UK/fayl/entry.md)
 
 
 ### Install
