@@ -1,7 +1,22 @@
 # Changelog
-## v1.24.0 - 2026-02-07: The Safe Update
+## v1.25.0 - 2026-02-11
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Changed`
+- Updated `goserialize` dependency to its latest version.
+- `fayl`
+    - `Entry.Read` has been renamed to `Content`.
+    - `Entry` now internally uses a `safe.Collection` of bytes as its internal content.
+    - Instead of returning a slice of bytes, `Entry.Content` now returns a `safe.Collection` of bytes.
+    - Instead of taking in a slice of bytes as a parametre, `Entry.SetContent` now takes in a `safe.Collection` of bytes.
+    - Due to a logic bug in the previous version, `Entry.Create` now fails if the entry already exists, instead of if it doesn't exist.
+    - `Entry.Create` now uses a `Path.Suffix` to determine the type due to its possible ephemeralness.
+    - All global suffix maps now use `sync.RWMutex`.
+
+`Removed`
+- `fayl`
+    - `Entry.Write` has been removed.
+## v1.24.0 - 2026-02-11: The Safe Update
 `Added`
 - Added new `collections/safe` package.
 - `safe`
