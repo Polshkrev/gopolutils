@@ -1,14 +1,15 @@
-package collections
+package safe
 
 import (
 	"fmt"
 	"sync"
 
 	"github.com/Polshkrev/gopolutils"
+	"github.com/Polshkrev/gopolutils/collections"
 )
 
 // Implementation of a concurrent-safe stack.
-type SafeStack[Type any] struct {
+type Stack[Type any] struct {
 	lock  sync.RWMutex
 	items []Type
 	size  gopolutils.Size
@@ -16,15 +17,15 @@ type SafeStack[Type any] struct {
 
 // Construct a new stack.
 // Returns a pointer to a new stack.
-func NewSafeStack[Type any]() *SafeStack[Type] {
-	var stack *SafeStack[Type] = new(SafeStack[Type])
+func NewStack[Type any]() *Stack[Type] {
+	var stack *Stack[Type] = new(Stack[Type])
 	stack.items = make([]Type, 0)
 	stack.size = 0
 	return stack
 }
 
 // Append an item to the stack.
-func (stack *SafeStack[Type]) Append(item Type) {
+func (stack *Stack[Type]) Append(item Type) {
 	stack.lock.Lock()
 	defer stack.lock.Unlock()
 	stack.items = append(stack.items, item)
@@ -32,9 +33,10 @@ func (stack *SafeStack[Type]) Append(item Type) {
 }
 
 // Append multiple items to the stack.
-func (stack *SafeStack[Type]) Extend(items View[Type]) {
-	var item Type
-	for _, item = range items.Collect() {
+func (stack *Stack[Type]) Extend(items collections.View[Type]) {
+	var i int
+	for i = range items.Collect() {
+		var item Type = items.Collect()[i]
 		stack.Append(item)
 	}
 }
@@ -43,7 +45,7 @@ func (stack *SafeStack[Type]) Extend(items View[Type]) {
 // Returns a pointer to the data stored on the stack at the given index.
 // If the stack is evaluated to be empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 // If the index is greater than the size of the stack, an [gopolutils.OutOfRangeError] is returned with a nil data pointer.
-func (stack *SafeStack[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
+func (stack *Stack[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	stack.lock.RLock()
 	defer stack.lock.RUnlock()
 	if stack.IsEmpty() {
@@ -58,7 +60,7 @@ func (stack *SafeStack[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exce
 // If the stack is empty, a [gopolutils.ValueError] is returned.
 // If the given index is greater than the stack size, an [gopolutils.OutOfRangeError] is returned.
 // If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the stack is not modified.
-func (stack *SafeStack[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
+func (stack *Stack[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	stack.lock.Lock()
 	defer stack.lock.Unlock()
 	if stack.IsEmpty() {
@@ -74,7 +76,7 @@ func (stack *SafeStack[Type]) Update(index gopolutils.Size, value Type) *gopolut
 // If the stack is empty, a [gopolutils.ValueError] is returned.
 // If the given index is greater than the size of the stack, an [gopolutils.OutOfRangeError] is returned.
 // If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the stack is not modified.
-func (stack *SafeStack[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
+func (stack *Stack[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	stack.lock.Lock()
 	defer stack.lock.Unlock()
 	if stack.IsEmpty() {
@@ -94,7 +96,7 @@ func (stack *SafeStack[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 // Returns a pointer to the last item in the stack.
 // If the stack is evaluated to be empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 // If a [gopolutils.ValueError] is returned, the stack is not modified.
-func (stack *SafeStack[Type]) Pop() (*Type, *gopolutils.Exception) {
+func (stack *Stack[Type]) Pop() (*Type, *gopolutils.Exception) {
 	stack.lock.Lock()
 	defer stack.lock.Unlock()
 	if stack.IsEmpty() {
@@ -113,7 +115,7 @@ func (stack *SafeStack[Type]) Pop() (*Type, *gopolutils.Exception) {
 // Unlike pop, this method accesses the data on the stack without modifying the stack itself.
 // Returns a pointer to the last item in the stack.
 // If the stack is evaluated to be empty, a [gopolutils.ValueError] is returned with a nil data pointer.
-func (stack *SafeStack[Type]) Peek() (*Type, *gopolutils.Exception) {
+func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
 	stack.lock.RLock()
 	defer stack.lock.RUnlock()
 	if stack.IsEmpty() {
@@ -125,7 +127,7 @@ func (stack *SafeStack[Type]) Peek() (*Type, *gopolutils.Exception) {
 
 // Determine if the stack is empty.
 // Returns true if the length of the underlying data and the size of the stack is equal to 0.
-func (stack *SafeStack[_]) IsEmpty() bool {
+func (stack *Stack[_]) IsEmpty() bool {
 	stack.lock.RLock()
 	defer stack.lock.RUnlock()
 	return len(stack.items) == 0 && stack.size == 0
@@ -133,7 +135,7 @@ func (stack *SafeStack[_]) IsEmpty() bool {
 
 // Collect the data stored in the stack as a slice.
 // Returns a view into the data stored in the stack.
-func (stack *SafeStack[Type]) Collect() []Type {
+func (stack *Stack[Type]) Collect() []Type {
 	stack.lock.RLock()
 	defer stack.lock.RUnlock()
 	return stack.items
@@ -141,7 +143,7 @@ func (stack *SafeStack[Type]) Collect() []Type {
 
 // Get a pointer to a slice of the data within stack.
 // Returns a mutable pointer to the underlying data within the stack.
-func (stack *SafeStack[Type]) Items() *[]Type {
+func (stack *Stack[Type]) Items() *[]Type {
 	stack.lock.RLock()
 	defer stack.lock.RUnlock()
 	return &stack.items
@@ -149,8 +151,28 @@ func (stack *SafeStack[Type]) Items() *[]Type {
 
 // Access the size of the stack.
 // Returns the size of the stack as an unsigned 64-bit integer.
-func (stack *SafeStack[_]) Size() gopolutils.Size {
+func (stack *Stack[_]) Size() gopolutils.Size {
 	stack.lock.RLock()
 	defer stack.lock.RUnlock()
 	return stack.size
+}
+
+// Lock the internal mutex of the collection for both reading and writing.
+func (stack *Stack[_]) Lock() {
+	stack.lock.Lock()
+}
+
+// Unlock the internal mutex of the collection for both reading and writing.
+func (stack *Stack[_]) Unlock() {
+	stack.lock.Unlock()
+}
+
+// Lock the internal mutex of the collection for reading.
+func (stack *Stack[_]) RLock() {
+	stack.lock.RLock()
+}
+
+// Unock the internal mutex of the collection for reading.
+func (stack *Stack[_]) RUnlock() {
+	stack.lock.RUnlock()
 }

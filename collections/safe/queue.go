@@ -1,4 +1,4 @@
-package collections
+package safe
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 // Implementation of a concurrent-safe queue data structure.
-type SafeQueue[Type any] struct {
+type Queue[Type any] struct {
 	lock  sync.RWMutex
 	items []Type
 	size  gopolutils.Size
@@ -16,15 +16,15 @@ type SafeQueue[Type any] struct {
 
 // Construct a new queue.
 // Returns a pointer to a new queue.
-func NewSafeQueue[Type any]() *SafeQueue[Type] {
-	var queue *SafeQueue[Type] = new(SafeQueue[Type])
+func NewQueue[Type any]() *Queue[Type] {
+	var queue *Queue[Type] = new(Queue[Type])
 	queue.items = make([]Type, 0)
 	queue.size = 0
 	return queue
 }
 
 // Append an item to the queue.
-func (queue *SafeQueue[Type]) Append(item Type) {
+func (queue *Queue[Type]) Append(item Type) {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 	queue.items = append(queue.items, item)
@@ -32,9 +32,10 @@ func (queue *SafeQueue[Type]) Append(item Type) {
 }
 
 // Append multiple items to the queue.
-func (queue *SafeQueue[Type]) Extend(items View[Type]) {
-	var item Type
-	for _, item = range items.Collect() {
+func (queue *Queue[Type]) Extend(items View[Type]) {
+	var i int
+	for i = range items.Collect() {
+		var item Type = items.Collect()[i]
 		queue.Append(item)
 	}
 }
@@ -43,7 +44,7 @@ func (queue *SafeQueue[Type]) Extend(items View[Type]) {
 // Returns a pointer to data stored in the queue at the given index.
 // If the queue is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 // If the index is greater than the size of the queue, an [gopolutils.OutOfRangeError] is returned with a nil data pointer.
-func (queue *SafeQueue[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
+func (queue *Queue[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	if queue.IsEmpty() {
@@ -58,7 +59,7 @@ func (queue *SafeQueue[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exce
 // If the queue is empty, a [gopolutils.ValueError] is returned.
 // If the given index is greater than the queue size, an [gopolutils.OutOfRangeError] is returned.
 // If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the queue is not modified.
-func (queue *SafeQueue[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
+func (queue *Queue[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 	if queue.IsEmpty() {
@@ -74,7 +75,7 @@ func (queue *SafeQueue[Type]) Update(index gopolutils.Size, value Type) *gopolut
 // If the queue is empty, a [gopolutils.ValueError] is returned.
 // If the given index is greater than the size of the queue, an [gopolutils.OutOfRangeError] is returned.
 // If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the queue is not modified.
-func (queue *SafeQueue[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
+func (queue *Queue[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 	if queue.IsEmpty() {
@@ -94,7 +95,7 @@ func (queue *SafeQueue[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 // Like the name suggests, when an item is dequeued, the item is removed from the queue.
 // If the queue is evaluated to be empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 // If a [gopolutils.ValueError] is returned, the queue is not modified.
-func (queue *SafeQueue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
+func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 	if queue.IsEmpty() {
@@ -109,7 +110,7 @@ func (queue *SafeQueue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 // Access the first element in the queue.
 // Returns a pointer to the first item in the queue.
 // If the queue is evaluated to be empty, a [gopolutils.ValueError] is returned with a nil data pointer.
-func (queue *SafeQueue[Type]) Peek() (*Type, *gopolutils.Exception) {
+func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	if queue.IsEmpty() {
@@ -120,7 +121,7 @@ func (queue *SafeQueue[Type]) Peek() (*Type, *gopolutils.Exception) {
 
 // Determine if the queue is empty.
 // Returns true if the length of the underlying data and the size of the queue is equal to 0.
-func (queue *SafeQueue[_]) IsEmpty() bool {
+func (queue *Queue[_]) IsEmpty() bool {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	return queue.size == 0 && len(queue.items) == 0
@@ -128,7 +129,7 @@ func (queue *SafeQueue[_]) IsEmpty() bool {
 
 // Collect the data stored in the queue as a slice.
 // Returns a view into the data stored in the queue.
-func (queue *SafeQueue[Type]) Collect() []Type {
+func (queue *Queue[Type]) Collect() []Type {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	return queue.items
@@ -136,7 +137,7 @@ func (queue *SafeQueue[Type]) Collect() []Type {
 
 // Get a pointer to the slice of the queue.
 // Returns a mutable pointer to the underlying data within the queue.
-func (queue *SafeQueue[Type]) Items() *[]Type {
+func (queue *Queue[Type]) Items() *[]Type {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	return &queue.items
@@ -144,8 +145,28 @@ func (queue *SafeQueue[Type]) Items() *[]Type {
 
 // Access the size of the queue.
 // Returns the size of the queue as an unsigned 64-bit integer.
-func (queue *SafeQueue[_]) Size() gopolutils.Size {
+func (queue *Queue[_]) Size() gopolutils.Size {
 	queue.lock.RLock()
 	defer queue.lock.RUnlock()
 	return queue.size
+}
+
+// Lock the internal mutex of the collection for both reading and writing.
+func (queue *Queue[_]) Lock() {
+	queue.lock.Lock()
+}
+
+// Unlock the internal mutex of the collection for both reading and writing.
+func (queue *Queue[_]) Unlock() {
+	queue.lock.Unlock()
+}
+
+// Lock the internal mutex of the collection for reading.
+func (queue *Queue[_]) RLock() {
+	queue.lock.RLock()
+}
+
+// Unock the internal mutex of the collection for reading.
+func (queue *Queue[_]) RUnlock() {
+	queue.lock.RUnlock()
 }
