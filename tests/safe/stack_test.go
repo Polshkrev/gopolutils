@@ -6,7 +6,7 @@ import (
 
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
-	"github.com/Polshkrev/gopolutils/safe"
+	"github.com/Polshkrev/gopolutils/collections/safe"
 )
 
 func TestSafeStackConstructNotNil(test *testing.T) {

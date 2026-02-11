@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/Polshkrev/gopolutils"
-	"github.com/Polshkrev/gopolutils/safe"
+	"github.com/Polshkrev/gopolutils/collections/safe"
 )
 
 func TestSafeMapConstructorIsNotNil(test *testing.T) {
