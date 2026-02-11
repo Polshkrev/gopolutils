@@ -21,14 +21,6 @@ func NewSet[Type comparable]() *Set[Type] {
 	return set
 }
 
-// Construct a new, concurrent-safe, set.
-// Returns a pointer to a new concurrent-safe set.
-func NewSafeSet[Type comparable]() *Set[Type] {
-	var set *Set[Type] = new(Set[Type])
-	set.items = NewSafeMap[Type, struct{}]()
-	return set
-}
-
 // Append an item to the set.
 // If the set can not insert the item, this is a critical error that should not happen in most cicumstances, so — as a precaution — an error is printed to standard error and the programme exists.
 func (set *Set[Type]) Append(item Type) {
