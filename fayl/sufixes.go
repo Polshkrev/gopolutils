@@ -56,7 +56,7 @@ const (
 )
 
 var (
-	stringLock sync.Mutex
+	stringLock sync.RWMutex
 	// Mapping of the string representation of the file suffix to its corresponding enum value. This mapping is not concurrent safe.
 	stringToSuffix map[string]Suffix = map[string]Suffix{
 		"7z":    Zip,
@@ -104,7 +104,7 @@ var (
 
 var (
 	// Concurrent safe lock from mapping [suffixToString]
-	suffixLock sync.Mutex
+	suffixLock sync.RWMutex
 	// Mapping of [Suffix] enum values to their corresponding string value.
 	suffixToString map[Suffix]string = map[Suffix]string{
 		A:      "a",
@@ -151,8 +151,8 @@ var (
 // Returns a path suffix obtained from a mapping of strings to suffixes.
 // If the path suffix is not defined in the mapping, a [gopolutils.KeyError] is returned with the `None` suffix value.
 func SuffixFromString(suffix string) (Suffix, *gopolutils.Exception) {
-	stringLock.Lock()
-	defer stringLock.Unlock()
+	stringLock.RLock()
+	defer stringLock.RUnlock()
 	var ok bool
 	var item Suffix
 	item, ok = stringToSuffix[suffix]
@@ -166,8 +166,8 @@ func SuffixFromString(suffix string) (Suffix, *gopolutils.Exception) {
 // Returns a string obtained from a mapping of suffixes to strings.
 // If the path suffix is not defined in the mapping, a [gopolutils.KeyError] is returned with an empty string.
 func StringFromSuffix(suffix Suffix) (string, *gopolutils.Exception) {
-	suffixLock.Lock()
-	defer suffixLock.Unlock()
+	suffixLock.RLock()
+	defer suffixLock.RUnlock()
 	var ok bool
 	var item string
 	item, ok = suffixToString[suffix]
