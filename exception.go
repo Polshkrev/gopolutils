@@ -39,20 +39,20 @@ func (exception Exception) Name() ExceptionName {
 
 // Construct a new exception with a default name and a given message.
 // Returns a pointer to a new exception.
-func NewException(message string) *Exception {
+func NewException(format string, arguments ...any) *Exception {
 	var exception *Exception = new(Exception)
 	exception.assignName(BaseException)
-	exception.assignMessage(message)
+	exception.assignMessage(fmt.Sprintf(format, arguments...))
 	exception.assignRepr()
 	return exception
 }
 
-// Construct a new exception with a given name and message.
+// Construct a new exception with a given name and format specifiers with arguments.
 // Returns a pointer to a new exception.
-func NewNamedException(name ExceptionName, message string) *Exception {
+func NewNamedException(name ExceptionName, format string, arguments ...any) *Exception {
 	var exception *Exception = new(Exception)
 	exception.assignName(name)
-	exception.assignMessage(message)
+	exception.assignMessage(fmt.Sprintf(format, arguments...))
 	exception.assignRepr()
 	return exception
 }
