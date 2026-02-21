@@ -57,14 +57,7 @@ func PathFromParts(folderName, fileName string, fileType Suffix) *Path {
 		os.Exit(1)
 	}
 	buffer.WriteString(suffixString)
-	var absolute string
-	var absoluteError error
-	absolute, absoluteError = filepath.Abs(buffer.String())
-	if absoluteError != nil {
-		fmt.Fprintln(os.Stderr, gopolutils.NewNamedException(gopolutils.OSError, absoluteError.Error()))
-		os.Exit(1)
-	}
-	return PathFrom(absolute)
+	return PathFrom(buffer.String())
 }
 
 // Determine if the filesystem path exists.
@@ -89,15 +82,15 @@ func (path Path) Absolute() (*Path, *gopolutils.Exception) {
 }
 
 // Append a filesystem path to another.
-func (path *Path) Append(item Path) {
-	path.raw = filepath.Join(path.raw, item.raw)
+func (path *Path) Append(item *Path) {
+	path.raw = fmt.Sprintf("%s%c%s", path.raw, filepath.Separator, item.ToString())
 }
 
 // Append a filesystem path as a string to a path object.
 // If the absolute path can not be obtained, an OSError is printed to standard error and the programme exits.
 func (path *Path) AppendAs(item string) {
 	var itemPath *Path = PathFrom(item)
-	path.Append(*itemPath)
+	path.Append(itemPath)
 }
 
 // Obtain the suffix of the filesystem path.
