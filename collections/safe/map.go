@@ -1,7 +1,6 @@
 package safe
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/Polshkrev/gopolutils"
@@ -30,7 +29,7 @@ func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Excepti
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
 	if mapping.HasKey(key) {
-		return gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Key '%v' already exists.", key))
+		return gopolutils.NewNamedException(gopolutils.KeyError, "Key '%v' already exists.", key)
 	}
 	mapping.items[key] = value
 	mapping.size++
@@ -45,9 +44,9 @@ func (mapping *Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 	mapping.lock.RLock()
 	defer mapping.lock.RUnlock()
 	if mapping.IsEmpty() {
-		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty map at key '%+v'.", key)
 	} else if !mapping.HasKey(key) {
-		return nil, gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Key '%+v' does not exist.", key))
+		return nil, gopolutils.NewNamedException(gopolutils.KeyError, "Key '%+v' does not exist.", key)
 	}
 	var value Value = mapping.items[key]
 	return &value, nil
@@ -61,9 +60,9 @@ func (mapping *Map[Key, Value]) Update(key Key, value Value) *gopolutils.Excepti
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
 	if mapping.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty map at key '%+v'.", key))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty map at key '%+v'.", key)
 	} else if !mapping.HasKey(key) {
-		return gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Key '%+v' does not exist.", key))
+		return gopolutils.NewNamedException(gopolutils.KeyError, "Key '%+v' does not exist.", key)
 	}
 	mapping.items[key] = value
 	return nil
@@ -103,9 +102,9 @@ func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 	mapping.lock.Lock()
 	defer mapping.lock.Unlock()
 	if mapping.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty map at key '%+v'", key))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty map at key '%+v'", key)
 	} else if !mapping.HasKey(key) {
-		return gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("Key '%+v' does not exist.", key))
+		return gopolutils.NewNamedException(gopolutils.KeyError, "Key '%+v' does not exist.", key)
 	}
 	delete(mapping.items, key)
 	mapping.size--

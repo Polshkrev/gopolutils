@@ -69,7 +69,7 @@ func (set *Set[Type]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	if set.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty set.")
 	} else if index > set.Size() {
-		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access set of size %d at index %d.", set.Size(), index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access set of size %d at index %d.", set.Size(), index)
 	}
 	var i gopolutils.Size
 	var key Type
@@ -83,7 +83,7 @@ func (set *Set[Type]) Remove(index gopolutils.Size) *gopolutils.Exception {
 		}
 		return nil
 	}
-	return gopolutils.NewNamedException(gopolutils.IndexError, fmt.Sprintf("No item at index %d exists.", index))
+	return gopolutils.NewNamedException(gopolutils.IndexError, "No item at index %d exists.", index)
 }
 
 // Remove an item within the set without an exception.

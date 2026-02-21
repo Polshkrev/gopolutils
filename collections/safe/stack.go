@@ -1,7 +1,6 @@
 package safe
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/Polshkrev/gopolutils"
@@ -49,9 +48,9 @@ func (stack *Stack[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exceptio
 	stack.lock.RLock()
 	defer stack.lock.RUnlock()
 	if stack.IsEmpty() {
-		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty stack at index %d.", index))
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty stack at index %d.", index)
 	} else if index > stack.size {
-		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
+		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access stack of size %d at index %d.", stack.size, index)
 	}
 	return &stack.items[index], nil
 }
@@ -64,9 +63,9 @@ func (stack *Stack[Type]) Update(index gopolutils.Size, value Type) *gopolutils.
 	stack.lock.Lock()
 	defer stack.lock.Unlock()
 	if stack.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty stack at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty stack at index %d.", index)
 	} else if index > stack.size {
-		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access stack of size %d at index %d.", stack.size, index)
 	}
 	stack.items[index] = value
 	return nil
@@ -80,9 +79,9 @@ func (stack *Stack[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	stack.lock.Lock()
 	defer stack.lock.Unlock()
 	if stack.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty stack at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty stack at index %d.", index)
 	} else if index > stack.size {
-		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not remove element of stack of size %d at index %d.", stack.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not remove element of stack of size %d at index %d.", stack.size, index)
 	}
 	stack.items = append(stack.items[:index], stack.items[index+1:]...)
 	stack.size--

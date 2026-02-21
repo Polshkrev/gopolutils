@@ -1,8 +1,6 @@
 package collections
 
 import (
-	"fmt"
-
 	"github.com/Polshkrev/gopolutils"
 )
 
@@ -41,9 +39,9 @@ func (stack *Stack[Type]) Extend(items View[Type]) {
 // If the index is greater than the size of the stack, an [gopolutils.OutOfRangeError] is returned with a nil data pointer.
 func (stack Stack[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	if stack.IsEmpty() {
-		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty stack at index %d.", index))
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty stack at index %d.", index)
 	} else if index > stack.size {
-		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
+		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access stack of size %d at index %d.", stack.size, index)
 	}
 	return &stack.items[index], nil
 }
@@ -54,9 +52,9 @@ func (stack Stack[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception
 // If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the stack is not modified.
 func (stack *Stack[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	if stack.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty stack at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty stack at index %d.", index)
 	} else if index > stack.size {
-		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access stack of size %d at index %d.", stack.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access stack of size %d at index %d.", stack.size, index)
 	}
 	stack.items[index] = value
 	return nil
@@ -68,9 +66,9 @@ func (stack *Stack[Type]) Update(index gopolutils.Size, value Type) *gopolutils.
 // If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the stack is not modified.
 func (stack *Stack[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	if stack.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty stack at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty stack at index %d.", index)
 	} else if index > stack.size {
-		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not remove element of stack of size %d at index %d.", stack.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not remove element of stack of size %d at index %d.", stack.size, index)
 	}
 	stack.items = append(stack.items[:index], stack.items[index+1:]...)
 	stack.size--
