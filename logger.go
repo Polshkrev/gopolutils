@@ -53,7 +53,7 @@ func lltostr(level LoggingLevel) string {
 	case Critical:
 		return "CRITICAL"
 	}
-	return NewNamedException(UnreachableError, "Unknown logging level.").Error() // unreachable
+	return NewNamedException(UnreachableError, "Unknown logging level. %v", level).Error() // unreachable
 }
 
 // A logger.
