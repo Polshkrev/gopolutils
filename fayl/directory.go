@@ -190,7 +190,7 @@ func (directory Directory) ToString() string {
 	var i int
 	for i = range directory.Collect() {
 		var item *Entry = directory.Collect()[i]
-		buffer.WriteString(fmt.Sprintf("%s%s%s - %s", directory.Root().ToString(), filepath.Separator, item.Path().ToString(), item.Type()))
+		buffer.WriteString(fmt.Sprintf("%s%c%s - %s", directory.Root().ToString(), filepath.Separator, item.Path().ToString(), item.Type()))
 	}
 	return buffer.String()
 }
