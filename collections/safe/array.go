@@ -1,7 +1,6 @@
 package safe
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/Polshkrev/gopolutils"
@@ -48,9 +47,9 @@ func (array *Array[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exceptio
 	array.RLock()
 	defer array.RUnlock()
 	if array.IsEmpty() {
-		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty array at index %d.", index))
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty array at index %d.", index)
 	} else if index > array.size {
-		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
+		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access array of size %d at index %d.", array.size, index)
 	}
 	return &array.items[index], nil
 }
@@ -63,9 +62,9 @@ func (array *Array[Type]) Update(index gopolutils.Size, value Type) *gopolutils.
 	array.Lock()
 	defer array.Unlock()
 	if array.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty array at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty array at index %d.", index)
 	} else if index > array.size {
-		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access array of size %d at index %d.", array.size, index)
 	}
 	array.items[index] = value
 	return nil
@@ -79,9 +78,9 @@ func (array *Array[Type]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	array.Lock()
 	defer array.Unlock()
 	if array.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty array at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty array at index %d.", index)
 	} else if index > array.size {
-		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not remove element of array of size %d at index %d.", array.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not remove element of array of size %d at index %d.", array.size, index)
 	}
 	array.items = append(array.items[:index], array.items[index+1:]...)
 	array.size--

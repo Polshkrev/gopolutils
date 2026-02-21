@@ -1,8 +1,6 @@
 package collections
 
 import (
-	"fmt"
-
 	"github.com/Polshkrev/gopolutils"
 )
 
@@ -40,9 +38,9 @@ func (array *Array[Type]) Extend(items View[Type]) {
 // If the given index is greater than the size of the array, an [gopolutils.OutOfRangeError] is returned with a nil data pointer.
 func (array Array[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	if array.IsEmpty() {
-		return nil, gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty array at index %d.", index))
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty array at index %d.", index)
 	} else if index > array.size {
-		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
+		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access array of size %d at index %d.", array.size, index)
 	}
 	return &array.items[index], nil
 }
@@ -53,9 +51,9 @@ func (array Array[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception
 // If an [gopolutils.OutOfRangeError] is returned, the collection is not modified.
 func (array *Array[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	if array.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not access an empty array at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty array at index %d.", index)
 	} else if index > array.size {
-		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not access array of size %d at index %d.", array.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access array of size %d at index %d.", array.size, index)
 	}
 	array.items[index] = value
 	return nil
@@ -67,9 +65,9 @@ func (array *Array[Type]) Update(index gopolutils.Size, value Type) *gopolutils.
 // If an [gopolutils.OutOfRangeError] is returned, the array is not modified.
 func (array *Array[Type]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	if array.IsEmpty() {
-		return gopolutils.NewNamedException(gopolutils.ValueError, fmt.Sprintf("Can not remove from an empty array at index %d.", index))
+		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty array at index %d.", index)
 	} else if index > array.size {
-		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, fmt.Sprintf("Can not remove element of array of size %d at index %d.", array.size, index))
+		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not remove element of array of size %d at index %d.", array.size, index)
 	}
 	array.items = append(array.items[:index], array.items[index+1:]...)
 	array.size--
