@@ -78,7 +78,7 @@ func (entry Entry) Is(kind EntryType) bool {
 // If the entry can not be created, an [gopolutils.IOError] is returned.
 func (entry Entry) Create() *gopolutils.Exception {
 	if entry.Path().Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileExistsError, fmt.Sprintf("File '%s' already exists.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.FileExistsError, "File '%s' already exists.", entry.Path().ToString())
 	}
 	var entryType Suffix
 	var except *gopolutils.Exception
@@ -111,9 +111,9 @@ func concurrentTouch(path string, resultChannel chan<- *os.File, errorChannel ch
 // If the file can not be created, an [gopolutils.IOError] is returned.
 func (entry Entry) Touch() *gopolutils.Exception {
 	if entry.Path().Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileExistsError, fmt.Sprintf("File '%s' already exists.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.FileExistsError, "File '%s' already exists.", entry.Path().ToString())
 	} else if !entry.Is(FileType) {
-		return gopolutils.NewNamedException(gopolutils.IsADirectoryError, fmt.Sprintf("Entry '%s' is not a file.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.IsADirectoryError, "Entry '%s' is not a file.", entry.Path().ToString())
 	}
 	var resultChannel chan *os.File = make(chan *os.File, 1)
 	var errorChannel chan error = make(chan error, 1)
@@ -138,9 +138,9 @@ func concurrentMakeDirectory(path string, errorChannel chan<- error) {
 // If the directory can not be created, an [gopolutils.IOError] is returned.
 func (entry Entry) MakeDirectory() *gopolutils.Exception {
 	if entry.Path().Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileExistsError, fmt.Sprintf("Directory '%s' already exists.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.FileExistsError, "Directory '%s' already exists.", entry.Path().ToString())
 	} else if !entry.Is(DirectoryType) {
-		return gopolutils.NewNamedException(gopolutils.NotADirectoryError, fmt.Sprintf("Entry '%s' is not a directory.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.NotADirectoryError, "Entry '%s' is not a directory.", entry.Path().ToString())
 	}
 	var errorChannel chan error = make(chan error, 1)
 	go concurrentMakeDirectory(entry.Path().ToString(), errorChannel)
@@ -187,9 +187,9 @@ func concurrentRemoveFile(path string, errorChannel chan<- error) {
 // If the file can not be removed, an [gopolutils.IOError] is returned.
 func (entry Entry) RemoveFile() *gopolutils.Exception {
 	if !entry.Path().Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, fmt.Sprintf("File '%s' can not be found.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, "File '%s' can not be found.", entry.Path().ToString())
 	} else if !entry.Is(FileType) {
-		return gopolutils.NewNamedException(gopolutils.IsADirectoryError, fmt.Sprintf("Entry '%s' is not a file.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.IsADirectoryError, "Entry '%s' is not a file.", entry.Path().ToString())
 	}
 	var errorChannel chan error = make(chan error, 1)
 	go concurrentRemoveFile(entry.Path().ToString(), errorChannel)
@@ -212,9 +212,9 @@ func concurrentRemoveDirectory(path string, errorChannel chan<- error) {
 // If the directory can not be removed, an [gopolutils.IOError] is returned.
 func (entry Entry) RemoveDirectory() *gopolutils.Exception {
 	if !entry.Path().Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, fmt.Sprintf("Directory '%s' does not exist.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, "Directory '%s' does not exist.", entry.Path().ToString())
 	} else if !entry.Is(DirectoryType) {
-		return gopolutils.NewNamedException(gopolutils.NotADirectoryError, fmt.Sprintf("Entry '%s' is not a directory.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.NotADirectoryError, "Entry '%s' is not a directory.", entry.Path().ToString())
 	}
 	var errorChannel chan error = make(chan error, 1)
 	go concurrentRemoveDirectory(entry.Path().ToString(), errorChannel)
@@ -248,7 +248,7 @@ func assignType(path string) (EntryType, *gopolutils.Exception) {
 // If the entry is a directory and the directory can not be removed, an [gopolutils.IOError] is returned.
 func (entry Entry) Remove() *gopolutils.Exception {
 	if !entry.Path().Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, fmt.Sprintf("Directory '%s' can not be found.", entry.Path().ToString()))
+		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, "Directory '%s' can not be found.", entry.Path().ToString())
 	}
 	var entryType EntryType
 	var except *gopolutils.Exception

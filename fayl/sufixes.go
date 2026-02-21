@@ -1,7 +1,6 @@
 package fayl
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/Polshkrev/gopolutils"
@@ -157,7 +156,7 @@ func SuffixFromString(suffix string) (Suffix, *gopolutils.Exception) {
 	var item Suffix
 	item, ok = stringToSuffix[suffix]
 	if !ok {
-		return None, gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("'%s' is not defined in mapping.", suffix))
+		return None, gopolutils.NewNamedException(gopolutils.KeyError, "'%s' is not defined in mapping.", suffix)
 	}
 	return item, nil
 }
@@ -172,7 +171,7 @@ func StringFromSuffix(suffix Suffix) (string, *gopolutils.Exception) {
 	var item string
 	item, ok = suffixToString[suffix]
 	if !ok {
-		return "", gopolutils.NewNamedException(gopolutils.KeyError, fmt.Sprintf("'%+v' is not defined in mapping.", suffix))
+		return "", gopolutils.NewNamedException(gopolutils.KeyError, "'%+v' is not defined in mapping.", suffix)
 	}
 	return item, nil
 }
