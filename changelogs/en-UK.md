@@ -1,7 +1,20 @@
 # Changelog
-## v1.25.0 - 2026-02-11
+## v1.26.0 - 2026-02-21
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `fayl`
+    - Added a new `Directory` type.
+    - Added `Entry.ToString` method.
+
+`Changed`
+- `fayl`
+    - The `EntryType` `Directory` has been renamed to `DirectoryType`.
+    - The `EntryType` `File` has been renamed to `FileType`.
+    - The constructor `PathFromParts` no longer uses the absolute path.
+- `Exception`
+    - Each constructor now uses a format parametre and variadic arguments to reduce the use of `fmt.Sprintf`.
+## v1.25.0 - 2026-02-11
 `Changed`
 - Updated `goserialize` dependency to its latest version.
 - `fayl`
