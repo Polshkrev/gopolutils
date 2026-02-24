@@ -1,7 +1,11 @@
 # Changelog
-## v1.26.3 - 2026-02-24
+## v1.26.4 - 2026-02-24
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Fixed`
+- `fayl`
+    - `Directory.ToString` now uses newlines.
+## v1.26.3 - 2026-02-24
 `Fixed`
 - `fayl`
     Some logic bugs in `Directory.Read` have been fixed.
