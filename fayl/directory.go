@@ -111,21 +111,40 @@ func (directory Directory) Delete() *gopolutils.Exception {
 	return nil
 }
 
-// Recursively append each of the child entry paths to the directory.
-// If the entries can not be obtained, an [gopolutils.OSError] is returned.
-func (directory *Directory) Read() *gopolutils.Exception {
-	var root string = directory.Root().ToString()
-	var walkError error = filepath.WalkDir(root, func(path string, info fs.DirEntry, err error) error {
+// Concurrently walk a directory with a given root.
+func walkConcurrent(root string, paths chan<- []string, errorChannel chan<- error) {
+	defer close(paths)
+	defer close(errorChannel)
+	var result []string = make([]string, 0)
+	var walkError error = filepath.WalkDir(root, func(path string, _ fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		} else if path == root {
 			return nil
 		}
-		directory.Append(NewEntry(PathFrom(path)))
+		result = append(result, path)
 		return nil
 	})
+	paths <- result
+	errorChannel <- walkError
+}
+
+// Recursively append each of the child entry paths to the directory.
+// If the entries can not be obtained, an [gopolutils.OSError] is returned.
+func (directory *Directory) Read() *gopolutils.Exception {
+	var root string = directory.Root().ToString()
+	var pathsChannel chan []string = make(chan []string, 1)
+	var errorChannel chan error = make(chan error, 1)
+	go walkConcurrent(root, pathsChannel, errorChannel)
+	var paths []string = <-pathsChannel
+	var walkError error = <-errorChannel
 	if walkError != nil {
 		return gopolutils.NewNamedException(gopolutils.OSError, walkError.Error())
+	}
+	var i int
+	for i = range paths {
+		var path string = paths[i]
+		directory.Append(NewEntry(PathFrom(path)))
 	}
 	return nil
 }
