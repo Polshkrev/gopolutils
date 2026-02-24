@@ -144,7 +144,9 @@ func (directory *Directory) Read() *gopolutils.Exception {
 	var i int
 	for i = range paths {
 		var path string = paths[i]
-		directory.Append(NewEntry(PathFrom(path)))
+		var entry *Entry = NewEntry(PathFrom(path))
+		entry.SetType(gopolutils.Must(entry.Path().ToString()))
+		directory.Append(entry)
 	}
 	return nil
 }
