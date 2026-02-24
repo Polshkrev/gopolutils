@@ -9,12 +9,13 @@ import (
 
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
+	"github.com/Polshkrev/gopolutils/collections/safe"
 )
 
 // Representation of a directory containing file entries.
 type Directory struct {
 	root    *Path
-	entries collections.Collection[*Entry]
+	entries safe.Collection[*Entry]
 }
 
 // Construct a new directory from its given root [Path].
@@ -120,12 +121,16 @@ func appendRoot(root string, entry fs.DirEntry) string {
 // Obtain the string entries of the given root directory.
 // Returns a slice of path strings from the given root.
 // If [os.ReadDir] fails, an error is returned with an empty string.
-func getEntries(root string) ([]string, error) {
+func getEntries(root string, resultChannel chan<- []string, errorChannel chan<- error) {
+	defer close(resultChannel)
+	defer close(errorChannel)
 	var entries []os.DirEntry
 	var walkError error
 	entries, walkError = os.ReadDir(root)
 	if walkError != nil {
-		return nil, walkError
+		resultChannel <- nil
+		errorChannel <- walkError
+		return
 	}
 	var result []string = make([]string, 0)
 	var i int
@@ -133,7 +138,8 @@ func getEntries(root string) ([]string, error) {
 		var entry os.DirEntry = entries[i]
 		result = append(result, appendRoot(root, entry))
 	}
-	return result, nil
+	resultChannel <- result
+	errorChannel <- nil
 }
 
 // Recursively append each of the child entry paths to the directory.
@@ -144,9 +150,11 @@ func (directory *Directory) Read() *gopolutils.Exception {
 		if err != nil {
 			return err
 		} else if info.IsDir() {
-			var entries []string
-			var directoryError error
-			entries, directoryError = getEntries(appendRoot(root, info))
+			var resultChannel chan []string = make(chan []string, 1)
+			var errorChannel chan error = make(chan error, 1)
+			go getEntries(appendRoot(root, info), resultChannel, errorChannel)
+			var entries []string = <-resultChannel
+			var directoryError error = <-errorChannel
 			if directoryError != nil {
 				return gopolutils.NewNamedException(gopolutils.OSError, directoryError.Error())
 			}
