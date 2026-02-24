@@ -1,7 +1,11 @@
 # Changelog
-## v1.26.0 - 2026-02-21
+## v1.26.1 - 2026-02-24
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Changed`
+- `fayl`
+    - `Directory.Read` is now concurrent.
+## v1.26.0 - 2026-02-21
 `Added`
 - `fayl`
     - Added a new `Directory` type.
