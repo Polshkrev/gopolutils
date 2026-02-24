@@ -18,7 +18,7 @@ type Path struct {
 
 // Construct a new filesystem path.
 // Returns a pointer to a new path containing the current working directory.
-// If the current working directory can not be obtained, an OSError is printed to standard error and the programme exits.
+// If the current working directory can not be obtained, an [gopolutils.OSError] is printed to standard error and the programme exits.
 func NewPath() *Path {
 	var path *Path = new(Path)
 	var workingDirectory string
@@ -43,8 +43,8 @@ func PathFrom(path string) *Path {
 // Construct a new filesystem path from its given parts.
 // The fileType parametre is the file extension without the preceding dot.
 // Returns a new filesystem path containing the absolute path composed of the given parts.
-// If the absolute path of the given parts can not be obtained, an OSError is printed to standard error and the programme exits.
-// If the path suffix is not defined in suffixToString, a `KeyError` is printed to standard error and the programme exits.
+// If the absolute path of the given parts can not be obtained, an [gopolutils.OSError] is printed to standard error and the programme exits.
+// If the path suffix is not defined in `suffixToString`, a [gopolutils.KeyError] is printed to standard error and the programme exits.
 func PathFromParts(folderName, fileName string, fileType Suffix) *Path {
 	var buffer strings.Builder = strings.Builder{}
 	buffer.WriteString(filepath.Join(folderName, fileName))
@@ -70,7 +70,7 @@ func (path Path) Exists() bool {
 
 // Obtain the absolute path.
 // Returns a pointer to a new path containing the absolute filesystem path.
-// If the absolute path can not be obtained, an OSError is returned with a nil data pointer.
+// If the absolute path can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 func (path Path) Absolute() (*Path, *gopolutils.Exception) {
 	var absolute string
 	var absoluteError error
@@ -83,18 +83,16 @@ func (path Path) Absolute() (*Path, *gopolutils.Exception) {
 
 // Append a filesystem path to another.
 func (path *Path) Append(item *Path) {
-	path.raw = fmt.Sprintf("%s%c%s", path.raw, filepath.Separator, item.ToString())
+	path.AppendAs(item.ToString())
 }
 
 // Append a filesystem path as a string to a path object.
-// If the absolute path can not be obtained, an OSError is printed to standard error and the programme exits.
 func (path *Path) AppendAs(item string) {
-	var itemPath *Path = PathFrom(item)
-	path.Append(itemPath)
+	path.raw = fmt.Sprintf("%s%c%s", path.raw, filepath.Separator, item)
 }
 
 // Obtain the suffix of the filesystem path.
-// If the suffix can not be obtained, an OSError is returned with a `None` suffix value.
+// If the suffix can not be obtained, an [gopolutils.OSError] is returned with a [None] suffix value.
 // If the string representation of the suffix is not found within the global map, a `KeyError` is returned with a `None` suffix value.
 func (path Path) Suffix() (Suffix, *gopolutils.Exception) {
 	var index int = strings.LastIndexByte(path.raw, '.')
@@ -107,7 +105,7 @@ func (path Path) Suffix() (Suffix, *gopolutils.Exception) {
 
 // Obtain the string representation of the root of the filesystem.
 // Returns a string representing the root of the filesystem path.
-// If the root can not be obtained, an OSError is returned with a nil data pointer.
+// If the root can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 func getRoot(filePath string) (string, *gopolutils.Exception) {
 	var index int = strings.IndexRune(filePath, filepath.Separator)
 	if index < 0 {
@@ -118,8 +116,8 @@ func getRoot(filePath string) (string, *gopolutils.Exception) {
 
 // Obtain the root of the filesystem as a path.
 // Returns a pointer to the path of the root of the filesystem.
-// If the absolute path can not be obtained, an OSError is returned with a nil data pointer.
-// If the root of the filesystem can not be obtained, an OSError is returned with a nil data pointer.
+// If the absolute path can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
+// If the root of the filesystem can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 func (path Path) Root() (*Path, *gopolutils.Exception) {
 	if OS(runtime.GOOS) != WINDOWS { // ! This will error if value is not in enum list.
 		return PathFrom("/"), nil
@@ -140,7 +138,7 @@ func (path Path) Root() (*Path, *gopolutils.Exception) {
 }
 
 // Determine if the given path is the root of the filesystem.
-// If the given path is evaluated to be the root, an OSError is returned.
+// If the given path is evaluated to be the root, an [gopolutils.OSError] is returned.
 func checkRoot(path Path) *gopolutils.Exception {
 	var root *Path
 	var rootExcept *gopolutils.Exception
@@ -155,8 +153,8 @@ func checkRoot(path Path) *gopolutils.Exception {
 
 // Obtain the parent directory of the filesystem path.
 // Returns a pointer to a new path containing the parent directory of the path.
-// If the parent can not be obtained, an OSError is returned with a nil data pointer.
-// If the path is the root of the filesystem, an OSError is returned with a nil data pointer.
+// If the parent can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
+// If the path is the root of the filesystem, an [gopolutils.OSError] is returned with a nil data pointer.
 func (path Path) Parent() (*Path, *gopolutils.Exception) {
 	var rootExcept *gopolutils.Exception = checkRoot(path)
 	if rootExcept != nil {
