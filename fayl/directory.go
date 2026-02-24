@@ -23,7 +23,7 @@ type Directory struct {
 func NewDirectory(root *Path) *Directory {
 	var directory *Directory = new(Directory)
 	directory.root = root
-	directory.entries = collections.NewArray[*Entry]()
+	directory.entries = safe.NewArray[*Entry]()
 	return directory
 }
 
