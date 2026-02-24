@@ -6,7 +6,7 @@ description = "A collection of golang utilities."
 [project.version]
 major = 1
 minor = 26
-patch = 2
+patch = 3
 
 [license]
 type = "MIT"

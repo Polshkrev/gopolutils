@@ -1,7 +1,11 @@
 # Changelog
-## v1.26.2 - 2026-02-24
+## v1.26.3 - 2026-02-24
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Fixed`
+- `fayl`
+    Some logic bugs in `Directory.Read` have been fixed.
+## v1.26.2 - 2026-02-24
 `Fixed`
 - `fayl`
     Some logic bugs in `Directory.Read` have been fixed.
