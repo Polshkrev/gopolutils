@@ -3,7 +3,6 @@ package fayl
 import (
 	"fmt"
 	"io/fs"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -112,36 +111,6 @@ func (directory Directory) Delete() *gopolutils.Exception {
 	return nil
 }
 
-// Append the given entry to the given root.
-// Returns a formatted string of the given root and entry name.
-func appendRoot(root string, entry fs.DirEntry) string {
-	return fmt.Sprintf("%s%c%s", root, filepath.Separator, entry.Name())
-}
-
-// Obtain the string entries of the given root directory.
-// Returns a slice of path strings from the given root.
-// If [os.ReadDir] fails, an error is returned with an empty string.
-func getEntries(root string, resultChannel chan<- []string, errorChannel chan<- error) {
-	defer close(resultChannel)
-	defer close(errorChannel)
-	var entries []os.DirEntry
-	var walkError error
-	entries, walkError = os.ReadDir(root)
-	if walkError != nil {
-		resultChannel <- nil
-		errorChannel <- walkError
-		return
-	}
-	var result []string = make([]string, 0)
-	var i int
-	for i = range entries {
-		var entry os.DirEntry = entries[i]
-		result = append(result, appendRoot(root, entry))
-	}
-	resultChannel <- result
-	errorChannel <- nil
-}
-
 // Recursively append each of the child entry paths to the directory.
 // If the entries can not be obtained, an [gopolutils.OSError] is returned.
 func (directory *Directory) Read() *gopolutils.Exception {
@@ -149,21 +118,10 @@ func (directory *Directory) Read() *gopolutils.Exception {
 	var walkError error = filepath.WalkDir(root, func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
-		} else if info.IsDir() {
-			var resultChannel chan []string = make(chan []string, 1)
-			var errorChannel chan error = make(chan error, 1)
-			go getEntries(appendRoot(root, info), resultChannel, errorChannel)
-			var entries []string = <-resultChannel
-			var directoryError error = <-errorChannel
-			if directoryError != nil {
-				return gopolutils.NewNamedException(gopolutils.OSError, directoryError.Error())
-			}
-			var i int
-			for i = range entries {
-				directory.Append(NewEntry(PathFrom(entries[i])))
-			}
+		} else if path == root {
+			return nil
 		}
-		directory.Append(NewEntry(PathFrom(appendRoot(root, info))))
+		directory.Append(NewEntry(PathFrom(path)))
 		return nil
 	})
 	if walkError != nil {
