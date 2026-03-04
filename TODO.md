@@ -1,5 +1,1 @@
 # TODO
-fayl:
-- [x] Create a file entry to handle operations that require more than just a path.
-- [x] Create a new `Directory` type.
-- [x] Should be more concurrent-safe.

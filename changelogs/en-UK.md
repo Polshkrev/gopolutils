@@ -1,7 +1,16 @@
 # Changelog
-## v1.27.0 - 2026-03-04
+## v1.28.0 - 2026-03-04 - The Archive Update
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `fayl`
+    - Added `Extract` function.
+    - Added `Archive` function.
+    - Added `TarFolder` function.
+    - Added `Untar` function
+    - Added `Unzip` function.
+    - Added `ZipFolder` function.
+## v1.27.0 - 2026-03-04
 `Added`
 - `fayl`
     - Added `Gzip` function.
