@@ -148,7 +148,7 @@ var (
 
 // Obtain a [Suffix] from a raw string.
 // Returns a path suffix obtained from a mapping of strings to suffixes.
-// If the path suffix is not defined in the mapping, a [gopolutils.KeyError] is returned with the `None` suffix value.
+// If the path suffix is not defined in the mapping, a [gopolutils.KeyError] is returned with the [None] suffix value.
 func SuffixFromString(suffix string) (Suffix, *gopolutils.Exception) {
 	stringLock.RLock()
 	defer stringLock.RUnlock()
