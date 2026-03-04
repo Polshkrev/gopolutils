@@ -1,7 +1,12 @@
 # Changelog
-## v1.26.4 - 2026-02-24
+## v1.27.0 - 2026-03-04
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `fayl`
+    - Added `Gzip` function.
+    - Added `Gunzip` function.
+## v1.26.4 - 2026-02-24
 `Fixed`
 - `fayl`
     - `Directory.ToString` now uses newlines.
