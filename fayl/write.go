@@ -15,7 +15,7 @@ func writeConcurrent(path *Path, content []byte, errorChannel chan<- error) {
 }
 
 // Write a slice of bytes to a file.
-// If the file can not be written, an IOError is returned.
+// If the file can not be written, an [gopolutils.IOError] is returned.
 func Write(filePath *Path, content []byte) *gopolutils.Exception {
 	var errorChannel chan error = make(chan error, 1)
 	go writeConcurrent(filePath, content, errorChannel)
@@ -27,8 +27,8 @@ func Write(filePath *Path, content []byte) *gopolutils.Exception {
 }
 
 // Helper method to marshall a single object to a file.
-// If the file can not be written, an IOError is returned.
-// If the given writer returns an error, an IOError is returned.
+// If the file can not be written, an [gopolutils.IOError] is returned.
+// If the given writer returns an error, an [gopolutils.IOError] is returned.
 func writeRawObject[Type any](filePath *Path, content *Type, writer goserialize.Writer) *gopolutils.Exception {
 	var data []byte
 	var marshalError error
@@ -40,8 +40,8 @@ func writeRawObject[Type any](filePath *Path, content *Type, writer goserialize.
 }
 
 // Helper method to marshall a slice of objects to a file.
-// If the file can not be written, an IOError is returned.
-// If the given writer returns an error, an IOError is returned.
+// If the file can not be written, an [gopolutils.IOError] is returned.
+// If the given writer returns an error, an [gopolutils.IOError] is returned.
 func writeRawList[Type any](filePath *Path, content []Type, writer goserialize.Writer) *gopolutils.Exception {
 	var data []byte
 	var marshalError error
@@ -53,9 +53,9 @@ func writeRawList[Type any](filePath *Path, content []Type, writer goserialize.W
 }
 
 // Write a view of a type into a file.
-// If the file can not be written, an IOError is returned.
-// Alternatively, if the data can not be marshalled, an IOError is returned.
-// In addition, if the file type can not be evaluated, an OSError is returned.
+// If the file can not be written, an [gopolutils.IOError] is returned.
+// Alternatively, if the data can not be marshalled, an [gopolutils.IOError] is returned.
+// In addition, if the file type can not be evaluated, an [gopolutils.OSError] is returned.
 func WriteList[Type any](filePath *Path, content collections.View[Type]) *gopolutils.Exception {
 	var fileType Suffix
 	var except *gopolutils.Exception
@@ -76,9 +76,9 @@ func WriteList[Type any](filePath *Path, content collections.View[Type]) *gopolu
 }
 
 // Write a file as an object.
-// If the file can not be written, an IOError is returned.
-// Alternatively, if the data can not be marshalled, an IOError is returned.
-// In addition, if the file type can not be evaluated, an OSError is returned.
+// If the file can not be written, an [gopolutils.IOError] is returned.
+// Alternatively, if the data can not be marshalled, an [gopolutils.IOError] is returned.
+// In addition, if the file type can not be evaluated, an [gopolutils.OSError] is returned.
 func WriteObject[Type any](filePath *Path, content *Type) *gopolutils.Exception {
 	var fileType Suffix
 	var except *gopolutils.Exception
