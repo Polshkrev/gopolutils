@@ -504,7 +504,7 @@ func cleanPath(path string) (string, error) {
 // Obtain the relative path from the given path parametre.
 // Returns the given path relative to the current working directory.
 func getRelative(path string) (string, error) {
-	if filepath.IsAbs(path) {
+	if !filepath.IsAbs(path) {
 		return path, nil
 	}
 	var current string
