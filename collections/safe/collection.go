@@ -2,7 +2,7 @@ package safe
 
 import "github.com/Polshkrev/gopolutils/collections"
 
-// Representation of a collection of with an internal lock.
+// Representation of a concurrent-safe collection.
 type Collection[Type any] interface {
 	Lockable
 	Unlockable
