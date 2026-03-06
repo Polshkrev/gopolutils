@@ -1,7 +1,14 @@
 # Changelog
-## v1.28.0 - 2026-03-04 - The Archive Update
+## v1.29.0 - 2026-03-06
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `safe`
+    - Added `Lockable` interface.
+    - Added `Unlockable` interface.
+    - Added new `Pair` type.
+    - Added documentation comment for the `Mapping` interface.
+## v1.28.0 - 2026-03-04 - The Archive Update
 `Added`
 - `fayl`
     - Added `Extract` function.
