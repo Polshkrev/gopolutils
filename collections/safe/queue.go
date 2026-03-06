@@ -9,9 +9,10 @@ import (
 
 // Implementation of a concurrent-safe queue data structure.
 type Queue[Type any] struct {
-	lock  sync.RWMutex
-	items []Type
-	size  gopolutils.Size
+	itemLock sync.RWMutex
+	items    []Type
+	sizeLock sync.RWMutex
+	size     gopolutils.Size
 }
 
 // Construct a new queue.
@@ -25,8 +26,8 @@ func NewQueue[Type any]() *Queue[Type] {
 
 // Append an item to the queue.
 func (queue *Queue[Type]) Append(item Type) {
-	queue.lock.Lock()
-	defer queue.lock.Unlock()
+	queue.Lock()
+	defer queue.Unlock()
 	queue.items = append(queue.items, item)
 	queue.size++
 }
@@ -45,8 +46,8 @@ func (queue *Queue[Type]) Extend(items collections.View[Type]) {
 // If the queue is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 // If the index is greater than the size of the queue, an [gopolutils.OutOfRangeError] is returned with a nil data pointer.
 func (queue *Queue[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
-	queue.lock.RLock()
-	defer queue.lock.RUnlock()
+	queue.RLock()
+	defer queue.RUnlock()
 	if queue.IsEmpty() {
 		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty queue at index %d.", index)
 	} else if index > queue.size {
@@ -60,8 +61,8 @@ func (queue *Queue[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exceptio
 // If the given index is greater than the queue size, an [gopolutils.OutOfRangeError] is returned.
 // If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the queue is not modified.
 func (queue *Queue[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
-	queue.lock.Lock()
-	defer queue.lock.Unlock()
+	queue.Lock()
+	defer queue.Unlock()
 	if queue.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty queue at index %d.", index)
 	} else if index > queue.size {
@@ -76,8 +77,8 @@ func (queue *Queue[Type]) Update(index gopolutils.Size, value Type) *gopolutils.
 // If the given index is greater than the size of the queue, an [gopolutils.OutOfRangeError] is returned.
 // If a [gopolutils.ValueError] or an [gopolutils.OutOfRangeError] is returned, the queue is not modified.
 func (queue *Queue[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
-	queue.lock.Lock()
-	defer queue.lock.Unlock()
+	queue.Lock()
+	defer queue.Unlock()
 	if queue.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty queue at index %d.", index)
 	} else if index > queue.size {
@@ -96,8 +97,8 @@ func (queue *Queue[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 // If the queue is evaluated to be empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 // If a [gopolutils.ValueError] is returned, the queue is not modified.
 func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
-	queue.lock.Lock()
-	defer queue.lock.Unlock()
+	queue.Lock()
+	defer queue.Unlock()
 	if queue.IsEmpty() {
 		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not dequeue from an empty queue.")
 	}
@@ -111,8 +112,8 @@ func (queue *Queue[Type]) Dequeue() (*Type, *gopolutils.Exception) {
 // Returns a pointer to the first item in the queue.
 // If the queue is evaluated to be empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
-	queue.lock.RLock()
-	defer queue.lock.RUnlock()
+	queue.RLock()
+	defer queue.RUnlock()
 	if queue.IsEmpty() {
 		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not peek into an empty queue.")
 	}
@@ -122,51 +123,55 @@ func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
 // Determine if the queue is empty.
 // Returns true if the length of the underlying data and the size of the queue is equal to 0.
 func (queue *Queue[_]) IsEmpty() bool {
-	queue.lock.RLock()
-	defer queue.lock.RUnlock()
+	queue.RLock()
+	defer queue.RUnlock()
 	return queue.size == 0 && len(queue.items) == 0
 }
 
 // Collect the data stored in the queue as a slice.
 // Returns a view into the data stored in the queue.
 func (queue *Queue[Type]) Collect() []Type {
-	queue.lock.RLock()
-	defer queue.lock.RUnlock()
+	queue.RLock()
+	defer queue.RUnlock()
 	return queue.items
 }
 
 // Get a pointer to the slice of the queue.
 // Returns a mutable pointer to the underlying data within the queue.
 func (queue *Queue[Type]) Items() *[]Type {
-	queue.lock.RLock()
-	defer queue.lock.RUnlock()
+	queue.RLock()
+	defer queue.RUnlock()
 	return &queue.items
 }
 
 // Access the size of the queue.
 // Returns the size of the queue as an unsigned 64-bit integer.
 func (queue *Queue[_]) Size() gopolutils.Size {
-	queue.lock.RLock()
-	defer queue.lock.RUnlock()
+	queue.RLock()
+	defer queue.RUnlock()
 	return queue.size
 }
 
 // Lock the internal mutex of the collection for both reading and writing.
 func (queue *Queue[_]) Lock() {
-	queue.lock.Lock()
+	queue.itemLock.Lock()
+	queue.sizeLock.Lock()
 }
 
 // Unlock the internal mutex of the collection for both reading and writing.
 func (queue *Queue[_]) Unlock() {
-	queue.lock.Unlock()
+	queue.itemLock.Unlock()
+	queue.sizeLock.Unlock()
 }
 
 // Lock the internal mutex of the collection for reading.
 func (queue *Queue[_]) RLock() {
-	queue.lock.RLock()
+	queue.itemLock.RLock()
+	queue.sizeLock.RLock()
 }
 
 // Unock the internal mutex of the collection for reading.
 func (queue *Queue[_]) RUnlock() {
-	queue.lock.RUnlock()
+	queue.itemLock.RUnlock()
+	queue.sizeLock.RUnlock()
 }
