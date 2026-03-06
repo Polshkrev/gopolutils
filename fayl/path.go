@@ -92,12 +92,11 @@ func (path *Path) AppendAs(item string) {
 }
 
 // Obtain the suffix of the filesystem path.
-// If the suffix can not be obtained, an [gopolutils.OSError] is returned with a [None] suffix value.
 // If the string representation of the suffix is not found within the global map, a [gopolutils.KeyError] is returned with a [None] suffix value.
 func (path Path) Suffix() (Suffix, *gopolutils.Exception) {
 	var index int = strings.LastIndexByte(path.raw, '.')
 	if index < 0 {
-		return None, gopolutils.NewNamedException(gopolutils.OSError, "Path does not have an associated suffix.")
+		return None, nil
 	}
 	var raw string = path.raw[index+1:]
 	return SuffixFromString(raw)

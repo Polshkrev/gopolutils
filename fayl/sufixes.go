@@ -58,6 +58,7 @@ var (
 	stringLock sync.RWMutex
 	// Mapping of the string representation of the file suffix to its corresponding enum value. This mapping is not concurrent safe.
 	stringToSuffix map[string]Suffix = map[string]Suffix{
+		"":      None,
 		"7z":    Zip,
 		"a":     A,
 		"asm":   Asm,
