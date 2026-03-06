@@ -9,9 +9,10 @@ import (
 
 // Implementation of a concurrent-safe array.
 type Array[Type any] struct {
-	lock  sync.RWMutex
-	items []Type
-	size  gopolutils.Size
+	itemLock sync.RWMutex
+	items    []Type
+	sizeLock sync.RWMutex
+	size     gopolutils.Size
 }
 
 // Construct a new array.
@@ -121,20 +122,24 @@ func (array *Array[_]) IsEmpty() bool {
 
 // Lock the internal mutex of the collection for both reading and writing.
 func (array *Array[_]) Lock() {
-	array.lock.Lock()
+	array.itemLock.Lock()
+	array.sizeLock.Lock()
 }
 
 // Unlock the internal mutex of the collection for both reading and writing.
 func (array *Array[_]) Unlock() {
-	array.lock.Unlock()
+	array.itemLock.Unlock()
+	array.sizeLock.Unlock()
 }
 
 // Lock the internal mutex of the collection for reading.
 func (array *Array[_]) RLock() {
-	array.lock.RLock()
+	array.itemLock.RLock()
+	array.sizeLock.RLock()
 }
 
 // Unock the internal mutex of the collection for reading.
 func (array *Array[_]) RUnlock() {
-	array.lock.RUnlock()
+	array.itemLock.RUnlock()
+	array.sizeLock.RUnlock()
 }

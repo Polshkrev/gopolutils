@@ -9,9 +9,10 @@ import (
 
 // A concurrent-safe collection of key-value pairs.
 type Map[Key comparable, Value any] struct {
-	lock  sync.RWMutex
-	items map[Key]Value
-	size  gopolutils.Size
+	itemLock sync.RWMutex
+	items    map[Key]Value
+	sizeLock sync.RWMutex
+	size     gopolutils.Size
 }
 
 // Consruct a new map.
@@ -26,8 +27,8 @@ func NewMap[Key comparable, Value any]() *Map[Key, Value] {
 // Insert a key-value pair into the map.
 // If the key is already in the map, instead of just quietly not inserting into the map, a [gopolutils.KeyEror] is retruned.
 func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Exception {
-	mapping.lock.Lock()
-	defer mapping.lock.Unlock()
+	mapping.Lock()
+	defer mapping.Unlock()
 	if mapping.HasKey(key) {
 		return gopolutils.NewNamedException(gopolutils.KeyError, "Key '%v' already exists.", key)
 	}
@@ -41,8 +42,8 @@ func (mapping *Map[Key, Value]) Insert(key Key, value Value) *gopolutils.Excepti
 // If the map is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 // If the key is not in the map, a [gopolutils.KeyError] is returned with a nil data pointer.
 func (mapping *Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
-	mapping.lock.RLock()
-	defer mapping.lock.RUnlock()
+	mapping.RLock()
+	defer mapping.RUnlock()
 	if mapping.IsEmpty() {
 		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty map at key '%+v'.", key)
 	} else if !mapping.HasKey(key) {
@@ -57,8 +58,8 @@ func (mapping *Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 // If the key does not exist in the mapping, a [gopolutils.KeyError] is returned.
 // If a [gopolutils.ValueError] or a [gopolutils.KeyError] is returned, the mapping is not modified.
 func (mapping *Map[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
-	mapping.lock.Lock()
-	defer mapping.lock.Unlock()
+	mapping.Lock()
+	defer mapping.Unlock()
 	if mapping.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty map at key '%+v'.", key)
 	} else if !mapping.HasKey(key) {
@@ -71,8 +72,8 @@ func (mapping *Map[Key, Value]) Update(key Key, value Value) *gopolutils.Excepti
 // Access a slice of unique keys within the map.
 // Returns a slice of unique keys within the map.
 func (mapping *Map[Key, _]) Keys() []Key {
-	mapping.lock.RLock()
-	defer mapping.lock.RUnlock()
+	mapping.RLock()
+	defer mapping.RUnlock()
 	var keys []Key = make([]Key, 0)
 	var key Key
 	for key = range mapping.items {
@@ -84,8 +85,8 @@ func (mapping *Map[Key, _]) Keys() []Key {
 // Access a slice of unique values within the map.
 // Returns a slice of unique values within the map.
 func (mapping *Map[_, Value]) Values() []Value {
-	mapping.lock.RLock()
-	defer mapping.lock.RUnlock()
+	mapping.RLock()
+	defer mapping.RUnlock()
 	var values []Value = make([]Value, 0)
 	var value Value
 	for _, value = range mapping.items {
@@ -99,8 +100,8 @@ func (mapping *Map[_, Value]) Values() []Value {
 // If the given key is not stored in the map, a [gopolutils.KeyError] is returned.
 // If a [gopolutils.ValueError] or a [gopolutils.KeyError] is returned, the mapping is not modified.
 func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
-	mapping.lock.Lock()
-	defer mapping.lock.Unlock()
+	mapping.Lock()
+	defer mapping.Unlock()
 	if mapping.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty map at key '%+v'", key)
 	} else if !mapping.HasKey(key) {
@@ -114,8 +115,8 @@ func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 // Determine if a given key is stored in the map.
 // Returns true if the key is stored in the map.
 func (mapping *Map[Key, _]) HasKey(key Key) bool {
-	mapping.lock.RLock()
-	defer mapping.lock.RUnlock()
+	mapping.RLock()
+	defer mapping.RUnlock()
 	var found bool
 	_, found = mapping.items[key]
 	return found
@@ -124,24 +125,24 @@ func (mapping *Map[Key, _]) HasKey(key Key) bool {
 // Acces the size of the map.
 // Returns the size of the map as an unsigned 64-bit integer.
 func (mapping *Map[_, _]) Size() gopolutils.Size {
-	mapping.lock.RLock()
-	defer mapping.lock.RUnlock()
+	mapping.RLock()
+	defer mapping.RUnlock()
 	return mapping.size
 }
 
 // Determine if the map is empty.
 // Returns true if the length of the underlying data and the size of the map is equal to 0.
 func (mapping *Map[_, _]) IsEmpty() bool {
-	mapping.lock.RLock()
-	defer mapping.lock.RUnlock()
+	mapping.RLock()
+	defer mapping.RUnlock()
 	return len(mapping.items) == 0 && mapping.size == 0
 }
 
 // Collect a map into a view.
 // Returns a slice containing each of the key-value pairs within the map.
 func (mapping *Map[Key, Value]) Collect() []collections.Pair[Key, Value] {
-	mapping.lock.RLock()
-	defer mapping.lock.RUnlock()
+	mapping.RLock()
+	defer mapping.RUnlock()
 	var result []collections.Pair[Key, Value] = make([]collections.Pair[Key, Value], 0, mapping.size)
 	var key Key
 	var value Value
@@ -153,20 +154,24 @@ func (mapping *Map[Key, Value]) Collect() []collections.Pair[Key, Value] {
 
 // Lock the internal mutex of the mapping for both reading and writing.
 func (mapping *Map[_, _]) Lock() {
-	mapping.lock.Lock()
+	mapping.itemLock.Lock()
+	mapping.sizeLock.Lock()
 }
 
 // Unlock the internal mutex of the mapping for both reading and writing.
 func (mapping *Map[_, _]) Unlock() {
-	mapping.lock.Unlock()
+	mapping.itemLock.Unlock()
+	mapping.sizeLock.Unlock()
 }
 
 // Lock the internal mutex of the mapping for reading.
 func (mapping *Map[_, _]) RLock() {
-	mapping.lock.RLock()
+	mapping.itemLock.RLock()
+	mapping.sizeLock.RLock()
 }
 
 // Unock the internal mutex of the mapping for reading.
 func (mapping *Map[Key, Value]) RUnlock() {
-	mapping.lock.RUnlock()
+	mapping.itemLock.RUnlock()
+	mapping.sizeLock.RUnlock()
 }
