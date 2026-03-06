@@ -119,15 +119,27 @@ func ZipFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		}
 		var name string = file.Path().ToString()
 		var handle *os.File
-		var openError error
-		handle, openError = os.Open(name)
+		var openError *gopolutils.Exception
+		handle, openError = getHandle(name)
 		if openError != nil {
-			return gopolutils.NewNamedException(gopolutils.IOError, openError.Error())
+			return openError
 		}
 		defer handle.Close()
+		var cleaned string
+		var cleanedError error
+		cleaned, cleanedError = cleanPath(handle.Name())
+		if cleanedError != nil {
+			return gopolutils.NewNamedException(gopolutils.ValueError, cleanedError.Error())
+		}
+		var stripped string
+		var strippedError *gopolutils.Exception
+		stripped, strippedError = cutRelativeRoot(cleaned)
+		if strippedError != nil {
+			return strippedError
+		}
 		var destinationHandle io.Writer
 		var handleError error
-		destinationHandle, handleError = writer.Create(name)
+		destinationHandle, handleError = writer.Create(stripped)
 		if handleError != nil {
 			return gopolutils.NewNamedException(gopolutils.IOError, handleError.Error())
 		}
@@ -165,7 +177,7 @@ func Unzip(source, destination *Path) *gopolutils.Exception {
 	var readerError error
 	reader, readerError = zip.OpenReader(source.ToString())
 	if readerError != nil {
-		return gopolutils.NewNamedException(gopolutils.ValueError, readerError.Error())
+		return gopolutils.NewNamedException(gopolutils.OSError, readerError.Error())
 	}
 	defer reader.Close()
 	var i int
@@ -186,10 +198,10 @@ func Unzip(source, destination *Path) *gopolutils.Exception {
 			return makeDirectoryError
 		}
 		var fileHandle *os.File
-		var handleError error
-		fileHandle, handleError = os.OpenFile(fullPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
+		var handleError *gopolutils.Exception
+		fileHandle, handleError = createFile(fullPath)
 		if handleError != nil {
-			return gopolutils.NewNamedException(gopolutils.OSError, handleError.Error())
+			return handleError
 		}
 		defer fileHandle.Close()
 		var readCloser io.ReadCloser
@@ -226,8 +238,8 @@ func Untar(source, destination *Path) *gopolutils.Exception {
 		return makeDirectoryError
 	}
 	var handle *os.File
-	var handleError error
-	handle, handleError = os.Open(source.ToString())
+	var handleError *gopolutils.Exception
+	handle, handleError = getHandle(source.ToString())
 	if handleError != nil {
 		return gopolutils.NewNamedException(gopolutils.OSError, handleError.Error())
 	}
@@ -243,7 +255,18 @@ func Untar(source, destination *Path) *gopolutils.Exception {
 		} else if nextError == io.EOF {
 			return nil
 		}
-		var fullPath string = fmt.Sprintf("%s%c%s", destination.ToString(), filepath.Separator, header.Name)
+		var fullPath string
+		if !filepath.IsAbs(header.Name) {
+			fullPath = fmt.Sprintf("%s%c%s", destination.ToString(), filepath.Separator, header.Name)
+		} else {
+			var cleaned string
+			var cleanedError error
+			cleaned, cleanedError = cleanPath(header.Name)
+			if cleanedError != nil {
+				return gopolutils.NewNamedException(gopolutils.IOError, cleanedError.Error())
+			}
+			fullPath = fmt.Sprintf("%s%c%s", destination.ToString(), filepath.Separator, cleaned)
+		}
 		if !validate(fullPath, destination.ToString()) {
 			return gopolutils.NewNamedException(gopolutils.ValueError, "Invalid file path: %s", fullPath)
 		}
@@ -299,14 +322,26 @@ func TarFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		if headerError != nil {
 			return gopolutils.NewNamedException(gopolutils.IOError, headerError.Error())
 		}
-		header.Name = name
+		var cleaned string
+		var cleanedError error
+		cleaned, cleanedError = cleanPath(name)
+		if cleanedError != nil {
+			return gopolutils.NewNamedException(gopolutils.ValueError, cleanedError.Error())
+		}
+		var stripped string
+		var strippedError *gopolutils.Exception
+		stripped, strippedError = cutRelativeRoot(cleaned)
+		if strippedError != nil {
+			return strippedError
+		}
+		header.Name = stripped
 		var writeHeaderError error = tarWriter.WriteHeader(header)
 		if writeHeaderError != nil {
 			return gopolutils.NewNamedException(gopolutils.IOError, writeHeaderError.Error())
 		}
 		var openFile *os.File
-		var openError error
-		openFile, openError = os.Open(name)
+		var openError *gopolutils.Exception
+		openFile, openError = getHandle(name)
 		if openError != nil {
 			return gopolutils.NewNamedException(gopolutils.OSError, openError.Error())
 		}
@@ -397,6 +432,90 @@ func copyFile(destination io.Writer, source io.Reader) *gopolutils.Exception {
 	return except
 }
 
+// Concurrently open a file.
+func openConcurrent(path string, handleChannel chan<- *os.File, exceptionChannel chan<- *gopolutils.Exception) {
+	defer close(handleChannel)
+	defer close(exceptionChannel)
+	var openFile *os.File
+	var openError error
+	openFile, openError = os.Open(path)
+	if openError != nil {
+		handleChannel <- nil
+		exceptionChannel <- gopolutils.NewNamedException(gopolutils.OSError, openError.Error())
+		return
+	}
+	handleChannel <- openFile
+	exceptionChannel <- nil
+}
+
+// Obtain a handle to a file from a given path.
+// Returns a handle to the open file of the given path.
+// If the handle can not be obtained, an [gopolutils.OSError] is returned.
+func getHandle(path string) (*os.File, *gopolutils.Exception) {
+	var handleChannel chan *os.File = make(chan *os.File, 1)
+	var exceptionChannel chan *gopolutils.Exception = make(chan *gopolutils.Exception, 1)
+	go openConcurrent(path, handleChannel, exceptionChannel)
+	var handle *os.File = <-handleChannel
+	var except *gopolutils.Exception = <-exceptionChannel
+	return handle, except
+}
+
+// Strip the given prefix from the given if contains the given prefix.
+// Returns the given path without the preceding prefix.
+func stripPrefix(path string, prefix string) string {
+	if strings.HasPrefix(path, prefix) {
+		return strings.TrimPrefix(path, prefix)
+	}
+	return path
+}
+
+// Cut the relative root from the given path.
+// Returns the given path after the first [filepath.Separator].
+// If the [filepath.Separator] can not be found, a [gopolutils.ValueError] is returned with an empty string.
+func cutRelativeRoot(path string) (string, *gopolutils.Exception) {
+	var before string
+	var after string
+	var found bool
+	before, after, found = strings.Cut(path, string(filepath.Separator))
+	if !found {
+		return "", gopolutils.NewNamedException(gopolutils.ValueError, "Can not find '%c' in path '%s'. Before: '%s', After: '%s', Found: %t.", filepath.Separator, path, before, after, found)
+	}
+	return after, nil
+}
+
+// Clean a given path.
+// Returns a cleaned path.
+func cleanPath(path string) (string, error) {
+	var relativeName string
+	var relativeError error
+	relativeName, relativeError = getRelative(path)
+	if relativeError != nil {
+		return "", relativeError
+	}
+	var evaluated string
+	var evaluatedError error
+	evaluated, evaluatedError = filepath.EvalSymlinks(relativeName)
+	if evaluatedError != nil {
+		return "", evaluatedError
+	}
+	return stripPrefix(evaluated, fmt.Sprintf("..%c", filepath.Separator)), nil
+}
+
+// Obtain the relative path from the given path parametre.
+// Returns the given path relative to the current working directory.
+func getRelative(path string) (string, error) {
+	if filepath.IsAbs(path) {
+		return path, nil
+	}
+	var current string
+	var currentError error
+	current, currentError = os.Getwd()
+	if currentError != nil {
+		return "", currentError
+	}
+	return filepath.Rel(current, path)
+}
+
 // Untar a single target file from its given [os.FileMode] and [tar.Reader].
 // If the directory can not be created, an [gopolutils.OSError] returned.
 // If the file can not be copied, an [gopolutils.IOError] returned.
@@ -406,10 +525,10 @@ func untarFile(target string, mode os.FileMode, reader *tar.Reader) *gopolutils.
 		return makeDirectoryError
 	}
 	var file *os.File
-	var openFileError error
-	file, openFileError = os.OpenFile(target, os.O_CREATE|os.O_RDWR, mode)
+	var openFileError *gopolutils.Exception
+	file, openFileError = createFile(target)
 	if openFileError != nil {
-		return gopolutils.NewNamedException(gopolutils.OSError, openFileError.Error())
+		return openFileError
 	}
 	defer file.Close()
 	return copyFile(file, reader)
