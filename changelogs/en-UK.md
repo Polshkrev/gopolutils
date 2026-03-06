@@ -1,7 +1,15 @@
 # Changelog
-## v1.29.0 - 2026-03-06
+## v1.29.1 - 2026-03-06
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Changed`
+- `fayl`
+    - Instead of returning an `gopolutils.Exception`, `Path.Suffix` now just returns a `None` `Suffix` when encountering a directory or `Path` without an extension.
+
+`Fixed`
+- `fayl`
+    - Fixed logic bugs in `archive.go`.
+## v1.29.0 - 2026-03-06
 `Added`
 - `safe`
     - Added `Lockable` interface.
