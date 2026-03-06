@@ -1,7 +1,11 @@
 # Changelog
-## v1.29.1 - 2026-03-06
+## v1.29.2 - 2026-03-06
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Fixed`
+- `fayl`
+    - In the private function `getRelative`, the absolute check was flipped and therefore wrong which has been fixed.
+## v1.29.1 - 2026-03-06
 `Changed`
 - `fayl`
     - Instead of returning an `gopolutils.Exception`, `Path.Suffix` now just returns a `None` `Suffix` when encountering a directory or `Path` without an extension.
