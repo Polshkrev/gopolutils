@@ -1,7 +1,13 @@
 # Changelog
-## v1.29.3 - 2026-03-11
+## v1.30.0 - 2026-03-11: The Async Iterator Update
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- Added `async` module.
+- `collections`
+    - `iter`
+        - Added `Iterator` type.
+## v1.29.3 - 2026-03-11
 `Fixed`
 - `fayl`
     - Some logic bugs in in `archive.go` have been fixed.
@@ -24,7 +30,7 @@ For future changes, refer to [TODO.md](../TODO.md).
     - Added `Unlockable` interface.
     - Added new `Pair` type.
     - Added documentation comment for the `Mapping` interface.
-## v1.28.0 - 2026-03-04 - The Archive Update
+## v1.28.0 - 2026-03-04: The Archive Update
 `Added`
 - `fayl`
     - Added `Extract` function.
