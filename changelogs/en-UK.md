@@ -1,7 +1,11 @@
 # Changelog
-## v1.29.2 - 2026-03-06
+## v1.29.3 - 2026-03-11
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Fixed`
+- `fayl`
+    - Some logic bugs in in `archive.go` have been fixed.
+## v1.29.2 - 2026-03-06
 `Fixed`
 - `fayl`
     - In the private function `getRelative`, the absolute check was flipped and therefore wrong which has been fixed.
