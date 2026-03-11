@@ -127,16 +127,11 @@ func ZipFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		defer handle.Close()
 		var cleaned string
 		var cleanedError error
-		cleaned, cleanedError = cleanPath(handle.Name())
+		cleaned, cleanedError = getRelative(name)
 		if cleanedError != nil {
 			return gopolutils.NewNamedException(gopolutils.ValueError, cleanedError.Error())
 		}
-		var stripped string
-		var strippedError *gopolutils.Exception
-		stripped, strippedError = cutRelativeRoot(cleaned)
-		if strippedError != nil {
-			return strippedError
-		}
+		var stripped string = stripPrefix(cleaned, fmt.Sprintf("..%c", filepath.Separator))
 		var destinationHandle io.Writer
 		var handleError error
 		destinationHandle, handleError = writer.Create(stripped)
@@ -277,7 +272,7 @@ func Untar(source, destination *Path) *gopolutils.Exception {
 				return makeDirectoryError
 			}
 		case tar.TypeReg:
-			var except *gopolutils.Exception = untarFile(fullPath, os.FileMode(header.Mode), tarReader)
+			var except *gopolutils.Exception = untarFile(fullPath, tarReader)
 			if except != nil {
 				return except
 			}
@@ -324,16 +319,11 @@ func TarFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		}
 		var cleaned string
 		var cleanedError error
-		cleaned, cleanedError = cleanPath(name)
+		cleaned, cleanedError = getRelative(name)
 		if cleanedError != nil {
 			return gopolutils.NewNamedException(gopolutils.ValueError, cleanedError.Error())
 		}
-		var stripped string
-		var strippedError *gopolutils.Exception
-		stripped, strippedError = cutRelativeRoot(cleaned)
-		if strippedError != nil {
-			return strippedError
-		}
+		var stripped string = stripPrefix(cleaned, fmt.Sprintf("..%c", filepath.Separator))
 		header.Name = stripped
 		var writeHeaderError error = tarWriter.WriteHeader(header)
 		if writeHeaderError != nil {
@@ -469,20 +459,6 @@ func stripPrefix(path string, prefix string) string {
 	return path
 }
 
-// Cut the relative root from the given path.
-// Returns the given path after the first [filepath.Separator].
-// If the [filepath.Separator] can not be found, a [gopolutils.ValueError] is returned with an empty string.
-func cutRelativeRoot(path string) (string, *gopolutils.Exception) {
-	var before string
-	var after string
-	var found bool
-	before, after, found = strings.Cut(path, string(filepath.Separator))
-	if !found {
-		return "", gopolutils.NewNamedException(gopolutils.ValueError, "Can not find '%c' in path '%s'. Before: '%s', After: '%s', Found: %t.", filepath.Separator, path, before, after, found)
-	}
-	return after, nil
-}
-
 // Clean a given path.
 // Returns a cleaned path.
 func cleanPath(path string) (string, error) {
@@ -519,7 +495,7 @@ func getRelative(path string) (string, error) {
 // Untar a single target file from its given [os.FileMode] and [tar.Reader].
 // If the directory can not be created, an [gopolutils.OSError] returned.
 // If the file can not be copied, an [gopolutils.IOError] returned.
-func untarFile(target string, mode os.FileMode, reader *tar.Reader) *gopolutils.Exception {
+func untarFile(target string, reader *tar.Reader) *gopolutils.Exception {
 	var makeDirectoryError *gopolutils.Exception = makeDirectory(filepath.Dir(target))
 	if makeDirectoryError != nil {
 		return makeDirectoryError
