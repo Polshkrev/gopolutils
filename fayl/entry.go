@@ -80,14 +80,8 @@ func (entry Entry) Create() *gopolutils.Exception {
 	if entry.Path().Exists() {
 		return gopolutils.NewNamedException(gopolutils.FileExistsError, "File '%s' already exists.", entry.Path().ToString())
 	}
-	var entryType Suffix
-	var except *gopolutils.Exception
-	entryType, except = SuffixFromString(entry.Path().ToString())
-	if except != nil {
-		return except
-	}
-	switch entryType {
-	case None:
+	switch entry.Type() {
+	case DirectoryType:
 		return entry.MakeDirectory()
 	default:
 		return entry.Touch()
