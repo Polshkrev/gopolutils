@@ -43,21 +43,11 @@ func PathFrom(path string) *Path {
 // Construct a new filesystem path from its given parts.
 // The fileType parametre is the file extension without the preceding dot.
 // Returns a new filesystem path containing the absolute path composed of the given parts.
-// If the absolute path of the given parts can not be obtained, an [gopolutils.OSError] is printed to standard error and the programme exits.
 // If the path suffix is not defined in `suffixToString`, a [gopolutils.KeyError] is printed to standard error and the programme exits.
 func PathFromParts(folderName, fileName string, fileType Suffix) *Path {
-	var buffer strings.Builder = strings.Builder{}
-	buffer.WriteString(filepath.Join(folderName, fileName))
-	buffer.WriteByte('.')
-	var suffixString string
-	var suffixExcept *gopolutils.Exception
-	suffixString, suffixExcept = StringFromSuffix(fileType)
-	if suffixExcept != nil {
-		fmt.Fprintln(os.Stderr, suffixExcept.Error())
-		os.Exit(1)
-	}
-	buffer.WriteString(suffixString)
-	return PathFrom(buffer.String())
+	var suffixString string = gopolutils.Must(StringFromSuffix(fileType))
+	var result string = fmt.Sprintf("%s%c%s.%s", folderName, filepath.Separator, fileName, suffixString)
+	return PathFrom(result)
 }
 
 // Determine if the filesystem path exists.
@@ -81,14 +71,43 @@ func (path Path) Absolute() (*Path, *gopolutils.Exception) {
 	return PathFrom(absolute), nil
 }
 
+// func (path Path) Compare(operand Path) (bool, *gopolutils.Exception) {
+// 	var fileInfoOne os.FileInfo
+// 	var infoError error
+// 	fileInfoOne, infoError = os.Stat(path.ToString())
+// 	if infoError != nil {
+// 		return false, gopolutils.NewNamedException(gopolutils.OSError, infoError.Error())
+// 	}
+// 	var fileInfoTwo os.FileInfo
+// 	fileInfoTwo, infoError = os.Stat(operand.ToString())
+// 	if infoError != nil {
+// 		return false, gopolutils.NewNamedException(gopolutils.OSError, infoError.Error())
+// 	}
+// 	return os.SameFile(fileInfoOne, fileInfoTwo), nil
+// }
+
 // Append a filesystem path to another.
-func (path *Path) Append(item *Path) {
-	path.AppendAs(item.ToString())
+func (path *Path) Append(other *Path) {
+	path.AppendAs(other.ToString())
 }
 
 // Append a filesystem path as a string to a path object.
 func (path *Path) AppendAs(item string) {
 	path.raw = fmt.Sprintf("%s%c%s", path.raw, filepath.Separator, item)
+}
+
+// Non-destructively join a path to another.
+// Returns a new path constucted from the original path and the operand.
+func (path Path) Join(other Path) *Path {
+	return path.JoinAs(other.ToString())
+}
+
+// Non-destructively join a a path string to a path.
+// Returns a new path constucted from the original path and the operand.
+func (path Path) JoinAs(other string) *Path {
+	var result *Path = PathFrom(path.ToString())
+	result.AppendAs(other)
+	return result
 }
 
 // Obtain the suffix of the filesystem path.
