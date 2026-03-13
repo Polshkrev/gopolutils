@@ -25,6 +25,22 @@ func (pair Pair[_, Second]) Second() *Second {
 	return &pair.second
 }
 
+// Set the first property of the pair.
+func (pair *Pair[First, _]) SetFirst(first First) {
+	pair.first = first
+}
+
+// Set the second property of the pair.
+func (pair *Pair[_, Second]) SetSecond(second Second) {
+	pair.second = second
+}
+
+// Set each of the properties of the pair.
+func (pair *Pair[First, Second]) Set(first First, second Second) {
+	pair.first = first
+	pair.second = second
+}
+
 // Swap two pairs with the same types.
 // Both the original pair and the operand passed into the function will be modified.
 func (pair *Pair[First, Second]) Swap(operand *Pair[First, Second]) {

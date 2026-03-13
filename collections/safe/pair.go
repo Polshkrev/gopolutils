@@ -50,7 +50,7 @@ func (pair *Pair[_, Second]) SetSecond(second Second) {
 // Set each of the properties of the pair.
 func (pair *Pair[First, Second]) Set(first First, second Second) {
 	pair.Lock()
-	pair.Unlock()
+	defer pair.Unlock()
 	pair.first = first
 	pair.second = second
 }
