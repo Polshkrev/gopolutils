@@ -27,20 +27,28 @@ class Mapping~Key, Value~ {
 
 class SafeCollection~Type~ {
     <<interface>>
-    +Lock()*
-    +Unlock()*
-    +RLock()*
-    +RUnlock()*
+    +Lockable$
+    +Unlockable$
     +Collection~Type~$
 }
 
 class SafeMapping~Key, Value~ {
     <<interface>>
-    +Lock()*
-    +Unlock()*
-    +RLock()*
-    +RUnlock()*
+    +Lockable
+    +Unlockable
     +Mapping~Key, Value~$
+}
+
+class Lockable {
+    <<interface>>
+    Lock()
+    RLock()
+}
+
+class Unlockable {
+    <<interface>>
+    Unlock()
+    RUnlock()
 }
 
 class View~Type~ {
@@ -119,6 +127,25 @@ class Pair~First, Second~ {
     +Items() ~*First, *Second~
 }
 
+class SafePair~First, Second~ {
+    -RWMutex firstLock
+    -First first
+    -RWMutex secondLock
+    -Second second
+    +First() *First
+    +Second() *Second
+    +SetFirst(First first)
+    +SetSecond(Second second)
+    +Set(First first, Second second)
+    +Swap(Pair~First, Second~)
+    +Flip() *Pair~Second, First~
+    +Items() ~*First, *Second~
+    +Lock()
+    +RLock()
+    +Unlock()
+    +RUnlock()
+}
+
 class Array~Type~ {
     -[]Type items
     -Size size
@@ -181,8 +208,9 @@ class Stack~Type~ {
 }
 
 class SafeArray~Type~ {
-    -RWMutex lock
+    -RWMutex itemLock
     -[]Type items
+    -RWMutex sizeLock
     -Size size
     +Append(Type Item)
     +Extend(View~Type~ items)
@@ -193,11 +221,16 @@ class SafeArray~Type~ {
     +Collect() []Type
     +Size() Size
     +IsEmpty() bool
+    +Lock()
+    +RLock()
+    +Unlock()
+    +RUnlock()
 }
 
 class SafeMap~Key, Value~ {
-    -RWMutex lock
+    -RWMutex itemLock
     -map~Key, Value~ items
+    -RWMutex sizeLock
     -Size size
     +Insert(Key key, Value value) *Exception
     +At(Key key) ~*Value, *Exception~
@@ -209,11 +242,16 @@ class SafeMap~Key, Value~ {
     +Collect() []Pair~Key, Value~
     +Size() Size
     +IsEmpty() bool
+    +Lock()
+    +RLock()
+    +Unlock()
+    +RUnlock()
 }
 
 class SafeQueue~Type~ {
-    -RWMutex lock
+    -RWMutex itemLock
     -[]Type items
+    -RWMutex sizeLock
     -Size size
     +Append(Type Item)
     +Extend(View~Type~ items)
@@ -226,11 +264,16 @@ class SafeQueue~Type~ {
     +Collect() []Type
     +Size() Size
     +IsEmpty() bool
+    +Lock()
+    +RLock()
+    +Unlock()
+    +RUnlock()
 }
 
 class SafeStack~Type~ {
-    -RWMutex lock
+    -RWMutex itemLock
     -[]Type items
+    -RWMutex sizeLock
     -Size size
     +Append(Type Item)
     +Extend(View~Type~ items)
@@ -243,6 +286,10 @@ class SafeStack~Type~ {
     +Collect() []Type
     +Size() Size
     +IsEmpty() bool
+    +Lock()
+    +RLock()
+    +Unlock()
+    +RUnlock()
 }
 
 class Set~Type~ {
@@ -279,6 +326,14 @@ Collection <|.. SafeStack : Implements
 SafeCollection <|.. SafeArray : Implements
 SafeCollection <|.. SafeQueue : Implements
 SafeCollection <|.. SafeStack : Implements
+
+Lockable <|.. SafeArray : Implements
+Lockable <|.. SafeQueue : Implements
+Lockable <|.. SafeStack : Implements
+
+Unlockable <|.. SafeArray : Implements
+Unlockable <|.. SafeQueue : Implements
+Unlockable <|.. SafeStack : Implements
 
 View <|.. Array : Implements
 View <|.. Queue : Implements
