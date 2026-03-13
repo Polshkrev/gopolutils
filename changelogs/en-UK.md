@@ -1,7 +1,14 @@
 # Changelog
-## v1.30.0 - 2026-03-11: The Async Iterator Update
+## v1.31.0 - 2026-03-13
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- Added `ByteSize` enum.
+- Added `ByteSizeToString` function.
+- `fayl`
+    - Added `Path.Join`.
+    - Added `Path.JoinAs`.
+## v1.30.0 - 2026-03-11: The Async Iterator Update
 `Added`
 - Added `async` module.
 - `collections`
