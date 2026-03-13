@@ -1,7 +1,13 @@
 # Changelog
-## v1.31.0 - 2026-03-13
+## v1.32.0 - 2026-03-13
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `collections`
+    - Added `Pair.SetFirst`.
+    - Added `Pair.SetSecond`
+    - Added `Pair.Set`.
+## v1.31.0 - 2026-03-13
 `Added`
 - Added `ByteSize` enum.
 - Added `ByteSizeToString` function.
