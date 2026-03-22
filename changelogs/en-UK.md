@@ -1,7 +1,14 @@
 # Changelog
-## v1.32.0 - 2026-03-22
+## v1.33.0 - 2026-03-22
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `fayl`
+    - Added `Size` type.
+    - Added `Entry.Read`.
+    - Added `Entry.ByteSize`.
+    - Added `Directory.ByteSize`.
+## v1.32.0 - 2026-03-22
 `Added`
 - `collections`
     - Added `Pair.SetFirst`.
