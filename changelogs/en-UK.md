@@ -1,7 +1,16 @@
 # Changelog
-## v1.32.0 - 2026-03-13
+## v1.33.0 - 2026-03-22
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Changed`
+- `fayl`
+    - The `OS` enum has been renamed to `OperatingSystem`.
+    - `Path.ToString` has been renamed to `String` to implement golang's [Stringer](https://pkg.go.dev/fmt#Stringer) interface.
+
+`Removed`
+- `fayl`
+    - `SuffixCount` has been removed as it was not fundemental to the architecture.
+## v1.32.0 - 2026-03-13
 `Added`
 - `collections`
     - Added `Pair.SetFirst`.

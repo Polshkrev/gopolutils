@@ -7,7 +7,7 @@ import (
 )
 
 // Representation of a file suffix i.e. ".go", ".c", ".h", et cetera.
-type Suffix = gopolutils.Enum
+type Suffix gopolutils.Enum
 
 const (
 	A Suffix = iota
@@ -47,11 +47,6 @@ const (
 	Xml
 	Yaml
 	Zip
-)
-
-const (
-	// Total amount of supported file suffixes.
-	SuffixCount uint8 = Zip
 )
 
 var (
