@@ -10,18 +10,18 @@ import (
 
 // Concurrently read a file passed on its given path.
 func readConcurrent(path *Path, dataChannel chan<- []byte, errorChannel chan<- error) {
-	var data []byte
-	var readError error
-	data, readError = os.ReadFile(path.ToString())
-	dataChannel <- data
-	errorChannel <- readError
 	defer close(dataChannel)
 	defer close(errorChannel)
+	var data []byte
+	var readError error
+	data, readError = os.ReadFile(path.String())
+	dataChannel <- data
+	errorChannel <- readError
 }
 
 // Read the raw contents of a file.
 // Returns a byte slice representing the raw file content.
-// If the absolute path of the file can not be obtained, or the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
+// If the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
 func Read(filePath *Path) ([]byte, *gopolutils.Exception) {
 	var dataChannel chan []byte = make(chan []byte, 1)
 	var errorChannel chan error = make(chan error, 1)
@@ -36,7 +36,7 @@ func Read(filePath *Path) ([]byte, *gopolutils.Exception) {
 
 // Helper method to marshall a single object from a file.
 // Returns a pointer to the marshalled object type.
-// If the absolute path of the file can not be obtained, or the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
+// If the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
 // If the given reader returns an error, an [gopolutils.IOError] is returned with a nil data pointer.
 func readRawObject[Type any](filePath *Path, reader goserialize.Reader) (*Type, *gopolutils.Exception) {
 	var raw []byte
@@ -55,7 +55,7 @@ func readRawObject[Type any](filePath *Path, reader goserialize.Reader) (*Type, 
 
 // Helper method to marshall a slice of objects from a file.
 // Returns a pointer to the marshalled slice of objects.
-// If the absolute path of the file can not be obtained, or the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
+// If the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
 // If the given reader returns an error, an [gopolutils.IOError] is returned with a nil data pointer.
 func readRawList[Type any](filePath *Path, reader goserialize.Reader) ([]Type, *gopolutils.Exception) {
 	var raw []byte
@@ -74,8 +74,8 @@ func readRawList[Type any](filePath *Path, reader goserialize.Reader) ([]Type, *
 
 // Helper function to dispatch the reader function based on the type of the given file path.
 // Returns a slice of marshalled data from a file.
-// If the absolute path of the file can not be obtained, or the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
-// Alternatively, if the data can not be marshalled, an [gopolutils.IOError] is returned with a nil data pointer.
+// If the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
+// If the data can not be marshalled, an [gopolutils.IOError] is returned with a nil data pointer.
 // In addition, if the file type can not be evaluated, an [gopolutils.Exception] is returned with a nil data pointer.
 func readerListDispatch[Type any](filePath *Path) ([]Type, *gopolutils.Exception) {
 	var fileType Suffix
@@ -98,8 +98,8 @@ func readerListDispatch[Type any](filePath *Path) ([]Type, *gopolutils.Exception
 
 // Read a file as a view into a collection of objects.
 // Returns a view into a collection of a file containing a list of data.
-// If the absolute path of the file can not be obtained, or the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
-// Alternatively, if the data can not be marshalled, an [gopolutils.IOError] is returned with a nil data pointer.
+// If the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
+// If the data can not be marshalled, an [gopolutils.IOError] is returned with a nil data pointer.
 // In addition, if the file type can not be evaluated, an [gopolutils.Exception] is returned with a nil data pointer.
 func ReadList[Type any](filePath *Path) (collections.View[Type], *gopolutils.Exception) {
 	var raw []Type
@@ -114,8 +114,8 @@ func ReadList[Type any](filePath *Path) (collections.View[Type], *gopolutils.Exc
 
 // Read a file as an object.
 // Returns a pointer to an object of data from a file.
-// If the absolute path of the file can not be obtained, or the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
-// Alternatively, if the data can not be marshalled, an [gopolutils.IOError] is returned with a nil data pointer.
+// If the file can not be read, an [gopolutils.IOError] is returned with a nil data pointer.
+// If the data can not be marshalled, an [gopolutils.IOError] is returned with a nil data pointer.
 // In addition, if the file type can not be evaluated, an [gopolutils.Exception] is returned with a nil data pointer.
 func ReadObject[Type any](filePath *Path) (*Type, *gopolutils.Exception) {
 	var fileType Suffix
