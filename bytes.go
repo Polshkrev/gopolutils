@@ -1,7 +1,7 @@
 package gopolutils
 
 // Standardization of a unit byte scaler.
-type ByteSize = Size
+type ByteSize Size
 
 const (
 	Byte ByteSize = 1 << (10 * iota) // Unit size in bytes.
@@ -15,7 +15,7 @@ const (
 
 // Represent a [ByteSize] as a string.
 // Returns a suffix string representation of a unit byte scaler.
-func ByteSizeToString(size ByteSize) string {
+func (size ByteSize) String() string {
 	switch size {
 	case KB:
 		return "KB"
