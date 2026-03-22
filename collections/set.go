@@ -177,7 +177,7 @@ func (set Set[Type]) Into() Collection[Type] {
 
 // Render a string representation of the set.
 // Returns a string representation of the set.
-func (set Set[Type]) ToString() string {
+func (set Set[Type]) String() string {
 	var item Type
 	var i gopolutils.Size
 	var buffer strings.Builder = strings.Builder{}
