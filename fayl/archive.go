@@ -26,7 +26,7 @@ func Extract(source, destination *Path) *gopolutils.Exception {
 	}
 	switch sourceSuffix {
 	case Gz:
-		var newRawPath string = strings.TrimSuffix(source.ToString(), filepath.Ext(source.ToString()))
+		var newRawPath string = strings.TrimSuffix(source.String(), filepath.Ext(source.String()))
 		var newPath *Path = PathFrom(newRawPath)
 		var content []byte
 		var readError *gopolutils.Exception
@@ -65,7 +65,7 @@ func Archive(destination *Path, files ...*Entry) *gopolutils.Exception {
 	}
 	switch destinationSuffix {
 	case Gz:
-		var newRawPath string = strings.TrimSuffix(destination.ToString(), filepath.Ext(destination.ToString()))
+		var newRawPath string = strings.TrimSuffix(destination.String(), filepath.Ext(destination.String()))
 		var newPath *Path = PathFrom(newRawPath)
 		var archiveError *gopolutils.Exception = Archive(newPath, files...)
 		if archiveError != nil {
@@ -102,11 +102,11 @@ func Archive(destination *Path, files ...*Entry) *gopolutils.Exception {
 // If any of the files can not be added to the zip archive, an [gopolutils.IOError] is returned.
 func ZipFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 	if destination.Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileExistsError, "'%s' already exists.", destination.ToString())
+		return gopolutils.NewNamedException(gopolutils.FileExistsError, "'%s' already exists.", destination)
 	}
 	var target *os.File
 	var createError *gopolutils.Exception
-	target, createError = createFile(destination.ToString())
+	target, createError = createFile(destination.String())
 	if createError != nil {
 		return createError
 	}
@@ -117,7 +117,7 @@ func ZipFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		if file.Is(DirectoryType) {
 			continue
 		}
-		var name string = file.Path().ToString()
+		var name string = file.Path().String()
 		var handle *os.File
 		var openError *gopolutils.Exception
 		handle, openError = getHandle(name)
@@ -160,17 +160,17 @@ func ZipFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 // If any of the files can not be copied, an [gopolutils.IOError] is returned.
 func Unzip(source, destination *Path) *gopolutils.Exception {
 	if !source.Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, "'%s' does not exist.", source.ToString())
+		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, "'%s' does not exist.", source)
 	} else if destination.Exists() {
-		gopolutils.NewNamedException(gopolutils.FileExistsError, "'%s' already exists.", destination.ToString())
+		gopolutils.NewNamedException(gopolutils.FileExistsError, "'%s' already exists.", destination)
 	}
-	var makeDirectoryError *gopolutils.Exception = makeDirectory(destination.ToString())
+	var makeDirectoryError *gopolutils.Exception = makeDirectory(destination.String())
 	if makeDirectoryError != nil {
 		return makeDirectoryError
 	}
 	var reader *zip.ReadCloser
 	var readerError error
-	reader, readerError = zip.OpenReader(source.ToString())
+	reader, readerError = zip.OpenReader(source.String())
 	if readerError != nil {
 		return gopolutils.NewNamedException(gopolutils.OSError, readerError.Error())
 	}
@@ -178,8 +178,8 @@ func Unzip(source, destination *Path) *gopolutils.Exception {
 	var i int
 	for i = range reader.File {
 		var file *zip.File = reader.File[i]
-		var fullPath string = fmt.Sprintf("%s%c%s", destination.ToString(), filepath.Separator, file.Name)
-		if !validate(fullPath, destination.ToString()) {
+		var fullPath string = fmt.Sprintf("%s%c%s", destination, filepath.Separator, file.Name)
+		if !validate(fullPath, destination.String()) {
 			return gopolutils.NewNamedException(gopolutils.ValueError, "Invalid file path: %s", fullPath)
 		} else if file.FileInfo().IsDir() {
 			var makeDirectoryError *gopolutils.Exception = makeDirectory(fullPath)
@@ -224,17 +224,17 @@ func Unzip(source, destination *Path) *gopolutils.Exception {
 // If any of the files can not be copied, an [gopolutils.IOError] is returned.
 func Untar(source, destination *Path) *gopolutils.Exception {
 	if !source.Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, "'%s' does not exist.", source.ToString())
+		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, "'%s' does not exist.", source)
 	} else if destination.Exists() {
-		gopolutils.NewNamedException(gopolutils.FileExistsError, "'%s' already exists.", destination.ToString())
+		gopolutils.NewNamedException(gopolutils.FileExistsError, "'%s' already exists.", destination)
 	}
-	var makeDirectoryError *gopolutils.Exception = makeDirectory(destination.ToString())
+	var makeDirectoryError *gopolutils.Exception = makeDirectory(destination.String())
 	if makeDirectoryError != nil {
 		return makeDirectoryError
 	}
 	var handle *os.File
 	var handleError *gopolutils.Exception
-	handle, handleError = getHandle(source.ToString())
+	handle, handleError = getHandle(source.String())
 	if handleError != nil {
 		return gopolutils.NewNamedException(gopolutils.OSError, handleError.Error())
 	}
@@ -252,7 +252,7 @@ func Untar(source, destination *Path) *gopolutils.Exception {
 		}
 		var fullPath string
 		if !filepath.IsAbs(header.Name) {
-			fullPath = fmt.Sprintf("%s%c%s", destination.ToString(), filepath.Separator, header.Name)
+			fullPath = fmt.Sprintf("%s%c%s", destination, filepath.Separator, header.Name)
 		} else {
 			var cleaned string
 			var cleanedError error
@@ -260,9 +260,9 @@ func Untar(source, destination *Path) *gopolutils.Exception {
 			if cleanedError != nil {
 				return gopolutils.NewNamedException(gopolutils.IOError, cleanedError.Error())
 			}
-			fullPath = fmt.Sprintf("%s%c%s", destination.ToString(), filepath.Separator, cleaned)
+			fullPath = fmt.Sprintf("%s%c%s", destination, filepath.Separator, cleaned)
 		}
-		if !validate(fullPath, destination.ToString()) {
+		if !validate(fullPath, destination.String()) {
 			return gopolutils.NewNamedException(gopolutils.ValueError, "Invalid file path: %s", fullPath)
 		}
 		switch header.Typeflag {
@@ -288,11 +288,11 @@ func Untar(source, destination *Path) *gopolutils.Exception {
 // If any of the files can not be copied, an [gopolutils.IOError] is returned.
 func TarFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 	if destination.Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileExistsError, "'%s' already exists.", destination.ToString())
+		return gopolutils.NewNamedException(gopolutils.FileExistsError, "'%s' already exists.", destination)
 	}
 	var targetHandle *os.File
 	var createError *gopolutils.Exception
-	targetHandle, createError = createFile(destination.ToString())
+	targetHandle, createError = createFile(destination.String())
 	if createError != nil {
 		return createError
 	}
@@ -304,7 +304,7 @@ func TarFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		if file.Is(DirectoryType) {
 			continue
 		}
-		var name string = file.Path().ToString()
+		var name string = file.Path().String()
 		var info fs.FileInfo
 		var statError error
 		info, statError = os.Stat(name)
