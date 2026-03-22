@@ -183,7 +183,7 @@ func (version *Version) Fix() {
 
 // Render a string representation of the version object.
 // Returns a version object represented as a string.
-func (version Version) ToString() string {
+func (version Version) String() string {
 	if len(version.Name()) == 0 && len(version.Description()) == 0 {
 		return fmt.Sprintf("%d.%d.%d", version.Major(), version.Minor(), version.Patch())
 	} else if len(version.Name()) == 0 && len(version.Description()) != 0 {

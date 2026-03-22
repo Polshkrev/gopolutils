@@ -1,7 +1,15 @@
 # Changelog
-## v1.34.0 - 2026-03-22
+## v1.35.0 - 2026-03-22
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- Added `Number` interface.
+
+`Changed`
+- `LoggingLevel` now implements golang's [Stringer](https://pkg.go.dev/fmt#Stringer) interface.
+- `ByteSizeToString` has been renamed to simply `String`.
+- `Version.ToString` has been renamed to `Version.String`.
+## v1.34.0 - 2026-03-22
 `Added`
 - `collections`
     - Added `Sum` iterator.
