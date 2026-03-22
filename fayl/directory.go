@@ -67,6 +67,17 @@ func (directory Directory) Size() gopolutils.Size {
 	return directory.entries.Size()
 }
 
+// Obtain the byte size of the directory.
+// Returns a [Size] of each of the entries in the directory.
+func (directory Directory) ByteSize() Size {
+	var size gopolutils.Size = 0
+	var i int
+	for i = range directory.Collect() {
+		size += directory.Collect()[i].ByteSize().Size()
+	}
+	return *SizeFromBytes(size)
+}
+
 // Determine if the directory is empty.
 // Returns true if the directory's size is equal to zero or if the underlying data is nil, else false.
 func (directory Directory) IsEmpty() bool {
@@ -132,7 +143,7 @@ func walkConcurrent(root string, paths chan<- []string, errorChannel chan<- erro
 // Recursively append each of the child entry paths to the directory.
 // If the entries can not be obtained, an [gopolutils.OSError] is returned.
 func (directory *Directory) Read() *gopolutils.Exception {
-	var root string = directory.Root().ToString()
+	var root string = directory.Root().String()
 	var pathsChannel chan []string = make(chan []string, 1)
 	var errorChannel chan error = make(chan error, 1)
 	go walkConcurrent(root, pathsChannel, errorChannel)
@@ -145,7 +156,7 @@ func (directory *Directory) Read() *gopolutils.Exception {
 	for i = range paths {
 		var path string = paths[i]
 		var entry *Entry = NewEntry(PathFrom(path))
-		entry.SetType(gopolutils.Must(assignType(entry.Path().ToString())))
+		entry.SetType(gopolutils.Must(assignType(entry.Path().String())))
 		directory.Append(entry)
 	}
 	return nil
@@ -172,12 +183,12 @@ func (directory Directory) Copy(destination *Directory) *gopolutils.Exception {
 
 // Represent the directory as a string.
 // Returns a representation of the directory as a string.
-func (directory Directory) ToString() string {
+func (directory Directory) String() string {
 	var buffer *strings.Builder = &strings.Builder{}
 	var i int
 	for i = range directory.Collect() {
 		var item *Entry = directory.Collect()[i]
-		buffer.WriteString(fmt.Sprintf("%s%c%s - %s\n", directory.Root().ToString(), filepath.Separator, item.Path().ToString(), item.Type()))
+		fmt.Fprintf(buffer, "%s%c%s - %s\n", directory.Root(), filepath.Separator, item.Path(), item.Type())
 	}
 	return buffer.String()
 }
