@@ -67,17 +67,6 @@ func (directory Directory) Size() gopolutils.Size {
 	return directory.entries.Size()
 }
 
-// Obtain the byte size of the directory.
-// Returns a [Size] of each of the entries in the directory.
-func (directory Directory) ByteSize() Size {
-	var size gopolutils.Size = 0
-	var i int
-	for i = range directory.Collect() {
-		size += directory.Collect()[i].ByteSize().Size()
-	}
-	return *SizeFromBytes(size)
-}
-
 // Determine if the directory is empty.
 // Returns true if the directory's size is equal to zero or if the underlying data is nil, else false.
 func (directory Directory) IsEmpty() bool {
