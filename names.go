@@ -1,7 +1,7 @@
 package gopolutils
 
 // Finite list of named exceptions. Inspired by python's built-in exceptions.
-type ExceptionName = StringEnum
+type ExceptionName StringEnum
 
 const (
 	BaseException          ExceptionName = "Exception"

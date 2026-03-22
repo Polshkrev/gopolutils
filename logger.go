@@ -22,7 +22,7 @@ var (
 )
 
 // An [Enum] representation of the severity of a log message.
-type LoggingLevel = Enum
+type LoggingLevel Enum
 
 const (
 	// Lowest severity log message. Used to log debug information for development.
@@ -40,7 +40,7 @@ const (
 // Represent a [LoggingLevel] as a string.
 // Returns a string representation of a logging level.
 // If the logging level is not defined in the enum, an [UnreachableError] is returned.
-func lltostr(level LoggingLevel) string {
+func (level LoggingLevel) String() string {
 	switch level {
 	case Debug:
 		return "DEBUG"
@@ -197,7 +197,7 @@ func (logger *Logger) Close() {
 // Private method to separate the responsibility of the log method.
 // This is the method that actually logs the message to the given stream.
 func publishMessage(stream *os.File, timestamp, name, message string, level LoggingLevel) {
-	fmt.Fprintf(stream, "%s:%s[%s] - %s\n", timestamp, name, lltostr(level), message)
+	fmt.Fprintf(stream, "%s:%s[%s] - %s\n", timestamp, name, level, message)
 }
 
 // Private method to construct a formatted timestamp.
