@@ -171,7 +171,7 @@ func (mapping *Map[_, _]) RLock() {
 }
 
 // Unock the internal mutex of the mapping for reading.
-func (mapping *Map[Key, Value]) RUnlock() {
+func (mapping *Map[_, _]) RUnlock() {
 	mapping.itemLock.RUnlock()
 	mapping.sizeLock.RUnlock()
 }
