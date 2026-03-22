@@ -137,7 +137,7 @@ func getRoot(filePath string) (string, *gopolutils.Exception) {
 // If the absolute path can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 // If the root of the filesystem can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 func (path Path) Root() (*Path, *gopolutils.Exception) {
-	if Os(runtime.GOOS) != Windows { // ! This will error if value is not in enum list.
+	if OperatingSystem(runtime.GOOS) != Windows { // ! This will error if value is not in enum list.
 		return PathFrom("/"), nil
 	}
 	var absolute string
