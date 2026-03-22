@@ -3,23 +3,23 @@ package fayl
 import "github.com/Polshkrev/gopolutils"
 
 // Finite — incomplete — operating system values.
-type OS = gopolutils.StringEnum
+type OperatingSystem gopolutils.StringEnum
 
 const (
 	// Windows operating system.
-	WINDOWS OS = "windows"
+	Windows OperatingSystem = "windows"
 	// Mac operating system.
-	MAC OS = "darwin"
+	Mac OperatingSystem = "darwin"
 	// Linux operating system.
-	LINUX OS = "linux"
+	Linux OperatingSystem = "linux"
 	// Android operating system.
-	ANDROID OS = "android"
+	Android OperatingSystem = "android"
 	// FreeBSD operating system.
-	FREEBSD OS = "freebsd"
+	Freebsd OperatingSystem = "freebsd"
 	// Representation of Apple's IOS.
-	IOS OS = "ios"
+	Ios OperatingSystem = "ios"
 	// NetBSD operating system.
-	NETBSD OS = "netbsd"
+	Netbsd OperatingSystem = "netbsd"
 	// OpenBSD operating system.
-	OPENBSD OS = "openbsd"
+	Openbsd OperatingSystem = "openbsd"
 )

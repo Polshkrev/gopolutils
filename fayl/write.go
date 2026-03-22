@@ -10,7 +10,7 @@ import (
 
 // Concurrently write a slice of bytes to a file of a given path.
 func writeConcurrent(path *Path, content []byte, errorChannel chan<- error) {
-	errorChannel <- os.WriteFile(path.ToString(), content, 0644)
+	errorChannel <- os.WriteFile(path.String(), content, 0644)
 	defer close(errorChannel)
 }
 
