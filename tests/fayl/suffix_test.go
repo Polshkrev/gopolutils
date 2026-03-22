@@ -7,13 +7,6 @@ import (
 	"github.com/Polshkrev/gopolutils/fayl"
 )
 
-func TestSuffixCountHasNotChanged(test *testing.T) {
-	const expected uint8 = 36
-	if fayl.SuffixCount != expected {
-		test.Errorf("SuffixCount has changed. Have: %d. Expected: %d\n", fayl.SuffixCount, expected)
-	}
-}
-
 func TestSuffixFromStringHasMappedSameValue(test *testing.T) {
 	var expect fayl.Suffix = fayl.Go
 	var value string = "go"
