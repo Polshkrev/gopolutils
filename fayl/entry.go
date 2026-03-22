@@ -73,25 +73,6 @@ func (entry Entry) Is(kind EntryType) bool {
 	return entry.kind == kind
 }
 
-// Read a file on the filesystem into the internal content of the entry.
-// If the entry does not exist on the filesystem, a [gopolutils.FileNotFoundError] is returned.
-func (entry *Entry) Read() *gopolutils.Exception {
-	if !entry.Path().Exists() {
-		return gopolutils.NewNamedException(gopolutils.FileNotFoundError, "File '%s' can not be found.", entry.Path())
-	}
-	var raw []byte
-	var except *gopolutils.Exception
-	raw, except = Read(entry.Path())
-	if except != nil {
-		return except
-	}
-	var i int
-	for i = range raw {
-		entry.Content().Append(raw[i])
-	}
-	return nil
-}
-
 // Generic dispatch creation method.
 // If the entry already exists on the filesystem, a [gopolutils.FileExistsError] is returned.
 // If the entry can not be created, an [gopolutils.IOError] is returned.
@@ -281,22 +262,6 @@ func (entry Entry) Remove() *gopolutils.Exception {
 // Returns a [gopolutils.Size] of the entry.
 func (entry Entry) Size() gopolutils.Size {
 	return entry.content.Size()
-}
-
-// Obtain the byte size of the entry.
-// Returns a [Size] of the entry.
-// If [os.Stat] fails, the method panics.
-func (entry Entry) ByteSize() Size {
-	if !entry.Path().Exists() {
-		return *SizeFromBytes(entry.content.Size())
-	}
-	var info os.FileInfo
-	var statError error
-	info, statError = os.Stat(entry.Path().String())
-	if statError != nil {
-		panic(statError)
-	}
-	return *SizeFromBytes(gopolutils.Size(info.Size()))
 }
 
 // Determine if the entry is empty.
