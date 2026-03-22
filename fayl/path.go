@@ -88,7 +88,7 @@ func (path Path) Absolute() (*Path, *gopolutils.Exception) {
 
 // Append a filesystem path to another.
 func (path *Path) Append(other *Path) {
-	path.AppendAs(other.ToString())
+	path.AppendAs(other.String())
 }
 
 // Append a filesystem path as a string to a path object.
@@ -99,13 +99,13 @@ func (path *Path) AppendAs(item string) {
 // Non-destructively join a path to another.
 // Returns a new path constucted from the original path and the operand.
 func (path Path) Join(other Path) *Path {
-	return path.JoinAs(other.ToString())
+	return path.JoinAs(other.String())
 }
 
 // Non-destructively join a a path string to a path.
 // Returns a new path constucted from the original path and the operand.
 func (path Path) JoinAs(other string) *Path {
-	var result *Path = PathFrom(path.ToString())
+	var result *Path = PathFrom(path.String())
 	result.AppendAs(other)
 	return result
 }
@@ -137,7 +137,7 @@ func getRoot(filePath string) (string, *gopolutils.Exception) {
 // If the absolute path can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 // If the root of the filesystem can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 func (path Path) Root() (*Path, *gopolutils.Exception) {
-	if OS(runtime.GOOS) != WINDOWS { // ! This will error if value is not in enum list.
+	if Os(runtime.GOOS) != Windows { // ! This will error if value is not in enum list.
 		return PathFrom("/"), nil
 	}
 	var absolute string
@@ -183,6 +183,6 @@ func (path Path) Parent() (*Path, *gopolutils.Exception) {
 
 // Represent a filesystem path as a string.
 // Returns a string representation of the filesystem path.
-func (path Path) ToString() string {
+func (path Path) String() string {
 	return path.raw
 }
