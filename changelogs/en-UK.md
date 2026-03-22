@@ -1,7 +1,15 @@
 # Changelog
-## v1.33.0 - 2026-03-22
+## v1.34.0 - 2026-03-22
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `collections`
+    - Added `Sum` iterator.
+
+`Changed`
+- `collections`
+    - `Set.ToString` has been renamed to `Set.String`.
+## v1.33.0 - 2026-03-22
 `Added`
 - `fayl`
     - Added `Size` type.

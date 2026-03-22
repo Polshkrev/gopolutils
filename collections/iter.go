@@ -123,3 +123,14 @@ func Chain[Type any](views ...View[Type]) Collection[Type] {
 	}
 	return result
 }
+
+// Sum given variadic [gopolutils.Number] values.
+// Returns a [gopolutils.Number] of the sum of the given values.
+func Sum[Type gopolutils.Number](values ...Type) Type {
+	var result Type = 0
+	var i int
+	for i = range values {
+		result += values[i]
+	}
+	return result
+}
