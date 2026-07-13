@@ -4,7 +4,7 @@ import "github.com/Polshkrev/gopolutils/collections"
 
 // Representation of a database table.
 type Table[Type any] interface {
-	Creater
+	Creator
 	Setter
 	Getter
 	Inserter[Type]
