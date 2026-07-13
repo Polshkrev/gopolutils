@@ -1,7 +1,11 @@
 # Changelog
-## v1.35.0 - 2026-03-22
+## v1.36.0 - 2026-07-13: The Table Update
 For future changes, refer to [TODO.md](../TODO.md).
-
+`Added`
+- Added `Logf` method to `Logger`.
+- Table
+    - Added the table module.
+## v1.35.0 - 2026-03-22
 `Added`
 - Added `Number` interface.
 

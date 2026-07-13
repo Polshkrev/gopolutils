@@ -5,7 +5,8 @@ description = "A collection of golang utilities."
 
 [project.version]
 major = 1
-minor = 35
+minor = 36
+name = "The Table Update"
 
 [license]
 type = "MIT"

@@ -164,14 +164,20 @@ func (logger *Logger) FullSetup(fileName string) *Exception {
 
 // Log a message.
 // If the default logging level of the logger is greater than the given logging level of the message, the message will not be logged.
-func (logger *Logger) Log(message string, level LoggingLevel) {
+func (logger Logger) Log(message string, level LoggingLevel) {
 	if level < logger.level {
 		return
 	}
-	var output *os.File
-	for _, output = range logger.outputs {
+	var i int
+	for i = range logger.outputs {
+		var output *os.File = logger.outputs[i]
 		publishMessage(output, getTimestamp(), logger.name, message, level)
 	}
+}
+
+// Log a formatted message.
+func (logger Logger) Logf(level LoggingLevel, message string, arguments ...any) {
+	logger.Log(fmt.Sprintf(message, arguments...), level)
 }
 
 // Deallocate the logger.
@@ -179,8 +185,9 @@ func (logger *Logger) Log(message string, level LoggingLevel) {
 // A good practice is to call this method deferred even if a file is not bound;
 // this method will not close the standard output.
 func (logger *Logger) Close() {
-	var output *os.File
-	for _, output = range logger.outputs {
+	var i int
+	for i = range logger.outputs {
+		var output *os.File = logger.outputs[i]
 		if !isFile(output) {
 			continue
 		} else if output != nil {
@@ -188,8 +195,7 @@ func (logger *Logger) Close() {
 		}
 		var err error = output.Close()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
-			os.Exit(1)
+			panic(err)
 		}
 	}
 }
