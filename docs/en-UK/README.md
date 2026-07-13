@@ -36,6 +36,10 @@
     3. [Path](/docs/en-UK/fayl/path.md)
     4. [Entry](/docs/en-UK/fayl/entry.md)
     5. [Compress](/docs/en-UK/fayl/compress.md)
+7. Table
+    1. [Interfaces](/docs/en-UK/table/table.md#interfaces)
+    2. [Field](/docs/en-UK/table/table.md#field)
+    3. [Connect](/docs/en-UK/table/table.md#connect)
 
 ### Install
 With a correctly configured Go toolchain:

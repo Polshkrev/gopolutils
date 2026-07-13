@@ -14,5 +14,6 @@ To setup the logger correctly, you will need to either add `stdout` or a file. T
 To modify the logger after it has been constructed, a public getter and setter for the name and level properties are defined.
 ### Logging
 To log a message, you need to call the `Log` method. This method takes a log message without a newline, and a level with which the message will be logged.
+To log a formatted message, `Logf` will need to be called. This method takes a level, a message, and a variadic amount of arguments to format the message.
 ### Destruction
 If a file is bound to the logger, you will need to close the file. The `Close` is typicalled called deffered to close any file bound to the logger. This method will not affect the standard output if it is bound to the logger.
