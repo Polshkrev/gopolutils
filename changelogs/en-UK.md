@@ -1,27 +1,6 @@
 # Changelog
-## v1.37.0 - 2026-07-17
-For future changes, refer to [TODO.md](../TODO.md).
-
-`Added`
-- Added `Exception` constructors from `error`.
-- `fayl`
-    - `entry`
-        - Added `Handle` method.
-    - `path`
-        - Added `Configuration` constructor.
-        - Added `Home` constructor.
-        - Added `Cache` constructor.
-    - `os`
-        - Added `CurrentOperatingSystem` function.
-    - `size`
-        - Added `SetSize` method.
-        - Added `SetUnit` method.
-
-`Changed`
-- The `Must` function now takes an `error` instead of the more concrete `Exception`.
-- `fayl`
-    - When creating an `Entry`, the type is now determined based the given `Path`'s suffix.
 ## v1.36.0 - 2026-07-13: The Table Update
+For future changes, refer to [TODO.md](../TODO.md).
 `Added`
 - Added `Logf` method to `Logger`.
 - Table
