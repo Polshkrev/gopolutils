@@ -1,6 +1,14 @@
 # Changelog
-## v1.36.0 - 2026-07-13: The Table Update
+## v1.37.0 - 2026-07-17
 For future changes, refer to [TODO.md](../TODO.md).
+
+`Added`
+- `fayl`
+    - `entry`
+        - Added `Handle` method.
+    - `os`
+        - Added `CurrentOperatingSystem` function.
+## v1.36.0 - 2026-07-13: The Table Update
 `Added`
 - Added `Logf` method to `Logger`.
 - Table
