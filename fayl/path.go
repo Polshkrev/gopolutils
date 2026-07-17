@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/Polshkrev/gopolutils"
@@ -25,8 +24,7 @@ func NewPath() *Path {
 	var err error
 	workingDirectory, err = os.Getwd()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, gopolutils.NewNamedException(gopolutils.OSError, err.Error()))
-		os.Exit(1)
+		panic(gopolutils.NewNamedException(gopolutils.OSError, err.Error()))
 	}
 	path.raw = workingDirectory
 	return path
@@ -137,18 +135,18 @@ func getRoot(filePath string) (string, *gopolutils.Exception) {
 // If the absolute path can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 // If the root of the filesystem can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 func (path Path) Root() (*Path, *gopolutils.Exception) {
-	if OperatingSystem(runtime.GOOS) != Windows { // ! This will error if value is not in enum list.
+	if CurrentOperatingSystem() != Windows {
 		return PathFrom("/"), nil
 	}
-	var absolute string
-	var absoluteError error
-	absolute, absoluteError = filepath.Abs(path.raw)
+	var absolute *Path
+	var absoluteError *gopolutils.Exception
+	absolute, absoluteError = path.Absolute()
 	if absoluteError != nil {
-		return nil, gopolutils.NewNamedException(gopolutils.OSError, absoluteError.Error())
+		return nil, absoluteError
 	}
 	var root string
 	var rootExcept *gopolutils.Exception
-	root, rootExcept = getRoot(absolute)
+	root, rootExcept = getRoot(absolute.String())
 	if rootExcept != nil {
 		return nil, rootExcept
 	}
