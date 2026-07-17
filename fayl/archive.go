@@ -120,7 +120,7 @@ func ZipFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		var name string = file.Path().String()
 		var handle *os.File
 		var openError *gopolutils.Exception
-		handle, openError = getHandle(name)
+		handle, openError = file.Handle()
 		if openError != nil {
 			return openError
 		}
@@ -232,9 +232,10 @@ func Untar(source, destination *Path) *gopolutils.Exception {
 	if makeDirectoryError != nil {
 		return makeDirectoryError
 	}
+	var entry *Entry = NewEntry(source)
 	var handle *os.File
 	var handleError *gopolutils.Exception
-	handle, handleError = getHandle(source.String())
+	handle, handleError = entry.Handle()
 	if handleError != nil {
 		return gopolutils.NewNamedException(gopolutils.OSError, handleError.Error())
 	}
@@ -331,7 +332,7 @@ func TarFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		}
 		var openFile *os.File
 		var openError *gopolutils.Exception
-		openFile, openError = getHandle(name)
+		openFile, openError = file.Handle()
 		if openError != nil {
 			return gopolutils.NewNamedException(gopolutils.OSError, openError.Error())
 		}
