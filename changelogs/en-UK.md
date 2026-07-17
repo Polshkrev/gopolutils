@@ -18,7 +18,6 @@ For future changes, refer to [TODO.md](../TODO.md).
         - Added `SetUnit` method.
 
 `Changed`
-- The `Must` function now takes an `error` instead of the more concrete `Exception`.
 - `fayl`
     - When creating an `Entry`, the type is now determined based the given `Path`'s suffix.
 ## v1.36.0 - 2026-07-13: The Table Update
