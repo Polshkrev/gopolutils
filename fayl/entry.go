@@ -28,7 +28,16 @@ type Entry struct {
 func NewEntry(path *Path) *Entry {
 	var entry *Entry = new(Entry)
 	entry.path = path
-	entry.kind = FileType
+	var suffix Suffix
+	var except *gopolutils.Exception
+	suffix, except = path.Suffix()
+	if except != nil {
+		panic(except)
+	} else if suffix == None {
+		entry.SetType(DirectoryType)
+	} else {
+		entry.SetType(FileType)
+	}
 	entry.content = safe.NewArray[byte]()
 	return entry
 }
