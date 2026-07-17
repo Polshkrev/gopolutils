@@ -1,7 +1,12 @@
 # Changelog
-## v1.37.0 - 2026-07-17
+## v1.38.0 - 2026-07-17
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `fayl`
+    - `Path`
+        - Added the `Configuration` constructor.
+## v1.37.0 - 2026-07-17
 `Added`
 - `fayl`
     - `entry`
