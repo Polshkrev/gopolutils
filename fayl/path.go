@@ -46,6 +46,18 @@ func Configuration() *Path {
 	return getDirectory(os.UserConfigDir)
 }
 
+// Obtain the home directory.
+// Returns the home directory as a [Path].
+func Home() *Path {
+	return getDirectory(os.UserHomeDir)
+}
+
+// Obtain the cache directory.
+// Returns the cache directory as a [Path].
+func Cache() *Path {
+	return getDirectory(os.UserCacheDir)
+}
+
 // Determine if the filesystem path exists.
 // Returns true if the filesystem path is evaluated to exist, else false.
 func (path Path) Exists() bool {

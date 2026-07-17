@@ -1,7 +1,13 @@
 # Changelog
-## v1.38.0 - 2026-07-17
+## v1.39.0 - 2026-07-17
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `fayl`
+    - `Path`
+        - Added the `Home` constructor.
+        - Added the `Cache` constructor.
+## v1.38.0 - 2026-07-17
 `Added`
 - `fayl`
     - `Path`
