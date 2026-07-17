@@ -25,8 +25,7 @@ func NewPath() *Path {
 	var err error
 	workingDirectory, err = os.Getwd()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, gopolutils.NewNamedException(gopolutils.OSError, err.Error()))
-		os.Exit(1)
+		panic(gopolutils.NewNamedException(gopolutils.OSError, err.Error()))
 	}
 	path.raw = workingDirectory
 	return path
