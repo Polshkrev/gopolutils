@@ -2,10 +2,7 @@ module github.com/Polshkrev/gopolutils
 
 go 1.23.0
 
-require (
-	github.com/Polshkrev/goserialize v0.10.0
-	github.com/joho/godotenv v1.5.1
-)
+require github.com/Polshkrev/goserialize v0.8.0
 
 require (
 	github.com/BurntSushi/toml v1.6.0 // indirect
