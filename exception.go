@@ -71,7 +71,7 @@ func (exception Exception) Is(name ExceptionName) bool {
 }
 
 // If the given exception is not nil, the function panics, else the function returns the given result.
-func Must[Type any](result Type, except *Exception) Type {
+func Must[Type any](result Type, except error) Type {
 	if except != nil {
 		panic(except.Error())
 	}
