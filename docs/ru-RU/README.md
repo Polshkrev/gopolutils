@@ -40,6 +40,7 @@
     1. [Интерфейсы](/docs/ru-RU/table/table.md#interfaces)
     2. [Ячейка](/docs/ru-RU/table/table.md#field)
     3. [Связывать](/docs/ru-RU/table/table.md#connect)
+8. [Среда Разработки](/docs/ru-RU/environment.md)
 
 ### Установить
 При правильно настроенном наборе инструментов Go:
