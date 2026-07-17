@@ -19,16 +19,7 @@ type Path struct {
 // Returns a pointer to a new path containing the current working directory.
 // If the current working directory can not be obtained, an [gopolutils.OSError] is printed to standard error and the programme exits.
 func NewPath() *Path {
-	var path *Path = new(Path)
-	var workingDirectory string
-	var err error
-	workingDirectory, err = os.Getwd()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, gopolutils.NewNamedException(gopolutils.OSError, err.Error()))
-		os.Exit(1)
-	}
-	path.raw = workingDirectory
-	return path
+	return getDirectory(os.Getwd)
 }
 
 // Construct a new filesystem path from a given path string.
@@ -47,6 +38,12 @@ func PathFromParts(folderName, fileName string, fileType Suffix) *Path {
 	var suffixString string = gopolutils.Must(StringFromSuffix(fileType))
 	var result string = fmt.Sprintf("%s%c%s.%s", folderName, filepath.Separator, fileName, suffixString)
 	return PathFrom(result)
+}
+
+// Obtain the configuration directory.
+// Returns the configuration directory as a [Path].
+func Configuration() *Path {
+	return getDirectory(os.UserConfigDir)
 }
 
 // Determine if the filesystem path exists.
@@ -184,4 +181,16 @@ func (path Path) Parent() (*Path, *gopolutils.Exception) {
 // Returns a string representation of the filesystem path.
 func (path Path) String() string {
 	return path.raw
+}
+
+// Obtain a path from a given getter function.
+// Returns a path representation obtained from a a given getter function.
+func getDirectory(getter func() (string, error)) *Path {
+	var directory string
+	var directoryError error
+	directory, directoryError = getter()
+	if directoryError != nil {
+		panic(gopolutils.NewNamedException(gopolutils.OSError, directoryError.Error()))
+	}
+	return PathFrom(directory)
 }
