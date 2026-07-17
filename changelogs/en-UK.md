@@ -1,10 +1,7 @@
 # Changelog
-## v1.38.0 - 2026-07-17
+## v1.37.0 - 2026-07-17
 For future changes, refer to [TODO.md](../TODO.md).
 
-`Added`
-- Added `environment` module.
-## v1.37.0 - 2026-07-17
 `Added`
 - Added `Exception` constructors from `error`.
 - `fayl`
