@@ -1,6 +1,10 @@
 package fayl
 
-import "github.com/Polshkrev/gopolutils"
+import (
+	"runtime"
+
+	"github.com/Polshkrev/gopolutils"
+)
 
 // Finite — incomplete — operating system values.
 type OperatingSystem gopolutils.StringEnum
@@ -23,3 +27,9 @@ const (
 	// OpenBSD operating system.
 	Openbsd OperatingSystem = "openbsd"
 )
+
+// Obtain the current operating system.
+// Returns the current operating system.
+func CurrentOperatingSystem() OperatingSystem {
+	return OperatingSystem(runtime.GOOS)
+}
