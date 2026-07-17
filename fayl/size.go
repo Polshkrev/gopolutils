@@ -44,7 +44,7 @@ func SizeFromBytes(size gopolutils.Size) *Size {
 
 // Set the unit of the size.
 func (size *Size) SetUnit(unit gopolutils.ByteSize) {
-	size.unit = unit
+	size.size = unit
 }
 
 // Set the new size of the size.
