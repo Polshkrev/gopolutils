@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/Polshkrev/gopolutils"
@@ -20,16 +19,7 @@ type Path struct {
 // Returns a pointer to a new path containing the current working directory.
 // If the current working directory can not be obtained, an [gopolutils.OSError] is printed to standard error and the programme exits.
 func NewPath() *Path {
-	var path *Path = new(Path)
-	var workingDirectory string
-	var err error
-	workingDirectory, err = os.Getwd()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, gopolutils.NewNamedException(gopolutils.OSError, err.Error()))
-		os.Exit(1)
-	}
-	path.raw = workingDirectory
-	return path
+	return getDirectory(os.Getwd)
 }
 
 // Construct a new filesystem path from a given path string.
@@ -48,6 +38,24 @@ func PathFromParts(folderName, fileName string, fileType Suffix) *Path {
 	var suffixString string = gopolutils.Must(StringFromSuffix(fileType))
 	var result string = fmt.Sprintf("%s%c%s.%s", folderName, filepath.Separator, fileName, suffixString)
 	return PathFrom(result)
+}
+
+// Obtain the configuration directory.
+// Returns a [Path] of the configuration directory.
+func Configuration() *Path {
+	return getDirectory(os.UserConfigDir)
+}
+
+// Obtain the home directory.
+// Returns a [Path] of the home directory.
+func Home() *Path {
+	return getDirectory(os.UserHomeDir)
+}
+
+// Obtain the cache directory.
+// Returns a [Path] of the cache directory.
+func Cache() *Path {
+	return getDirectory(os.UserCacheDir)
 }
 
 // Determine if the filesystem path exists.
@@ -137,18 +145,18 @@ func getRoot(filePath string) (string, *gopolutils.Exception) {
 // If the absolute path can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 // If the root of the filesystem can not be obtained, an [gopolutils.OSError] is returned with a nil data pointer.
 func (path Path) Root() (*Path, *gopolutils.Exception) {
-	if OperatingSystem(runtime.GOOS) != Windows { // ! This will error if value is not in enum list.
+	if CurrentOperatingSystem() != Windows {
 		return PathFrom("/"), nil
 	}
-	var absolute string
-	var absoluteError error
-	absolute, absoluteError = filepath.Abs(path.raw)
+	var absolute *Path
+	var absoluteError *gopolutils.Exception
+	absolute, absoluteError = path.Absolute()
 	if absoluteError != nil {
-		return nil, gopolutils.NewNamedException(gopolutils.OSError, absoluteError.Error())
+		return nil, absoluteError
 	}
 	var root string
 	var rootExcept *gopolutils.Exception
-	root, rootExcept = getRoot(absolute)
+	root, rootExcept = getRoot(absolute.String())
 	if rootExcept != nil {
 		return nil, rootExcept
 	}
@@ -185,4 +193,16 @@ func (path Path) Parent() (*Path, *gopolutils.Exception) {
 // Returns a string representation of the filesystem path.
 func (path Path) String() string {
 	return path.raw
+}
+
+// Obtain a directory from a given getter function.
+// Returns a [Path] obtained from the given getter function.
+func getDirectory(getter func() (string, error)) *Path {
+	var result string
+	var getError error
+	result, getError = getter()
+	if getError != nil {
+		panic(gopolutils.NewNamedException(gopolutils.OSError, "%s", getError.Error()))
+	}
+	return PathFrom(result)
 }
