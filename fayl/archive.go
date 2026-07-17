@@ -422,34 +422,6 @@ func copyFile(destination io.Writer, source io.Reader) *gopolutils.Exception {
 	return except
 }
 
-// Concurrently open a file.
-func openConcurrent(path string, handleChannel chan<- *os.File, exceptionChannel chan<- *gopolutils.Exception) {
-	defer close(handleChannel)
-	defer close(exceptionChannel)
-	var openFile *os.File
-	var openError error
-	openFile, openError = os.Open(path)
-	if openError != nil {
-		handleChannel <- nil
-		exceptionChannel <- gopolutils.NewNamedException(gopolutils.OSError, openError.Error())
-		return
-	}
-	handleChannel <- openFile
-	exceptionChannel <- nil
-}
-
-// Obtain a handle to a file from a given path.
-// Returns a handle to the open file of the given path.
-// If the handle can not be obtained, an [gopolutils.OSError] is returned.
-func getHandle(path string) (*os.File, *gopolutils.Exception) {
-	var handleChannel chan *os.File = make(chan *os.File, 1)
-	var exceptionChannel chan *gopolutils.Exception = make(chan *gopolutils.Exception, 1)
-	go openConcurrent(path, handleChannel, exceptionChannel)
-	var handle *os.File = <-handleChannel
-	var except *gopolutils.Exception = <-exceptionChannel
-	return handle, except
-}
-
 // Strip the given prefix from the given if contains the given prefix.
 // Returns the given path without the preceding prefix.
 func stripPrefix(path string, prefix string) string {
