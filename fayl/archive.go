@@ -120,7 +120,7 @@ func ZipFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		var name string = file.Path().String()
 		var handle *os.File
 		var openError *gopolutils.Exception
-		handle, openError = file.Handle()
+		handle, openError = getHandle(name)
 		if openError != nil {
 			return openError
 		}
@@ -232,10 +232,9 @@ func Untar(source, destination *Path) *gopolutils.Exception {
 	if makeDirectoryError != nil {
 		return makeDirectoryError
 	}
-	var entry *Entry = NewEntry(source)
 	var handle *os.File
 	var handleError *gopolutils.Exception
-	handle, handleError = entry.Handle()
+	handle, handleError = getHandle(source.String())
 	if handleError != nil {
 		return gopolutils.NewNamedException(gopolutils.OSError, handleError.Error())
 	}
@@ -332,7 +331,7 @@ func TarFolder(destination *Path, files ...*Entry) *gopolutils.Exception {
 		}
 		var openFile *os.File
 		var openError *gopolutils.Exception
-		openFile, openError = file.Handle()
+		openFile, openError = getHandle(name)
 		if openError != nil {
 			return gopolutils.NewNamedException(gopolutils.OSError, openError.Error())
 		}
@@ -421,6 +420,34 @@ func copyFile(destination io.Writer, source io.Reader) *gopolutils.Exception {
 	go copyConcurrent(destination, source, exceptionChannel)
 	var except *gopolutils.Exception = <-exceptionChannel
 	return except
+}
+
+// Concurrently open a file.
+func openConcurrent(path string, handleChannel chan<- *os.File, exceptionChannel chan<- *gopolutils.Exception) {
+	defer close(handleChannel)
+	defer close(exceptionChannel)
+	var openFile *os.File
+	var openError error
+	openFile, openError = os.Open(path)
+	if openError != nil {
+		handleChannel <- nil
+		exceptionChannel <- gopolutils.NewNamedException(gopolutils.OSError, openError.Error())
+		return
+	}
+	handleChannel <- openFile
+	exceptionChannel <- nil
+}
+
+// Obtain a handle to a file from a given path.
+// Returns a handle to the open file of the given path.
+// If the handle can not be obtained, an [gopolutils.OSError] is returned.
+func getHandle(path string) (*os.File, *gopolutils.Exception) {
+	var handleChannel chan *os.File = make(chan *os.File, 1)
+	var exceptionChannel chan *gopolutils.Exception = make(chan *gopolutils.Exception, 1)
+	go openConcurrent(path, handleChannel, exceptionChannel)
+	var handle *os.File = <-handleChannel
+	var except *gopolutils.Exception = <-exceptionChannel
+	return handle, except
 }
 
 // Strip the given prefix from the given if contains the given prefix.

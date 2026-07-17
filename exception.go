@@ -57,18 +57,6 @@ func NewNamedException(name ExceptionName, format string, arguments ...any) *Exc
 	return exception
 }
 
-// Construct an exception based on a given [error].
-// Returns a new [Exception] based on the given [error].
-func ExceptionFrom(except error) *Exception {
-	return NewException(except.Error())
-}
-
-// Construct a named exception based on a given [error].
-// Returns a new named [Exception] based on the given [error].
-func NamedExceptionFrom(name ExceptionName, except error) *Exception {
-	return NewNamedException(name, except.Error())
-}
-
 // Method to adhere to the built-in error type.
 // Returns a string representation of the exception.
 func (exception Exception) Error() string {

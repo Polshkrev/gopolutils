@@ -28,16 +28,7 @@ type Entry struct {
 func NewEntry(path *Path) *Entry {
 	var entry *Entry = new(Entry)
 	entry.path = path
-	var suffix Suffix
-	var except *gopolutils.Exception
-	suffix, except = path.Suffix()
-	if except != nil {
-		panic(except)
-	} else if suffix == None {
-		entry.SetType(DirectoryType)
-	} else {
-		entry.SetType(FileType)
-	}
+	entry.kind = FileType
 	entry.content = safe.NewArray[byte]()
 	return entry
 }
@@ -255,7 +246,7 @@ func assignType(path string) (EntryType, *gopolutils.Exception) {
 	var infoError error
 	info, infoError = os.Stat(path)
 	if infoError != nil {
-		return FileType, gopolutils.NewNamedException(gopolutils.IOError, infoError.Error())
+		return "", gopolutils.NewNamedException(gopolutils.IOError, infoError.Error())
 	}
 	if info.IsDir() {
 		return DirectoryType, nil
@@ -284,34 +275,6 @@ func (entry Entry) Remove() *gopolutils.Exception {
 	default:
 		return entry.RemoveFile()
 	}
-}
-
-// Concurrently open a file.
-func openConcurrent(path string, handleChannel chan<- *os.File, exceptionChannel chan<- *gopolutils.Exception) {
-	defer close(handleChannel)
-	defer close(exceptionChannel)
-	var openFile *os.File
-	var openError error
-	openFile, openError = os.Open(path)
-	if openError != nil {
-		handleChannel <- nil
-		exceptionChannel <- gopolutils.NewNamedException(gopolutils.OSError, openError.Error())
-		return
-	}
-	handleChannel <- openFile
-	exceptionChannel <- nil
-}
-
-// Obtain a handle to a file from a given path.
-// Returns a handle to the open file of the given path.
-// If the handle can not be obtained, an [gopolutils.OSError] is returned.
-func (entry Entry) Handle() (*os.File, *gopolutils.Exception) {
-	var handleChannel chan *os.File = make(chan *os.File, 1)
-	var exceptionChannel chan *gopolutils.Exception = make(chan *gopolutils.Exception, 1)
-	go openConcurrent(entry.Path().String(), handleChannel, exceptionChannel)
-	var handle *os.File = <-handleChannel
-	var except *gopolutils.Exception = <-exceptionChannel
-	return handle, except
 }
 
 // Obtain the size of the entry.

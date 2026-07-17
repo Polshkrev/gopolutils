@@ -40,7 +40,6 @@
     1. [Interfaces](/docs/en-UK/table/table.md#interfaces)
     2. [Field](/docs/en-UK/table/table.md#field)
     3. [Connect](/docs/en-UK/table/table.md#connect)
-8. [Environment](/docs/en-UK/environment.md)
 
 ### Install
 With a correctly configured Go toolchain:
