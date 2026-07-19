@@ -7,6 +7,9 @@ import (
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
+var _ Collection[any] = (*Stack[any])(nil)
+var _ collections.Iterable[any] = (*Stack[any])(nil)
+
 // Implementation of a concurrent-safe stack.
 type Stack[Type any] struct {
 	itemLock sync.RWMutex
@@ -147,6 +150,12 @@ func (stack *Stack[Type]) Items() *[]Type {
 	stack.RLock()
 	defer stack.RUnlock()
 	return &stack.items
+}
+
+// Obtain an stack over the data of the collection.
+// Returns an stack the data of the collection.
+func (stack *Stack[Type]) Iterator() *collections.Iterator[Type] {
+	return collections.From(stack)
 }
 
 // Access the size of the stack.

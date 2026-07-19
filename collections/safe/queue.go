@@ -7,6 +7,9 @@ import (
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
+var _ Collection[any] = (*Queue[any])(nil)
+var _ collections.Iterable[any] = (*Queue[any])(nil)
+
 // Implementation of a concurrent-safe queue data structure.
 type Queue[Type any] struct {
 	itemLock sync.RWMutex
@@ -120,14 +123,6 @@ func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
 	return &queue.items[0], nil
 }
 
-// Determine if the queue is empty.
-// Returns true if the length of the underlying data and the size of the queue is equal to 0.
-func (queue *Queue[_]) IsEmpty() bool {
-	queue.RLock()
-	defer queue.RUnlock()
-	return queue.size == 0 && len(queue.items) == 0
-}
-
 // Collect the data stored in the queue as a slice.
 // Returns a view into the data stored in the queue.
 func (queue *Queue[Type]) Collect() []Type {
@@ -144,12 +139,26 @@ func (queue *Queue[Type]) Items() *[]Type {
 	return &queue.items
 }
 
+// Obtain an queue over the data of the collection.
+// Returns an queue the data of the collection.
+func (queue *Queue[Type]) Iterator() *collections.Iterator[Type] {
+	return collections.From(queue)
+}
+
 // Access the size of the queue.
 // Returns the size of the queue as an unsigned 64-bit integer.
 func (queue *Queue[_]) Size() gopolutils.Size {
 	queue.RLock()
 	defer queue.RUnlock()
 	return queue.size
+}
+
+// Determine if the queue is empty.
+// Returns true if the length of the underlying data and the size of the queue is equal to 0.
+func (queue *Queue[_]) IsEmpty() bool {
+	queue.RLock()
+	defer queue.RUnlock()
+	return queue.size == 0 && len(queue.items) == 0
 }
 
 // Lock the internal mutex of the collection for both reading and writing.

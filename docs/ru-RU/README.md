@@ -4,18 +4,20 @@
 ## Оглавление
 1. [Установить](#установить)
 2. [Диаграммы](/docs/ru-RU/diagrams.md)
-3. Глобалы
+3. [Событие](/docs/ru-RU/events.md)
+4. Глобалы
     1. [Логгер](/docs/ru-RU/logger.md)
     2. [Версия](/docs/ru-RU/version.md)
     3. [Ошибка](/docs/ru-RU/exception.md)
-4. [Скопления](/docs/ru-RU/collections/collections.md)
+5. [Скопления](/docs/ru-RU/collections/collections.md)
     1. Интерфейсы
         1. [Скопление](/docs/ru-RU/collections/collection.md)
         2. [Сопоставление](/docs/ru-RU/collections/mapping.md)
         3. [Размерный](/docs/ru-RU/collections/sized.md)
         4. [Толкование](/docs/ru-RU/collections/view.md)
         5. [Обёртка](/docs/ru-RU/collections/wrapper.md)
-        6. Конкурентный
+        6. [Итерируемый объект](/docs/ru-RU/collections/iterable.md)
+        7. Конкурентный
             1. [Скопление](/docs/ru-RU/collections/safe/collection.md)
             2. [Сопоставление](/docs/ru-RU/collections/safe/mapping.md)
     3. Структуры
@@ -30,7 +32,7 @@
             2. [Таблица](/docs/ru-RU/collections/safe/map.md)
             3. [Очередь](/docs/ru-RU/collections/safe/queue.md)
             4. [Стек](/docs/ru-RU/collections/safe/stack.md)
-5. Файл
+6. Файл
     1. [Читать](/docs/ru-RU/fayl/read.md)
     2. [Записывать](/docs/ru-RU/fayl/write.md)
     3. [Адрес](/docs/ru-RU/fayl/path.md)

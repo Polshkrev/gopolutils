@@ -4,6 +4,9 @@ import (
 	"github.com/Polshkrev/gopolutils"
 )
 
+var _ Mapping[any, any] = (*Map[any, any])(nil)
+var _ Iterable[Pair[any, any]] = (*Map[any, any])(nil)
+
 // A collection of key-value pairs.
 type Map[Key comparable, Value any] struct {
 	items map[Key]Value
@@ -96,6 +99,24 @@ func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 	return nil
 }
 
+// Collect a map into a view.
+// Returns a slice containing each of the key-value pairs within the map.
+func (mapping Map[Key, Value]) Collect() []Pair[Key, Value] {
+	var result []Pair[Key, Value] = make([]Pair[Key, Value], 0, mapping.size)
+	var key Key
+	var value Value
+	for key, value = range mapping.items {
+		result = append(result, *NewPair(key, value))
+	}
+	return result
+}
+
+// Obtain an mapping over the data of the collection.
+// Returns an mapping the data of the collection.
+func (mapping Map[Key, Value]) Iterator() *Iterator[Pair[Key, Value]] {
+	return From(mapping)
+}
+
 // Determine if a given key is stored in the map.
 // Returns true if the key is stored in the map.
 func (mapping Map[Key, _]) HasKey(key Key) bool {
@@ -114,16 +135,4 @@ func (mapping Map[_, _]) Size() gopolutils.Size {
 // Returns true if the length of the underlying data and the size of the map is equal to 0.
 func (mapping Map[_, _]) IsEmpty() bool {
 	return len(mapping.items) == 0 && mapping.size == 0
-}
-
-// Collect a map into a view.
-// Returns a slice containing each of the key-value pairs within the map.
-func (mapping Map[Key, Value]) Collect() []Pair[Key, Value] {
-	var result []Pair[Key, Value] = make([]Pair[Key, Value], 0, mapping.size)
-	var key Key
-	var value Value
-	for key, value = range mapping.items {
-		result = append(result, *NewPair(key, value))
-	}
-	return result
 }

@@ -7,6 +7,9 @@ import (
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
+var _ Collection[any] = (*Array[any])(nil)
+var _ collections.Iterable[any] = (*Array[any])(nil)
+
 // Implementation of a concurrent-safe array.
 type Array[Type any] struct {
 	itemLock sync.RWMutex
@@ -102,6 +105,12 @@ func (array *Array[Type]) Collect() []Type {
 	array.RLock()
 	defer array.RUnlock()
 	return array.items
+}
+
+// Obtain an array over the data of the collection.
+// Returns an array the data of the collection.
+func (array *Array[Type]) Iterator() *collections.Iterator[Type] {
+	return collections.From(array)
 }
 
 // Access the size of the array.

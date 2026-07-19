@@ -4,6 +4,9 @@ import (
 	"github.com/Polshkrev/gopolutils"
 )
 
+var _ Collection[any] = (*Stack[any])(nil)
+var _ Iterable[any] = (*Stack[any])(nil)
+
 // Implementation of a stack.
 type Stack[Type any] struct {
 	items []Type
@@ -105,6 +108,12 @@ func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
 	}
 	var index int = len(stack.items) - 1
 	return &stack.items[index], nil
+}
+
+// Obtain an stack over the data of the collection.
+// Returns an stack the data of the collection.
+func (stack Stack[Type]) Iterator() *Iterator[Type] {
+	return From(stack)
 }
 
 // Determine if the stack is empty.

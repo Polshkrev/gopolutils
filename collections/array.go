@@ -4,6 +4,9 @@ import (
 	"github.com/Polshkrev/gopolutils"
 )
 
+var _ Collection[any] = (*Array[any])(nil)
+var _ Iterable[any] = (*Array[any])(nil)
+
 // Implementation of a classical dynamic array.
 type Array[Type any] struct {
 	items []Type
@@ -84,6 +87,12 @@ func (array Array[Type]) Items() *[]Type {
 // Returns a view into the data stored in the array.
 func (array Array[Type]) Collect() []Type {
 	return array.items
+}
+
+// Obtain an array over the data of the collection.
+// Returns an array the data of the collection.
+func (array Array[Type]) Iterator() *Iterator[Type] {
+	return From(array)
 }
 
 // Access the size of the array.

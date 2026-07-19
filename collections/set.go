@@ -8,6 +8,9 @@ import (
 	"github.com/Polshkrev/gopolutils"
 )
 
+var _ Collection[any] = (*Set[any])(nil)
+var _ Iterable[any] = (*Set[any])(nil)
+
 // Implementation of a set.
 type Set[Type comparable] struct {
 	items Mapping[Type, struct{}]
@@ -173,6 +176,12 @@ func (set Set[Type]) Into() Collection[Type] {
 	var array *Array[Type] = NewArray[Type]()
 	array.Extend(set)
 	return array
+}
+
+// Obtain an set over the data of the collection.
+// Returns an set the data of the collection.
+func (set Set[Type]) Iterator() *Iterator[Type] {
+	return From(set)
 }
 
 // Render a string representation of the set.
