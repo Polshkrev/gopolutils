@@ -4,6 +4,9 @@ import (
 	"github.com/Polshkrev/gopolutils"
 )
 
+var _ Collection[any] = (*Stack[any])(nil)
+var _ Iterable[any] = (*Stack[any])(nil)
+
 // Implementation of a stack.
 type Stack[Type any] struct {
 	items []Type

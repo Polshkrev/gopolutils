@@ -7,6 +7,9 @@ import (
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
+var _ Collection[any] = (*Array[any])(nil)
+var _ collections.Iterable[any] = (*Array[any])(nil)
+
 // Implementation of a concurrent-safe array.
 type Array[Type any] struct {
 	itemLock sync.RWMutex

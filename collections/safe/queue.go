@@ -7,6 +7,9 @@ import (
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
+var _ Collection[any] = (*Queue[any])(nil)
+var _ collections.Iterable[any] = (*Queue[any])(nil)
+
 // Implementation of a concurrent-safe queue data structure.
 type Queue[Type any] struct {
 	itemLock sync.RWMutex

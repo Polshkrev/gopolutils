@@ -7,6 +7,9 @@ import (
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
+var _ Mapping[any, any] = (*Map[any, any])(nil)
+var _ collections.Iterable[Pair[any, any]] = (*Map[any, any])(nil)
+
 // A concurrent-safe collection of key-value pairs.
 type Map[Key comparable, Value any] struct {
 	itemLock sync.RWMutex
@@ -112,6 +115,26 @@ func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 	return nil
 }
 
+// Obtain an mapping over the data of the collection.
+// Returns an mapping the data of the collection.
+func (mapping *Map[Key, Value]) Iterator() *collections.Iterator[Pair[Key, Value]] {
+	return collections.From(mapping)
+}
+
+// Collect a map into a view.
+// Returns a slice containing each of the key-value pairs within the map.
+func (mapping *Map[Key, Value]) Collect() []Pair[Key, Value] {
+	mapping.RLock()
+	defer mapping.RUnlock()
+	var result []Pair[Key, Value] = make([]Pair[Key, Value], 0, mapping.size)
+	var key Key
+	var value Value
+	for key, value = range mapping.items {
+		result = append(result, *NewPair(key, value))
+	}
+	return result
+}
+
 // Determine if a given key is stored in the map.
 // Returns true if the key is stored in the map.
 func (mapping *Map[Key, _]) HasKey(key Key) bool {
@@ -136,20 +159,6 @@ func (mapping *Map[_, _]) IsEmpty() bool {
 	mapping.RLock()
 	defer mapping.RUnlock()
 	return len(mapping.items) == 0 && mapping.size == 0
-}
-
-// Collect a map into a view.
-// Returns a slice containing each of the key-value pairs within the map.
-func (mapping *Map[Key, Value]) Collect() []collections.Pair[Key, Value] {
-	mapping.RLock()
-	defer mapping.RUnlock()
-	var result []collections.Pair[Key, Value] = make([]collections.Pair[Key, Value], 0, mapping.size)
-	var key Key
-	var value Value
-	for key, value = range mapping.items {
-		result = append(result, *collections.NewPair(key, value))
-	}
-	return result
 }
 
 // Lock the internal mutex of the mapping for both reading and writing.

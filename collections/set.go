@@ -8,6 +8,9 @@ import (
 	"github.com/Polshkrev/gopolutils"
 )
 
+var _ Collection[any] = (*Set[any])(nil)
+var _ Iterable[any] = (*Set[any])(nil)
+
 // Implementation of a set.
 type Set[Type comparable] struct {
 	items Mapping[Type, struct{}]
