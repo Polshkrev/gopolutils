@@ -1,7 +1,45 @@
 # Changelog
-## v1.39.0 - 2026-07-17
+## v1.40.0 - 2026-07-19: The Event Update
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `events`
+    - Added `EventType` enum.
+    - Added `Event` type.
+    - Added `EventManager` type.
+    - Added `Subscribe` function.
+    - Added `Post` function.
+- `collections`
+    - Added `Iterable` interface.
+    - `array`
+        - Added `Iterator` method.
+    - `map`
+        - Added `Iterator` method.
+    - `queue`
+        - Added `Iterator` method.
+    - `stack`
+        - Added `Iterator` method.
+    - `set`
+        - Added `Iterator` method.
+- `safe`
+    - `array`
+        - Added `Iterator` method.
+    - `map`
+        - Added `Iterator` method.
+    - `queue`
+        - Added `Iterator` method.
+    - `stack`
+        - Added `Iterator` method.
+    - `set`
+        - Added `Iterator` method.
+- `docs`
+    - Added `event` documentation.
+
+`Changed`
+- `safe`
+    - `map`
+        - The `Collect` method now returns a `safe.Pair` instead of a `collections.Pair`.
+## v1.39.0 - 2026-07-17
 `Added`
 - `fayl`
     - `Path`
