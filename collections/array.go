@@ -4,6 +4,9 @@ import (
 	"github.com/Polshkrev/gopolutils"
 )
 
+var _ Collection[any] = (*Array[any])(nil)
+var _ Iterable[any] = (*Array[any])(nil)
+
 // Implementation of a classical dynamic array.
 type Array[Type any] struct {
 	items []Type

@@ -2,6 +2,9 @@ package collections
 
 import "github.com/Polshkrev/gopolutils"
 
+var _ Collection[any] = (*Queue[any])(nil)
+var _ Iterable[any] = (*Queue[any])(nil)
+
 // Implementation of a queue data structure.
 type Queue[Type any] struct {
 	items []Type

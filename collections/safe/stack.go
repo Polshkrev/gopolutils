@@ -7,6 +7,9 @@ import (
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
+var _ Collection[any] = (*Stack[any])(nil)
+var _ collections.Iterable[any] = (*Stack[any])(nil)
+
 // Implementation of a concurrent-safe stack.
 type Stack[Type any] struct {
 	itemLock sync.RWMutex
