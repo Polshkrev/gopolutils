@@ -16,7 +16,8 @@
         3. [Sized](/docs/en-UK/collections/sized.md)
         4. [View](/docs/en-UK/collections/view.md)
         5. [Wrapper](/docs/en-UK/collections/wrapper.md)
-        6. Safe
+        6. [Iterable](/docs/en-UK/collections/iterable.md)
+        7. Safe
             1. [Collection](/docs/en-UK/collections/safe/collection.md)
             2. [Mapping](/docs/en-UK/collections/safe/mapping.md)
     3. Structures
