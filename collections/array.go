@@ -86,6 +86,12 @@ func (array Array[Type]) Collect() []Type {
 	return array.items
 }
 
+// Obtain an array over the data of the collection.
+// Returns an array the data of the collection.
+func (array Array[Type]) Iterator() *Iterator[Type] {
+	return From(array)
+}
+
 // Access the size of the array.
 // Returns the size of the array as an unsigned 64-bit integer.
 func (array Array[_]) Size() gopolutils.Size {

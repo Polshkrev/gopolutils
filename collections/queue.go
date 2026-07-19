@@ -100,12 +100,6 @@ func (queue *Queue[Type]) Peek() (*Type, *gopolutils.Exception) {
 	return &queue.items[0], nil
 }
 
-// Determine if the queue is empty.
-// Returns true if the length of the underlying data and the size of the queue is equal to 0.
-func (queue Queue[_]) IsEmpty() bool {
-	return queue.size == 0 && len(queue.items) == 0
-}
-
 // Collect the data stored in the queue as a slice.
 // Returns a view into the data stored in the queue.
 func (queue Queue[Type]) Collect() []Type {
@@ -116,6 +110,18 @@ func (queue Queue[Type]) Collect() []Type {
 // Returns a mutable pointer to the underlying data within the queue.
 func (queue Queue[Type]) Items() *[]Type {
 	return &queue.items
+}
+
+// Obtain an queue over the data of the collection.
+// Returns an queue the data of the collection.
+func (queue Queue[Type]) Iterator() *Iterator[Type] {
+	return From(queue)
+}
+
+// Determine if the queue is empty.
+// Returns true if the length of the underlying data and the size of the queue is equal to 0.
+func (queue Queue[_]) IsEmpty() bool {
+	return queue.size == 0 && len(queue.items) == 0
 }
 
 // Access the size of the queue.
