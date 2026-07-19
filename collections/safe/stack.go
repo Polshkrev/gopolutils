@@ -149,6 +149,12 @@ func (stack *Stack[Type]) Items() *[]Type {
 	return &stack.items
 }
 
+// Obtain an stack over the data of the collection.
+// Returns an stack the data of the collection.
+func (stack *Stack[Type]) Iterator() *collections.Iterator[Type] {
+	return collections.From(stack)
+}
+
 // Access the size of the stack.
 // Returns the size of the stack as an unsigned 64-bit integer.
 func (stack *Stack[_]) Size() gopolutils.Size {

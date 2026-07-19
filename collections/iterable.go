@@ -4,5 +4,5 @@ package collections
 type Iterable[Type any] interface {
 	// Obtain an iterator over the data of the collection.
 	// Returns an iterator the data of the collection.
-	Iterator() Iterator[Type]
+	Iterator() *Iterator[Type]
 }
