@@ -5,7 +5,8 @@ description = "A collection of golang utilities."
 
 [project.version]
 major = 1
-minor = 39
+minor = 40
+name = "The Event Update"
 
 [license]
 type = "MIT"
