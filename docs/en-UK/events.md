@@ -18,11 +18,11 @@ const (
 )
 
 func registerApplicationStart() {
-	events.Subscribe(applicationStart, func() { fmt.Println("Application has started.") })
+	events.Subscribe(applicationStart, func(any) { fmt.Println("Application has started.") })
 }
 
 func registerApplicationEnd() {
-	events.Subscribe(applicationEnd, func() { fmt.Println("Application has ended.") })
+	events.Subscribe(applicationEnd, func(any) { fmt.Println("Application has ended.") })
 }
 
 func init() {
@@ -34,8 +34,8 @@ func init() {
 Posting an event defines triggering each function subscribed to at the given `EventType`. Such as in the example below:
 ```go
 func main() {
-    events.Post(applicationStart)
+    events.Post(applicationStart, nil)
 	/* Application Code */
-	events.Post(applicationEnd)
+	events.Post(applicationEnd, nil)
 }
 ```
