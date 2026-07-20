@@ -18,11 +18,11 @@ const (
 )
 
 func registerApplicationStart() {
-	events.Subscribe(applicationStart, func() { fmt.Println("Application has started.") })
+	events.Subscribe(applicationStart, func(any) { fmt.Println("Application has started.") })
 }
 
 func registerApplicationEnd() {
-	events.Subscribe(applicationEnd, func() { fmt.Println("Application has ended.") })
+	events.Subscribe(applicationEnd, func(any) { fmt.Println("Application has ended.") })
 }
 
 func init() {
@@ -34,8 +34,8 @@ func init() {
 Отправка события определяет запуск каждой функции, на которую оформлена подписка, для заданного `EventType`. Например, как в приведенном ниже примере:
 ```go
 func main() {
-    events.Post(applicationStart)
+    events.Post(applicationStart, nil)
 	/* Application Code */
-	events.Post(applicationEnd)
+	events.Post(applicationEnd, nil)
 }
 ```

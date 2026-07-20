@@ -1,7 +1,11 @@
 # Changelog
-## v1.40.0 - 2026-07-19: The Event Update
+## v1.40.1 - 2026-07-20
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Changed`
+- `events`
+    - `Post` now needs to be called with specific data for the event.
+## v1.40.0 - 2026-07-19: The Event Update
 `Added`
 - `events`
     - Added `EventType` enum.
