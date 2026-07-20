@@ -9,7 +9,7 @@ import (
 type EventType gopolutils.StringEnum
 
 // Type alias for an event to be called.
-type Event func()
+type Event func(any)
 
 // Type alias for a mapping of event types to a collection of events.
 type EventManager collections.Mapping[EventType, collections.Collection[Event]]
@@ -34,7 +34,7 @@ func Subscribe(eventType EventType, event Event) {
 }
 
 // Trigger each event stored at the given event type.
-func Post(eventType EventType) {
+func Post(eventType EventType, data any) {
 	if !events.HasKey(eventType) {
 		return
 	}
@@ -42,6 +42,6 @@ func Post(eventType EventType) {
 	var i int
 	for i = range (*subscribedEvents).Collect() {
 		var subscribedEvent Event = (*subscribedEvents).Collect()[i]
-		subscribedEvent()
+		subscribedEvent(data)
 	}
 }
