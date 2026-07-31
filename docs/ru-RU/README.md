@@ -39,9 +39,9 @@
     4. [Запись](/docs/ru-RU/fayl/entry.md)
     5. [Сжимать](/docs/ru-RU/fayl/compress.md)
 7. Таблица
-    1. [Интерфейсы](/docs/ru-RU/table/table.md#interfaces)
-    2. [Ячейка](/docs/ru-RU/table/table.md#field)
-    3. [Связывать](/docs/ru-RU/table/table.md#connect)
+    1. [Интерфейсы](/docs/ru-RU/table/table.md#интерфейсы)
+    2. [Ячейка](/docs/ru-RU/table/table.md#ячейка)
+    3. [Связывать](/docs/ru-RU/table/table.md#связывать)
 
 ### Установить
 При правильно настроенном наборе инструментов Go:
