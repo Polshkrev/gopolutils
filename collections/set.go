@@ -13,14 +13,14 @@ var _ Iterable[any] = (*Set[any])(nil)
 
 // Implementation of a set.
 type Set[Type comparable] struct {
-	items Mapping[Type, struct{}]
+	items Mapping[Type, None]
 }
 
 // Construct a new set.
 // Returns a pointer to a new empty set.
 func NewSet[Type comparable]() *Set[Type] {
 	var set *Set[Type] = new(Set[Type])
-	set.items = NewMap[Type, struct{}]()
+	set.items = NewMap[Type, None]()
 	return set
 }
 
@@ -30,7 +30,7 @@ func (set *Set[Type]) Append(item Type) {
 	if set.Contains(item) {
 		return
 	}
-	var except *gopolutils.Exception = set.items.Insert(item, struct{}{})
+	var except *gopolutils.Exception = set.items.Insert(item, None{})
 	if except != nil {
 		fmt.Fprintln(os.Stderr, except.Error())
 		os.Exit(1)
