@@ -18,7 +18,7 @@ func (future *Future[Type]) Await() (Type, *Exception) {
 func Async[Type any](callback func() (Type, *Exception)) *Future[Type] {
 	var result Type
 	var except *Exception
-	var done chan struct{} = make(chan struct{})
+	var done chan None = make(chan None)
 	go func() {
 		defer func() {
 			var result any
