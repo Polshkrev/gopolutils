@@ -46,9 +46,9 @@ func TestSetLevel(t *testing.T) {
 }
 
 type levelTest struct {
-	name  string
-	level gopolutils.LoggingLevel
-	want  string
+	name     string
+	level    gopolutils.LoggingLevel
+	expected string
 }
 
 func TestLoggingLevelString(t *testing.T) {
@@ -263,10 +263,7 @@ func TestLogWritesMessage(t *testing.T) {
 	}
 
 	logger.Log("Hello, world!", gopolutils.Info)
-	except = logger.Close()
-	if except != nil {
-		t.Fatal(except)
-	}
+	defer logger.Close()
 
 	var output string = readFile(path)
 
@@ -291,10 +288,7 @@ func TestLogfWritesFormattedMessage(t *testing.T) {
 
 	logger.Logf(gopolutils.Info, "value = %d", 42)
 
-	except = logger.Close()
-	if except != nil {
-		t.Fatal(except)
-	}
+	defer logger.Close()
 
 	var data string = readFile(path)
 
@@ -316,10 +310,7 @@ func TestLogRespectsLoggingLevel(t *testing.T) {
 	logger.Log("debug", gopolutils.Debug)
 	logger.Log("info", gopolutils.Info)
 	logger.Log("warning", gopolutils.Warning)
-	except = logger.Close()
-	if except != nil {
-		t.Fatal(except)
-	}
+	defer logger.Close()
 
 	var output string = readFile(path)
 
@@ -343,10 +334,7 @@ func TestLogEmptyMessage(t *testing.T) {
 	}
 
 	logger.Log("", gopolutils.Info)
-	except = logger.Close()
-	if except != nil {
-		t.Fatal(except)
-	}
+	defer logger.Close()
 
 	if len(readFile(path)) == 0 {
 		t.Fatal("Expected log output.")
@@ -367,10 +355,7 @@ func TestLogMultipleMessages(t *testing.T) {
 	logger.Log(messages[0], gopolutils.Info)
 	logger.Log(messages[1], gopolutils.Warning)
 	logger.Log(messages[2], gopolutils.Error)
-	except = logger.Close()
-	if except != nil {
-		t.Fatal(except)
-	}
+	defer logger.Close()
 
 	var output string = readFile(path)
 	var i int
