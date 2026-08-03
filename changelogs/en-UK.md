@@ -1,7 +1,18 @@
 # Changelog
-## v1.40.1 - 2026-07-20
+## v1.41.0 - 2026-08-03
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- Added `None` type.
+- Added `Callback` type.
+
+`Changed`
+- The private `output_count` variable is now apart of the `Logger` structure for better testability.
+- `Logger.Log` now checks for a `nil` output.
+- `Logge.Close` now correctly check for nil outputs.
+- `tests`
+    - Rewrote all main package tests.
+## v1.40.1 - 2026-07-20
 `Changed`
 - `events`
     - `Post` now needs to be called with specific data for the event.
