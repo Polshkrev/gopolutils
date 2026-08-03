@@ -25,7 +25,7 @@ func Async[Type any](callback func() (Type, *Exception)) *Future[Type] {
 			if result = recover(); result != nil {
 				switch x := result.(type) {
 				case *Exception:
-					except = NewNamedException(ChildProcessError, "Panic in asynchronous worker: %w\n%s", x, string(debug.Stack()))
+					except = NewNamedException(ChildProcessError, "Panic in asynchronous worker: %v\n%s", x, string(debug.Stack()))
 				default:
 					except = NewNamedException(ChildProcessError, "Panic in asynchronous worker: %v\n%s", x, string(debug.Stack()))
 				}
