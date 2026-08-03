@@ -16,11 +16,6 @@ const (
 	timestampFormat string = "2006-01-02 15:04:05"
 )
 
-var (
-	// Sef-explanatory.
-	outputCount uint8 = 0
-)
-
 // An [Enum] representation of the severity of a log message.
 type LoggingLevel Enum
 
@@ -53,14 +48,15 @@ func (level LoggingLevel) String() string {
 	case Critical:
 		return "CRITICAL"
 	}
-	return NewNamedException(UnreachableError, "Unknown logging level. %v", level).Error() // unreachable
+	return NewNamedException(UnreachableError, "Unknown logging level.").Error() // unreachable
 }
 
 // A logger.
 type Logger struct {
-	name    string
-	level   LoggingLevel
-	outputs [availableOutputs]*os.File
+	name        string
+	level       LoggingLevel
+	outputs     [availableOutputs]*os.File
+	outputCount uint8
 }
 
 // Construct a new logger with a given name and default logging level.
@@ -98,11 +94,11 @@ func (logger Logger) GetName() string {
 // Bind the standard output to the logger.
 // If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
 func (logger *Logger) AddConsole() *Exception {
-	if outputCount >= availableOutputs {
+	if logger.outputCount >= availableOutputs {
 		return NewNamedException(ValueError, "The number of outputs has exceeded the maximum allowed.")
 	}
-	logger.outputs[outputCount] = os.Stdout
-	outputCount++
+	logger.outputs[logger.outputCount] = os.Stdout
+	logger.outputCount++
 	return nil
 }
 
@@ -110,7 +106,7 @@ func (logger *Logger) AddConsole() *Exception {
 // If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
 // If the given file can not be found, an IOError is returned.
 func (logger *Logger) AddFile(fileName string) *Exception {
-	if outputCount >= availableOutputs {
+	if logger.outputCount >= availableOutputs {
 		return NewNamedException(ValueError, "The number of outputs has exceeded the maximum allowed.")
 	}
 	var file *os.File
@@ -119,8 +115,8 @@ func (logger *Logger) AddFile(fileName string) *Exception {
 	if except != nil {
 		return NewNamedException(IOError, except.Error())
 	}
-	logger.outputs[outputCount] = file
-	outputCount++
+	logger.outputs[logger.outputCount] = file
+	logger.outputCount++
 	return nil
 }
 
@@ -131,7 +127,7 @@ func (logger *Logger) ConsoleOnly() *Exception {
 	if except != nil {
 		return except
 	}
-	outputCount = 2
+	logger.outputCount = 2
 	return nil
 }
 
@@ -143,7 +139,7 @@ func (logger *Logger) FileOnly(fileName string) *Exception {
 	if except != nil {
 		return except
 	}
-	outputCount = 2
+	logger.outputCount = 2
 	return nil
 }
 
@@ -171,6 +167,9 @@ func (logger Logger) Log(message string, level LoggingLevel) {
 	var i int
 	for i = range logger.outputs {
 		var output *os.File = logger.outputs[i]
+		if output == nil {
+			continue
+		}
 		publishMessage(output, getTimestamp(), logger.name, message, level)
 	}
 }
@@ -188,9 +187,7 @@ func (logger *Logger) Close() {
 	var i int
 	for i = range logger.outputs {
 		var output *os.File = logger.outputs[i]
-		if !isFile(output) {
-			continue
-		} else if output != nil {
+		if output == nil || !isFile(output) {
 			continue
 		}
 		var err error = output.Close()
@@ -219,7 +216,7 @@ func isFile(stream *os.File) bool {
 	var found bool = false
 	var streams [3]*os.File = [3]*os.File{os.Stdout, os.Stdin, os.Stderr}
 	var output int
-	for output = 0; output < 3; output++ {
+	for output = range streams {
 		if streams[output] != stream {
 			continue
 		}
