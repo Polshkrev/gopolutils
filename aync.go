@@ -18,14 +18,14 @@ func (future *Future[Type]) Await() (Type, *Exception) {
 func Async[Type any](callback func() (Type, *Exception)) *Future[Type] {
 	var result Type
 	var except *Exception
-	var done chan struct{} = make(chan struct{})
+	var done chan None = make(chan None)
 	go func() {
 		defer func() {
 			var result any
 			if result = recover(); result != nil {
 				switch x := result.(type) {
 				case *Exception:
-					except = NewNamedException(ChildProcessError, "Panic in asynchronous worker: %w\n%s", x, string(debug.Stack()))
+					except = NewNamedException(ChildProcessError, "Panic in asynchronous worker: %v\n%s", x, string(debug.Stack()))
 				default:
 					except = NewNamedException(ChildProcessError, "Panic in asynchronous worker: %v\n%s", x, string(debug.Stack()))
 				}
