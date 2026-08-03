@@ -6,187 +6,269 @@ import (
 	"github.com/Polshkrev/gopolutils"
 )
 
-func TestNewVersionZerosOut(test *testing.T) {
+func TestNewVersion(t *testing.T) {
 	var version *gopolutils.Version = gopolutils.NewVersion()
-	if version.Major() != 0 {
-		test.Errorf("New version major is not set correctly: %d. Expected: %d\n", version.Major(), 0)
+
+	if version == nil {
+		t.Fatal("Expected non-nil version")
+	} else if version.Name() != "" {
+		t.Errorf("Expected empty name, got %q", version.Name())
+	} else if version.Description() != "" {
+		t.Errorf("Expected empty description, got %q", version.Description())
+	} else if version.Major() != 0 {
+		t.Errorf("Expected major 0, got %d", version.Major())
 	} else if version.Minor() != 0 {
-		test.Errorf("New version minor is not set correctly: %d. Expected: %d\n", version.Minor(), 0)
+		t.Errorf("Expected minor 0, got %d", version.Minor())
 	} else if version.Patch() != 0 {
-		test.Errorf("New version patch is not set correctly: %d. Expected: %d\n", version.Patch(), 0)
+		t.Errorf("Expected patch 0, got %d", version.Patch())
 	}
 }
 
-func TestVersionConvertSetsCorrectly(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(1, 1, 1)
+func TestVersionConvert(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(1, 2, 3)
 	if version.Major() != 1 {
-		test.Errorf("New version major is not set correctly: %d. Expected: %d\n", version.Major(), 0)
-	} else if version.Minor() != 1 {
-		test.Errorf("New version minor is not set correctly: %d. Expected: %d\n", version.Minor(), 0)
-	} else if version.Patch() != 1 {
-		test.Errorf("New version patch is not set correctly: %d. Expected: %d\n", version.Patch(), 1)
+		t.Errorf("Expected major 1, got %d", version.Major())
+	} else if version.Minor() != 2 {
+		t.Errorf("Expected minor 2, got %d", version.Minor())
+	} else if version.Patch() != 3 {
+		t.Errorf("Expected patch 3, got %d", version.Patch())
 	}
 }
 
-func TestVersionCompareMajor(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(2, 0, 0)
-	var compare *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
-	var result bool = version.CompareMajor(compare.Major())
-	if !result {
-		test.Errorf("Version major is less than the compare value. Got: %t. Expected: %t", result, true)
+func TestNewNamedVersion(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.NewNamedVersion("Test")
+
+	if version.Name() != "Test" {
+		t.Errorf("Expected name Test, got %q", version.Name())
+	} else if version.Description() != "" {
+		t.Errorf("Expected empty description")
 	}
 }
 
-func TestVersionCompareMajorFailure(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
-	var compare *gopolutils.Version = gopolutils.VersionConvert(2, 0, 0)
-	var result bool = version.CompareMajor(compare.Major())
-	if result {
-		test.Errorf("Version major is less than the compare value. Got: %t. Expected: %t", result, false)
+func TestNewStringVersion(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.NewStringVersion("Test", "Description")
+
+	if version.Name() != "Test" {
+		t.Errorf("Expected name Test")
+	} else if version.Description() != "Description" {
+		t.Errorf("Expected description Description")
 	}
 }
 
-func TestVersionCompareMinor(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(0, 2, 0)
-	var compare *gopolutils.Version = gopolutils.VersionConvert(0, 1, 0)
-	var result bool = version.CompareMinor(compare.Minor())
-	if !result {
-		test.Errorf("Version minor is less than the compare value. Got: %t. Expected: %t", result, true)
+func TestNewFullVersion(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.NewFullVersion("Test", "Description", 1, 2, 3)
+
+	if version.Name() != "Test" {
+		t.Errorf("Unexpected name")
+	} else if version.Description() != "Description" {
+		t.Errorf("Unexpected description")
+	} else if version.Major() != 1 || version.Minor() != 2 || version.Patch() != 3 {
+		t.Errorf("Unexpected version numbers")
 	}
 }
 
-func TestVersionCompareMinorFailure(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(0, 1, 0)
-	var compare *gopolutils.Version = gopolutils.VersionConvert(0, 2, 0)
-	var result bool = version.CompareMinor(compare.Minor())
-	if result {
-		test.Errorf("Version major is less than the compare value. Got: %t. Expected: %t", result, false)
-	}
-}
-
-func TestVersionComparePatch(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(2, 0, 0)
-	var compare *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
-	var result bool = version.ComparePatch(compare.Patch())
-	if !result {
-		test.Errorf("Version patch is less than the compare value. Got: %t. Expected: %t", result, true)
-	}
-}
-
-func TestVersionComparePatchFailure(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(0, 0, 1)
-	var compare *gopolutils.Version = gopolutils.VersionConvert(0, 0, 2)
-	var result bool = version.ComparePatch(compare.Patch())
-	if result {
-		test.Errorf("Version major is less than the compare value. Got: %t. Expected: %t", result, false)
-	}
-}
-
-func TestVersionCompare(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(2, 0, 0)
-	var compare *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
-	var result bool = version.Compare(*compare)
-	if !result {
-		test.Errorf("Version is less than the compare value. Got: %t. Expected: %t", result, true)
-	}
-}
-
-func TestVersionCompareFailure(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
-	var compare *gopolutils.Version = gopolutils.VersionConvert(2, 0, 0)
-	var result bool = version.Compare(*compare)
-	if result {
-		test.Errorf("Version major is less than the compare value. Got: %t. Expected: %t", result, false)
-	}
-}
-
-func TestVersionIsZeroTrue(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(0, 0, 0)
-	if !version.IsZero() {
-		test.Errorf("Version: '%+v' is not evaluated to be zero.", *version)
-	}
-}
-
-func TestVersionIsZeroFalse(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(1, 1, 1)
-	if version.IsZero() {
-		test.Errorf("Version: '%+v' is evaluated to be zero.", *version)
-	}
-}
-
-func TestVersionIsZeroMajorFalse(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
-	if version.IsZero() {
-		test.Errorf("Version: '%+v' is evaluated to be zero.", *version)
-	}
-}
-
-func TestVersionIsZeroMinorFalse(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(0, 1, 0)
-	if version.IsZero() {
-		test.Errorf("Version: '%+v' is evaluated to be zero.", *version)
-	}
-}
-
-func TestVersionIsZeroPatchFalse(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(0, 0, 1)
-	if version.IsZero() {
-		test.Errorf("Version: '%+v' is evaluated to be zero.", *version)
-	}
-}
-
-func TestVersionIsPublic(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
-	var result bool = version.IsPublic()
-	if !result {
-		test.Errorf("Version is less than the compare value. Got: %t. Expected: %t", result, true)
-	}
-}
-
-func TestVersionIsPublicFailure(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(0, 1, 0)
-	var result bool = version.IsPublic()
-	if result {
-		test.Errorf("Version is less than the compare value. Got: %t. Expected: %t", result, false)
-	}
-}
-
-func TestVersionPublish(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(0, 0, 0)
-	var result *gopolutils.Exception = version.Publish()
-	if result != nil {
-		test.Errorf("Version publish returned a non nil exception. Got: %+v. Expected: %+v", result, nil)
-	}
-}
-
-func TestVersionPublishAlredyPublic(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.VersionConvert(1, 0, 0)
-	var result *gopolutils.Exception = version.Publish()
-	if result == nil {
-		test.Errorf("Version publish returned a nil exception. Got: %+v. Expected: %+v", result, nil)
-	}
-}
-
-func TestVersionRelease(test *testing.T) {
+func TestSetters(t *testing.T) {
 	var version *gopolutils.Version = gopolutils.NewVersion()
+
+	version.SetName("Example")
+	version.SetDescription("Testing")
+	version.SetMajor(5)
+	version.SetMinor(6)
+	version.SetPatch(7)
+
+	if version.Name() != "Example" {
+		t.Errorf("Unexpected name")
+	} else if version.Description() != "Testing" {
+		t.Errorf("Unexpected description")
+	} else if version.Major() != 5 {
+		t.Errorf("Unexpected major")
+	} else if version.Minor() != 6 {
+		t.Errorf("Unexpected minor")
+	} else if version.Patch() != 7 {
+		t.Errorf("Unexpected patch")
+	}
+}
+
+func TestCompareMajor(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(3, 0, 0)
+
+	if !version.CompareMajor(3) {
+		t.Error("Expected CompareMajor(3) to be true")
+	} else if !version.CompareMajor(2) {
+		t.Error("Expected CompareMajor(2) to be true")
+	} else if version.CompareMajor(4) {
+		t.Error("Expected CompareMajor(4) to be false")
+	}
+}
+
+func TestCompareMinor(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(0, 4, 0)
+
+	if !version.CompareMinor(4) {
+		t.Error("Expected CompareMinor(4)")
+	} else if !version.CompareMinor(2) {
+		t.Error("Expected CompareMinor(2)")
+	} else if version.CompareMinor(5) {
+		t.Error("Expected CompareMinor(5) to be false")
+	}
+}
+
+func TestComparePatch(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(0, 0, 8)
+
+	if !version.ComparePatch(8) {
+		t.Error("Expected ComparePatch(8)")
+	} else if !version.ComparePatch(2) {
+		t.Error("Expected ComparePatch(2)")
+	} else if version.ComparePatch(9) {
+		t.Error("Expected ComparePatch(9) to be false")
+	}
+}
+
+func TestCompare(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(2, 5, 7)
+
+	if !version.Compare(*gopolutils.VersionConvert(2, 5, 7)) {
+		t.Error("Expected equal versions")
+	} else if !version.Compare(*gopolutils.VersionConvert(1, 4, 6)) {
+		t.Error("Expected comparison to succeed")
+	} else if version.Compare(*gopolutils.VersionConvert(3, 0, 0)) {
+		t.Error("Expected comparison to fail")
+	} else if version.Compare(*gopolutils.VersionConvert(2, 6, 0)) {
+		t.Error("Expected comparison to fail")
+	} else if version.Compare(*gopolutils.VersionConvert(2, 5, 8)) {
+		t.Error("Expected comparison to fail")
+	}
+}
+
+func TestIsZero(t *testing.T) {
+	if !gopolutils.NewVersion().IsZero() {
+		t.Error("Expected zero version")
+	} else if gopolutils.VersionConvert(0, 0, 1).IsZero() {
+		t.Error("Expected non-zero version")
+	}
+}
+
+func TestIsPublic(t *testing.T) {
+	if gopolutils.VersionConvert(0, 5, 0).IsPublic() {
+		t.Error("Expected private version")
+	} else if !gopolutils.VersionConvert(1, 0, 0).IsPublic() {
+		t.Error("Expected public version")
+	}
+}
+
+func TestPublish(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(0, 5, 7)
+
+	var except *gopolutils.Exception = version.Publish()
+	if except != nil {
+		t.Fatalf("unexpected error: %v", except)
+	} else if version.Major() != 1 {
+		t.Errorf("Expected major 1")
+	} else if version.Minor() != 0 {
+		t.Errorf("Expected minor 0")
+	} else if version.Patch() != 0 {
+		t.Errorf("Expected patch 0")
+	}
+}
+
+func TestPublishAlreadyPublic(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(1, 2, 3)
+
+	var except *gopolutils.Exception = version.Publish()
+
+	if except == nil {
+		t.Fatal("Expected error")
+	} else if version.Major() != 1 || version.Minor() != 2 || version.Patch() != 3 {
+		t.Error("version should not have changed")
+	}
+}
+
+func TestRelease(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(1, 5, 8)
+
 	version.Release()
-	if version.Major() != 1 {
-		test.Errorf("Version release did not increment correctly. Got: %d, Expected: %d.", version.Major(), 1)
+	if version.Major() != 2 {
+		t.Errorf("Expected major 2")
+	} else if version.Minor() != 0 {
+		t.Errorf("Expected minor 0")
+	} else if version.Patch() != 0 {
+		t.Errorf("Expected patch 0")
 	}
 }
 
-func TestVersionUpdate(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.NewVersion()
+func TestUpdate(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(2, 5, 8)
+
 	version.Update()
-	if version.Minor() != 1 {
-		test.Errorf("Version update did not increment correctly. Got: %d, Expected: %d.", version.Minor(), 1)
+
+	if version.Major() != 2 {
+		t.Errorf("major should not change")
+	} else if version.Minor() != 6 {
+		t.Errorf("Expected minor 6")
+	} else if version.Patch() != 0 {
+		t.Errorf("Expected patch 0")
 	}
 }
 
-func TestVersionFix(test *testing.T) {
-	var version *gopolutils.Version = gopolutils.NewVersion()
+func TestFix(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(2, 3, 4)
+
 	version.Fix()
-	if version.Patch() != 1 {
-		test.Errorf("Version release did not increment correctly. Got: %d, Expected: %d.", version.Patch(), 1)
+
+	if version.Major() != 2 {
+		t.Errorf("major should not change")
+	} else if version.Minor() != 3 {
+		t.Errorf("minor should not change")
+	} else if version.Patch() != 5 {
+		t.Errorf("Expected patch 5")
+	}
+}
+
+type stringTest struct {
+	name     string
+	version  *gopolutils.Version
+	expected string
+}
+
+func TestString(t *testing.T) {
+	var tests []stringTest = []stringTest{
+		{
+			name:     "numbers only",
+			version:  gopolutils.VersionConvert(1, 2, 3),
+			expected: "1.2.3",
+		},
+		{
+			name:     "description only",
+			version:  gopolutils.NewFullVersion("", "beta", 1, 2, 3),
+			expected: "1.2.3 - beta",
+		},
+		{
+			name:     "name only",
+			version:  gopolutils.NewFullVersion("App", "", 1, 2, 3),
+			expected: "App: 1.2.3",
+		},
+		{
+			name:     "name and description",
+			version:  gopolutils.NewFullVersion("App", "beta", 1, 2, 3),
+			expected: "App: 1.2.3 - beta",
+		},
+	}
+
+	var i int
+	for i = range tests {
+		var test stringTest = tests[i]
+		var result string = test.version.String()
+		if result != test.expected {
+			t.Errorf("%s: Expected %q, got %q", test.name, test.expected, result)
+		}
+	}
+}
+
+func TestNumberString(t *testing.T) {
+	var version *gopolutils.Version = gopolutils.VersionConvert(7, 8, 9)
+
+	if version.NumberString() != "7.8.9" {
+		t.Errorf("Expected 7.8.9, got %q", version.NumberString())
 	}
 }
