@@ -240,7 +240,7 @@ func TestMapCollect(t *testing.T) {
 	var i int
 	for i = range pairs {
 		var pair collections.Pair[string, int] = pairs[i]
-		found[*pair.First()] = *pair.Second()
+		found[pair.First()] = pair.Second()
 	}
 
 	if found["a"] != 1 || found["b"] != 2 || found["c"] != 3 {
