@@ -1,232 +1,395 @@
 package tests
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
-func TestStackConstructNotNil(test *testing.T) {
-	var nilStack *collections.Stack[int] = collections.NewStack[int]()
-	if nilStack == nil {
-		test.Errorf("Stack constructor returned nil.\n")
+func TestNewStack(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	if stack == nil {
+		t.Fatal("expected stack")
+	} else if !stack.IsEmpty() {
+		t.Fatal("new stack should be empty")
+	} else if stack.Size() != 0 {
+		t.Fatalf("expected size 0, got %d", stack.Size())
 	}
 }
 
-func TestStackAppendSuccess(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	if !collections.In(mock, 1) {
-		test.Errorf("Can not find '%d' in stack '%+v'\n", 1, *mock)
+func TestStackAppend(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+	stack.Append(2)
+	stack.Append(3)
+
+	if stack.Size() != 3 {
+		t.Fatalf("expected size 3, got %d", stack.Size())
+	}
+
+	var expected []int = []int{1, 2, 3}
+	var i int
+	for i = range expected {
+		var value int = expected[i]
+		var item *int
+		var exception *gopolutils.Exception
+		item, exception = stack.At(gopolutils.Size(i))
+
+		if exception != nil {
+			t.Fatal(exception)
+		} else if *item != value {
+			t.Fatalf("expected %d, got %d", value, *item)
+		}
 	}
 }
 
-func TestStackAppendFail(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	if collections.In(mock, 10) {
-		test.Errorf("Can not find '%d' in stack '%+v'\n", 10, *mock)
+func TestStackExtend(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	var values *collections.Array[int] = collections.NewArray[int]()
+	values.Append(1)
+	values.Append(2)
+	values.Append(3)
+
+	stack.Extend(values)
+
+	if stack.Size() != 3 {
+		t.Fatalf("expected size 3, got %d", stack.Size())
 	}
 }
 
-func TestStackAtSuccess(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestStackAt(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(42)
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.At(1)
-	if *item != 1 || except != nil {
-		test.Errorf("Can not find '%d' in stack '%+v'. %s\n", 1, *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = stack.At(0)
+	if exception != nil {
+		t.Fatal(exception)
+	} else if *item != 42 {
+		t.Fatalf("expected 42, got %d", *item)
 	}
 }
 
-func TestStackAtFail(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestStackAtEmpty(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.At(20)
-	if except == nil {
-		test.Errorf("Except at index '%d' is nil in stack '%+v' with value '%d'.\n", 20, *mock, *item)
+	var exception *gopolutils.Exception
+	item, exception = stack.At(0)
+	if exception == nil {
+		t.Fatal("expected exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
 	}
 }
 
-func TestStackUpdateSuccess(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var except *gopolutils.Exception = mock.Update(0, 3)
+func TestStackAtOutOfRange(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+
 	var item *int
-	var exceptAt *gopolutils.Exception
-	item, exceptAt = mock.At(0)
-	if except != nil || exceptAt != nil || *item != 3 {
-		test.Errorf("Can not find '%d' in stack '%+v'. %s\n", 1, *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = stack.At(2)
+	if exception == nil {
+		t.Fatal("expected exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
 	}
 }
 
-func TestStackUpdateFail(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	var except *gopolutils.Exception = mock.Update(0, 3)
-	var exceptAt *gopolutils.Exception
-	_, exceptAt = mock.At(0)
-	if except == nil || exceptAt == nil {
-		test.Errorf("Can not find '%d' in stack '%+v'. %s\n", 1, *mock, except.Error())
-	}
-}
+func TestStackUpdate(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
 
-func TestStackPopSuccess(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+	stack.Append(1)
+
+	var exception *gopolutils.Exception = stack.Update(0, 100)
+	if exception != nil {
+		t.Fatal(exception)
+	}
+
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Pop()
-	if *item != 2 || except != nil || collections.In(mock, 2) {
-		test.Errorf("Did not pop stack '%+v' correctly. %s\n", *mock, except.Error())
+	item, exception = stack.At(0)
+	if exception != nil {
+		t.Fatal(exception)
+	} else if *item != 100 {
+		t.Fatalf("expected 100, got %d", *item)
 	}
 }
 
-func TestStackPopFail(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	var except *gopolutils.Exception
-	_, except = mock.Pop()
-	if except == nil || collections.In(mock, 2) {
-		test.Errorf("Item is evaluated in popped stack '%+v'.\n", *mock)
+func TestStackUpdateEmpty(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	if stack.Update(0, 1) == nil {
+		t.Fatal("expected exception")
 	}
 }
 
-func TestStackPopRemoves(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestStackUpdateOutOfRange(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+
+	if stack.Update(2, 5) == nil {
+		t.Fatal("expected exception")
+	}
+}
+
+func TestStackRemove(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+	stack.Append(2)
+	stack.Append(3)
+	var exception *gopolutils.Exception = stack.Remove(1)
+	if exception != nil {
+		t.Fatal(exception)
+	}
+
+	var expected []int = []int{1, 3}
+
+	if stack.Size() != 2 {
+		t.Fatalf("expected size 2, got %d", stack.Size())
+	}
+	var i int
+	for i = range expected {
+		var value int = expected[i]
+		var item *int
+		var exception *gopolutils.Exception
+		item, exception = stack.At(gopolutils.Size(i))
+		if exception != nil {
+			t.Fatal(exception)
+		} else if *item != value {
+			t.Fatalf("expected %d, got %d", value, *item)
+		}
+	}
+}
+
+func TestStackRemoveEmpty(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	if stack.Remove(0) == nil {
+		t.Fatal("expected exception")
+	}
+}
+
+func TestStackRemoveOutOfRange(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+
+	if stack.Remove(2) == nil {
+		t.Fatal("expected exception")
+	}
+}
+
+func TestPop(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+	stack.Append(2)
+	stack.Append(3)
+
+	var expected []int = []int{3, 2, 1}
+	var i int
+	for i = range expected {
+		var value int = expected[i]
+		var item *int
+		var exception *gopolutils.Exception
+		item, exception = stack.Pop()
+
+		if exception != nil {
+			t.Fatal(exception)
+		} else if *item != value {
+			t.Fatalf("expected %d, got %d", value, *item)
+		}
+	}
+
+	if !stack.IsEmpty() {
+		t.Fatal("expected empty stack")
+	}
+}
+
+func TestPopEmpty(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Pop()
-	if *item != 2 || except != nil || collections.In(mock, 2) {
-		test.Errorf("Did not pop from stack '%+v' correctly. %s\n", *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = stack.Pop()
+	if exception == nil {
+		t.Fatal("expected exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
 	}
 }
 
-func TestStackPeekSuccess(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestStackPeek(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(10)
+	stack.Append(20)
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Peek()
-	if *item != 2 || except != nil || !collections.In(mock, 2) {
-		test.Errorf("Did not peek stack '%+v' correctly. %s\n", *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = stack.Peek()
+
+	if exception != nil {
+		t.Fatal(exception)
+	} else if *item != 20 {
+		t.Fatalf("expected 20, got %d", *item)
+	} else if stack.Size() != 2 {
+		t.Fatal("peek should not modify stack")
 	}
 }
 
-func TestStackPeekFail(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	var except *gopolutils.Exception
-	_, except = mock.Peek()
-	if except == nil || collections.In(mock, 2) {
-		test.Errorf("Item is evaluated in peeked stack '%+v'.\n", *mock)
-	}
-}
+func TestStackPeekEmpty(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
 
-func TestStackPeekDoesNotRemove(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Peek()
-	if *item != 2 || except != nil || !collections.In(mock, 2) {
-		test.Errorf("Did not peek stack '%+v' correctly. %s\n", *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = stack.Peek()
+	if exception == nil {
+		t.Fatal("expected exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
 	}
 }
 
-func TestStackCollectSuccess(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var expect []int = []int{0, 1, 2}
-	var result []int = mock.Collect()
-	if !reflect.DeepEqual(result, expect) {
-		test.Errorf("Stack collect was not retuned correctly: '%+v'.\n", *mock)
+func TestStackItems(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+	stack.Append(2)
+
+	var items *[]int = stack.Items()
+
+	(*items)[0] = 42
+	var item *int
+	var exception *gopolutils.Exception
+	item, exception = stack.At(0)
+	if exception != nil {
+		t.Fatal(exception)
+	} else if *item != 42 {
+		t.Fatal("expected modification through Items()")
 	}
 }
 
-func TestStackCollectFail(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var expect []int = []int{1, 2, 3}
-	var result []int = mock.Collect()
-	if reflect.DeepEqual(result, expect) {
-		test.Errorf("Stack collect was not retuned correctly: '%+v'.\n", *mock)
+func TestStackCollect(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+	stack.Append(2)
+
+	var values []int = stack.Collect()
+
+	if len(values) != 2 {
+		t.Fatal("unexpected length")
+	} else if values[0] != 1 || values[1] != 2 {
+		t.Fatal("unexpected values")
 	}
 }
 
-func TestStackSizeSuccess(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var size gopolutils.Size = mock.Size()
-	if size != 3 {
-		test.Errorf("Stack size was not retuned correctly: '%d'.\n", size)
+func TestStackIterator(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+	stack.Append(2)
+	stack.Append(3)
+
+	var count int = 0
+
+	stack.Iterator().ForEach(func(int) {
+		count++
+	})
+
+	if count != 3 {
+		t.Fatalf("expected 3 elements, got %d", count)
 	}
 }
 
-func TestStackSizeFail(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	mock.Append(4)
-	var size gopolutils.Size = mock.Size()
-	if size == 3 {
-		test.Errorf("Stack size was not retuned correctly: '%d'.\n", size)
+func TestStackSize(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+	var i int
+	for i = range 10 {
+		stack.Append(i)
+	}
+
+	if stack.Size() != 10 {
+		t.Fatalf("expected size 10, got %d", stack.Size())
 	}
 }
 
-func TestStackIsEmptySuccess(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var result bool = mock.IsEmpty()
-	if result {
-		test.Errorf("Stack is empty was not retuned correctly: '%t'.\n", result)
+func TestStackIsEmpty(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	if !stack.IsEmpty() {
+		t.Fatal("expected empty stack")
+	}
+
+	stack.Append(1)
+
+	if stack.IsEmpty() {
+		t.Fatal("expected non-empty stack")
 	}
 }
 
-func TestStackIsEmptyFail(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	var result bool = mock.IsEmpty()
-	if !result {
-		test.Errorf("Stack is empty was not retuned correctly: '%t'.\n", result)
+func TestStackAppendAfterPop(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+	stack.Append(2)
+
+	stack.Pop()
+	stack.Append(3)
+
+	var expected []int = []int{1, 3}
+	var i int
+	for i = range expected {
+		var value int = expected[i]
+		var item *int
+		var exception *gopolutils.Exception
+		item, exception = stack.At(gopolutils.Size(i))
+		if exception != nil {
+			t.Fatal(exception)
+		} else if *item != value {
+			t.Fatalf("expected %d, got %d", value, *item)
+		}
 	}
 }
 
-func TestStackItemsIsNotNil(test *testing.T) {
-	var mock *collections.Stack[int] = collections.NewStack[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	if mock.Items() == nil {
-		test.Errorf("Stack items are nil.\n")
+func TestStackAtIndexEqualsSize(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+
+	stack.Append(1)
+
+	var item *int
+	var exception *gopolutils.Exception
+	item, exception = stack.At(stack.Size())
+	if exception == nil {
+		t.Fatal("expected out of range exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
+	}
+}
+
+func TestStackUpdateIndexEqualsSize(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+	stack.Append(1)
+
+	if stack.Update(stack.Size(), 42) == nil {
+		t.Fatal("expected out of range exception")
+	}
+}
+
+func TestStackRemoveIndexEqualsSize(t *testing.T) {
+	var stack *collections.Stack[int] = collections.NewStack[int]()
+	stack.Append(1)
+
+	if stack.Remove(stack.Size()) == nil {
+		t.Fatal("expected out of range exception")
 	}
 }
