@@ -30,7 +30,9 @@ func (array *Array[Type]) Append(item Type) {
 
 // Append multiple items to the array.
 func (array *Array[Type]) Extend(items View[Type]) {
-	for _, item := range items.Collect() {
+	var i int
+	for i = range items.Collect() {
+		var item Type = items.Collect()[i]
 		array.Append(item)
 	}
 }
@@ -42,7 +44,7 @@ func (array *Array[Type]) Extend(items View[Type]) {
 func (array Array[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	if array.IsEmpty() {
 		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty array at index %d.", index)
-	} else if index > array.size {
+	} else if index >= array.size {
 		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access array of size %d at index %d.", array.size, index)
 	}
 	return &array.items[index], nil
@@ -55,7 +57,7 @@ func (array Array[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception
 func (array *Array[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	if array.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty array at index %d.", index)
-	} else if index > array.size {
+	} else if index >= array.size {
 		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access array of size %d at index %d.", array.size, index)
 	}
 	array.items[index] = value
@@ -69,7 +71,7 @@ func (array *Array[Type]) Update(index gopolutils.Size, value Type) *gopolutils.
 func (array *Array[Type]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	if array.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty array at index %d.", index)
-	} else if index > array.size {
+	} else if index >= array.size {
 		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not remove element of array of size %d at index %d.", array.size, index)
 	}
 	array.items = append(array.items[:index], array.items[index+1:]...)
