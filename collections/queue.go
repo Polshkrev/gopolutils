@@ -28,8 +28,9 @@ func (queue *Queue[Type]) Append(item Type) {
 
 // Append multiple items to the queue.
 func (queue *Queue[Type]) Extend(items View[Type]) {
-	var item Type
-	for _, item = range items.Collect() {
+	var i int
+	for i = range items.Collect() {
+		var item Type = items.Collect()[i]
 		queue.Append(item)
 	}
 }
@@ -41,7 +42,7 @@ func (queue *Queue[Type]) Extend(items View[Type]) {
 func (queue Queue[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	if queue.IsEmpty() {
 		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty queue at index %d.", index)
-	} else if index > queue.size {
+	} else if index >= queue.size {
 		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access queue of size %d at index %d.", queue.size, index)
 	}
 	return &queue.items[index], nil
@@ -54,7 +55,7 @@ func (queue Queue[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception
 func (queue *Queue[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	if queue.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty queue at index %d.", index)
-	} else if index > queue.size {
+	} else if index >= queue.size {
 		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access queue of size %d at index %d.", queue.size, index)
 	}
 	queue.items[index] = value
@@ -68,7 +69,7 @@ func (queue *Queue[Type]) Update(index gopolutils.Size, value Type) *gopolutils.
 func (queue *Queue[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	if queue.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty queue at index %d.", index)
-	} else if index > queue.size {
+	} else if index >= queue.size {
 		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not remove element of queue of size %d at index %d.", queue.size, index)
 	}
 	queue.items = append(queue.items[:index], queue.items[index+1:]...)
