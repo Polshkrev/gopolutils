@@ -30,8 +30,9 @@ func (stack *Stack[Type]) Append(item Type) {
 
 // Append multiple items to the stack.
 func (stack *Stack[Type]) Extend(items View[Type]) {
-	var item Type
-	for _, item = range items.Collect() {
+	var i int
+	for i = range items.Collect() {
+		var item Type = items.Collect()[i]
 		stack.Append(item)
 	}
 }
@@ -43,7 +44,7 @@ func (stack *Stack[Type]) Extend(items View[Type]) {
 func (stack Stack[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception) {
 	if stack.IsEmpty() {
 		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty stack at index %d.", index)
-	} else if index > stack.size {
+	} else if index >= stack.size {
 		return nil, gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access stack of size %d at index %d.", stack.size, index)
 	}
 	return &stack.items[index], nil
@@ -56,7 +57,7 @@ func (stack Stack[Type]) At(index gopolutils.Size) (*Type, *gopolutils.Exception
 func (stack *Stack[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exception {
 	if stack.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty stack at index %d.", index)
-	} else if index > stack.size {
+	} else if index >= stack.size {
 		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access stack of size %d at index %d.", stack.size, index)
 	}
 	stack.items[index] = value
@@ -70,7 +71,7 @@ func (stack *Stack[Type]) Update(index gopolutils.Size, value Type) *gopolutils.
 func (stack *Stack[_]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	if stack.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not remove from an empty stack at index %d.", index)
-	} else if index > stack.size {
+	} else if index >= stack.size {
 		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not remove element of stack of size %d at index %d.", stack.size, index)
 	}
 	stack.items = append(stack.items[:index], stack.items[index+1:]...)
