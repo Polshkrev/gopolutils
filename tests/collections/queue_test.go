@@ -1,235 +1,418 @@
 package tests
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/Polshkrev/gopolutils"
 	"github.com/Polshkrev/gopolutils/collections"
 )
 
-func TestQueueConstructNotNil(test *testing.T) {
-	var nilQueue *collections.Queue[int] = collections.NewQueue[int]()
-	if nilQueue == nil {
-		test.Errorf("Queue constructor returned nil.\n")
+func TestNewQueue(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	if queue == nil {
+		t.Fatal("expected queue")
+	} else if !queue.IsEmpty() {
+		t.Fatal("new queue should be empty")
+	} else if queue.Size() != 0 {
+		t.Fatalf("expected size 0, got %d", queue.Size())
 	}
 }
 
-func TestQueueAppendSuccess(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	if !collections.In(mock, 1) {
-		test.Errorf("Can not find '%d' in queue '%+v'\n", 1, *mock)
+func TestQueueAppend(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+	queue.Append(2)
+	queue.Append(3)
+
+	if queue.Size() != 3 {
+		t.Fatalf("expected size 3, got %d", queue.Size())
+	}
+
+	var expected []int = []int{1, 2, 3}
+	var i, value int
+	for i, value = range expected {
+		var item *int
+		var exception *gopolutils.Exception
+		item, exception = queue.At(gopolutils.Size(i))
+
+		if exception != nil {
+			t.Fatal(exception)
+		} else if *item != value {
+			t.Fatalf("expected %d, got %d", value, *item)
+		}
 	}
 }
 
-func TestQueueAppendFail(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	if collections.In(mock, 10) {
-		test.Errorf("Can not find '%d' in queue '%+v'\n", 10, *mock)
+func TestQueueExtend(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	var values *collections.Array[int] = collections.NewArray[int]()
+	values.Append(1)
+	values.Append(2)
+	values.Append(3)
+
+	queue.Extend(values)
+
+	if queue.Size() != 3 {
+		t.Fatalf("expected size 3, got %d", queue.Size())
+	}
+
+	var expected []int = []int{1, 2, 3}
+	var i, value int
+	for i, value = range expected {
+		var item *int
+		var exception *gopolutils.Exception
+		item, exception = queue.At(gopolutils.Size(i))
+		if exception != nil {
+			t.Fatal(exception)
+		} else if *item != value {
+			t.Fatalf("expected %d, got %d", value, *item)
+		}
 	}
 }
 
-func TestQueueAtSuccess(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestQueueAt(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(42)
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.At(1)
-	if *item != 1 || except != nil {
-		test.Errorf("Can not find '%d' in queue '%+v'. %s\n", 1, *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = queue.At(0)
+
+	if exception != nil {
+		t.Fatal(exception)
+	} else if *item != 42 {
+		t.Fatalf("expected 42, got %d", *item)
 	}
 }
 
-func TestQueueAtFail(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestQueueAtEmpty(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.At(20)
-	if except == nil {
-		test.Errorf("Except at index '%d' is nil in queue '%+v' with value '%d'.\n", 20, *mock, *item)
+	var exception *gopolutils.Exception
+	item, exception = queue.At(0)
+
+	if exception == nil {
+		t.Fatal("expected exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
 	}
 }
 
-func TestQueueUpdateSuccess(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var except *gopolutils.Exception = mock.Update(0, 3)
+func TestQueueAtOutOfRange(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+
 	var item *int
-	var exceptAt *gopolutils.Exception
-	item, exceptAt = mock.At(0)
-	if except != nil || exceptAt != nil || *item != 3 {
-		test.Errorf("Can not find '%d' in queue '%+v'. %s\n", 1, *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = queue.At(2)
+
+	if exception == nil {
+		t.Fatal("expected exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
 	}
 }
 
-func TestQueueUpdateFail(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	var except *gopolutils.Exception = mock.Update(0, 3)
-	var exceptAt *gopolutils.Exception
-	_, exceptAt = mock.At(0)
-	if except == nil || exceptAt == nil {
-		test.Errorf("Can not find '%d' in queue '%+v'. %s\n", 1, *mock, except.Error())
-	}
-}
+func TestQueueUpdate(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
 
-func TestQueueDequeueSuccess(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+	queue.Append(1)
+
+	var exception *gopolutils.Exception = queue.Update(0, 100)
+	if exception != nil {
+		t.Fatal(exception)
+	}
+
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Dequeue()
-	if *item != 0 || except != nil {
-		test.Errorf("Can not dequeue queue '%+v'. %s\n", *mock, except.Error())
+	item, exception = queue.At(0)
+	if exception != nil {
+		t.Fatalf("unexpected exception: %s", exception.Error())
+	} else if *item != 100 {
+		t.Fatalf("expected 100, got %d", *item)
 	}
 }
 
-func TestQueueDequeueFail(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	var except *gopolutils.Exception
-	_, except = mock.Dequeue()
-	if except == nil {
-		test.Errorf("Item is evaluated in dequeued queue '%+v'.\n", *mock)
+func TestQueueUpdateEmpty(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	if queue.Update(0, 1) == nil {
+		t.Fatal("expected exception")
 	}
 }
 
-func TestQueueDequeueRemoves(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestQueueUpdateOutOfRange(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+
+	if queue.Update(2, 5) == nil {
+		t.Fatal("expected exception")
+	}
+
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Dequeue()
-	if *item != 0 || except != nil || collections.In(mock, 0) {
-		test.Errorf("Did not dequeue queue '%+v' correctly. %s\n", *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = queue.At(0)
+	if exception != nil {
+		t.Fatal(exception)
+	} else if *item != 1 {
+		t.Fatal("queue should not have been modified")
 	}
 }
 
-func TestQueuePeekSuccess(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestQueueRemove(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+	queue.Append(2)
+	queue.Append(3)
+
+	var exception *gopolutils.Exception = queue.Remove(1)
+	if exception != nil {
+		t.Fatal(exception)
+	}
+
+	var expected []int = []int{1, 3}
+
+	if queue.Size() != 2 {
+		t.Fatalf("expected size 2, got %d", queue.Size())
+	}
+	var i, value int
+	for i, value = range expected {
+
+		var item *int
+		item, exception = queue.At(gopolutils.Size(i))
+
+		if *item != value {
+			t.Fatalf("expected %d, got %d", value, *item)
+		}
+	}
+}
+
+func TestQueueRemoveEmpty(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	if queue.Remove(0) == nil {
+		t.Fatal("expected exception")
+	}
+}
+
+func TestQueueRemoveOutOfRange(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+
+	if queue.Remove(2) == nil {
+		t.Fatal("expected exception")
+	} else if queue.Size() != 1 {
+		t.Fatal("queue should not have been modified")
+	}
+}
+
+func TestDequeue(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+	queue.Append(2)
+	queue.Append(3)
+
+	var expected []int = []int{1, 2, 3}
+	var i int
+	for i = range expected {
+		var value int = expected[i]
+
+		var item *int
+		var exception *gopolutils.Exception
+		item, exception = queue.Dequeue()
+		if exception != nil {
+			t.Fatal(exception)
+		} else if *item != value {
+			t.Fatalf("expected %d, got %d", value, *item)
+		}
+	}
+
+	if !queue.IsEmpty() {
+		t.Fatal("expected empty queue")
+	}
+}
+
+func TestDequeueEmpty(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Peek()
-	if *item != 0 || except != nil {
-		test.Errorf("Did not peek queue '%+v' correctly. %s\n", *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = queue.Dequeue()
+
+	if exception == nil {
+		t.Fatal("expected exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
 	}
 }
 
-func TestQueuePeekFail(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestQueuePeek(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(10)
+	queue.Append(20)
+
 	var item *int
-	item, _ = mock.Peek()
-	if *item != 0 {
-		test.Errorf("Item is evaluated in peeked queue '%+v' with value '%d'.\n", *mock, *item)
+	var exception *gopolutils.Exception
+	item, exception = queue.Peek()
+	if exception != nil {
+		t.Fatal(exception)
+	} else if *item != 10 {
+		t.Fatalf("expected 10, got %d", *item)
+	} else if queue.Size() != 2 {
+		t.Fatal("peek should not remove element")
 	}
 }
 
-func TestQueuePeekDoesNotRemove(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
+func TestQueuePeekEmpty(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
 	var item *int
-	var except *gopolutils.Exception
-	item, except = mock.Peek()
-	if *item != 0 || except != nil || !collections.In(mock, 0) {
-		test.Errorf("Did not peek queue '%+v' correctly. %s\n", *mock, except.Error())
+	var exception *gopolutils.Exception
+	item, exception = queue.Peek()
+	if exception == nil {
+		t.Fatal("expected exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
 	}
 }
 
-func TestQueueCollectSuccess(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var expect []int = []int{0, 1, 2}
-	var result []int = mock.Collect()
-	if !reflect.DeepEqual(result, expect) {
-		test.Errorf("Queue collect was not retuned correctly: '%+v'.\n", *mock)
+func TestQueueItems(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+	queue.Append(2)
+
+	var items *[]int = queue.Items()
+
+	(*items)[0] = 42
+	var item *int
+	var exception *gopolutils.Exception
+	item, exception = queue.At(0)
+	if exception != nil {
+		t.Fatal(exception)
+	} else if *item != 42 {
+		t.Fatal("expected modification through Items()")
 	}
 }
 
-func TestQueueCollectFail(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var expect []int = []int{1, 2, 3}
-	var result []int = mock.Collect()
-	if reflect.DeepEqual(result, expect) {
-		test.Errorf("Queue collect was not retuned correctly: '%+v'.\n", *mock)
+func TestQueueCollect(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+	queue.Append(2)
+
+	var values []int = queue.Collect()
+
+	if len(values) != 2 {
+		t.Fatal("unexpected length")
+	} else if values[0] != 1 || values[1] != 2 {
+		t.Fatal("unexpected values")
 	}
 }
 
-func TestQueueSizeSuccess(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var size gopolutils.Size = mock.Size()
-	if size != 3 {
-		test.Errorf("Queue size was not retuned correctly: '%d'.\n", size)
+func TestQueueIterator(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+	queue.Append(2)
+	queue.Append(3)
+
+	var count int = 0
+
+	queue.Iterator().ForEach(func(value int) {
+		count++
+	})
+
+	if count != 3 {
+		t.Fatalf("expected 3 elements, got %d", count)
 	}
 }
 
-func TestQueueSizeFail(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	mock.Append(4)
-	var size gopolutils.Size = mock.Size()
-	if size == 3 {
-		test.Errorf("Queue size was not retuned correctly: '%d'.\n", size)
+func TestQueueSize(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+	var i int
+	for i = range 10 {
+		queue.Append(i)
+	}
+
+	if queue.Size() != 10 {
+		t.Fatalf("expected size 10, got %d", queue.Size())
 	}
 }
 
-func TestQueueIsEmptySuccess(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	var result bool = mock.IsEmpty()
-	if result {
-		test.Errorf("Queue is empty was not retuned correctly: '%t'.\n", result)
+func TestQueueIsEmpty(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	if !queue.IsEmpty() {
+		t.Fatal("expected empty queue")
+	}
+
+	queue.Append(1)
+
+	if queue.IsEmpty() {
+		t.Fatal("expected non-empty queue")
 	}
 }
 
-func TestQueueIsEmptyFail(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	var result bool = mock.IsEmpty()
-	if !result {
-		test.Errorf("Queue is empty was not retuned correctly: '%t'.\n", result)
+func TestAppendAfterDequeue(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+	queue.Append(2)
+
+	queue.Dequeue()
+	queue.Append(3)
+
+	var expected []int = []int{2, 3}
+	var i, value int
+	for i, value = range expected {
+		var item *int
+		var exception *gopolutils.Exception
+		item, exception = queue.At(gopolutils.Size(i))
+		if exception != nil {
+			t.Fatal(exception)
+		} else if *item != value {
+			t.Fatalf("expected %d, got %d", value, *item)
+		}
 	}
 }
 
-func TestQueueItemsIsNotNil(test *testing.T) {
-	var mock *collections.Queue[int] = collections.NewQueue[int]()
-	mock.Append(0)
-	mock.Append(1)
-	mock.Append(2)
-	if mock.Items() == nil {
-		test.Errorf("Queue items are nil.\n")
+func TestQueueAtIndexEqualsSize(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+
+	queue.Append(1)
+
+	var item *int
+	var exception *gopolutils.Exception
+	item, exception = queue.At(queue.Size())
+	if exception == nil {
+		t.Fatal("expected out of range exception")
+	} else if item != nil {
+		t.Fatal("expected nil item")
+	}
+}
+
+func TestQueueUpdateIndexEqualsSize(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+	queue.Append(1)
+
+	if queue.Update(queue.Size(), 5) == nil {
+		t.Fatal("expected out of range exception")
+	}
+}
+
+func TestQueueRemoveIndexEqualsSize(t *testing.T) {
+	var queue *collections.Queue[int] = collections.NewQueue[int]()
+	queue.Append(1)
+
+	if queue.Remove(queue.Size()) == nil {
+		t.Fatal("expected out of range exception")
 	}
 }
