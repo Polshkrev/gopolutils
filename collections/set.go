@@ -10,6 +10,7 @@ import (
 
 var _ Collection[any] = (*Set[any])(nil)
 var _ Iterable[any] = (*Set[any])(nil)
+var _ Wrapper[any] = (*Set[any])(nil)
 
 // Implementation of a set.
 type Set[Type comparable] struct {
@@ -40,8 +41,9 @@ func (set *Set[Type]) Append(item Type) {
 // Append multiple items to the set.
 // If the set can not insert the item, this is a critical error that should not happen in most cicumstances, so — as a precaution — an error is printed to standard error and the programme exists.
 func (set *Set[Type]) Extend(items View[Type]) {
-	var item Type
-	for _, item = range items.Collect() {
+	var i int
+	for i = range items.Collect() {
+		var item Type = items.Collect()[i]
 		set.Append(item)
 	}
 }
@@ -71,7 +73,7 @@ func (set *Set[Type]) Update(index gopolutils.Size, value Type) *gopolutils.Exce
 func (set *Set[Type]) Remove(index gopolutils.Size) *gopolutils.Exception {
 	if set.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty set.")
-	} else if index > set.Size() {
+	} else if index >= set.Size() {
 		return gopolutils.NewNamedException(gopolutils.OutOfRangeError, "Can not access set of size %d at index %d.", set.Size(), index)
 	}
 	var i gopolutils.Size
@@ -129,8 +131,9 @@ func (set Set[Type]) Items() *[]Type {
 // Returns a pointer to a new set that contains all the unique items that were contained within operand but not the original set.
 func (set Set[Type]) Difference(other Set[Type]) *Set[Type] {
 	var new *Set[Type] = NewSet[Type]()
-	var item Type
-	for _, item = range other.Collect() {
+	var i int
+	for i = range other.Collect() {
+		var item Type = other.Collect()[i]
 		if set.Contains(item) {
 			continue
 		}
@@ -143,8 +146,9 @@ func (set Set[Type]) Difference(other Set[Type]) *Set[Type] {
 // Returns a pointer to a new set that contains all the unique items that were contained within both the original set and the operand.
 func (set Set[Type]) Intersection(other Set[Type]) *Set[Type] {
 	var new *Set[Type] = NewSet[Type]()
-	var item Type
-	for _, item = range other.Collect() {
+	var i int
+	for i = range other.Collect() {
+		var item Type = other.Collect()[i]
 		if !set.Contains(item) {
 			continue
 		}
@@ -166,7 +170,7 @@ func (set Set[Type]) Collect() []Type {
 }
 
 // Convert a collection into a set.
-func (set *Set[Type]) From(collection Collection[Type]) {
+func (set *Set[Type]) From(collection View[Type]) {
 	set.Extend(collection)
 }
 
@@ -188,15 +192,15 @@ func (set Set[Type]) Iterator() *Iterator[Type] {
 // Returns a string representation of the set.
 func (set Set[Type]) String() string {
 	var item Type
-	var i gopolutils.Size
 	var buffer strings.Builder = strings.Builder{}
 	buffer.WriteString("{")
-	for i, item = range Enumerate(set) {
-		if i == set.Size()-1 {
-			buffer.WriteString(fmt.Sprintf("%v", item))
-		} else {
-			buffer.WriteString(fmt.Sprintf("%v,", item))
+	var first bool = true
+	for _, item = range set.Collect() {
+		if !first {
+			buffer.WriteString(",")
 		}
+		first = false
+		fmt.Fprintf(&buffer, "%v", item)
 	}
 	buffer.WriteString("}")
 	return buffer.String()
