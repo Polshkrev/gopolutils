@@ -16,13 +16,13 @@ func NewPair[First any, Second any](first First, second Second) *Pair[First, Sec
 }
 
 // Return a pointer to the first property of the pair.
-func (pair Pair[First, _]) First() *First {
-	return &pair.first
+func (pair Pair[First, _]) First() First {
+	return pair.first
 }
 
 // Return a pointer to the second property of the pair.
-func (pair Pair[_, Second]) Second() *Second {
-	return &pair.second
+func (pair Pair[_, Second]) Second() Second {
+	return pair.second
 }
 
 // Set the first property of the pair.
@@ -44,9 +44,7 @@ func (pair *Pair[First, Second]) Set(first First, second Second) {
 // Swap two pairs with the same types.
 // Both the original pair and the operand passed into the function will be modified.
 func (pair *Pair[First, Second]) Swap(operand *Pair[First, Second]) {
-	var newPair *Pair[First, Second] = NewPair(*operand.First(), *operand.Second())
-	*operand = *pair
-	*pair = *newPair
+	*pair, *operand = *operand, *pair
 }
 
 // Flip the values of a pair.
@@ -57,6 +55,6 @@ func (pair *Pair[First, Second]) Flip() *Pair[Second, First] {
 
 // Get a tuple of each of the properties in the pair.
 // Returns a pointer to each of the properties in the pair.
-func (pair Pair[First, Second]) Items() (*First, *Second) {
+func (pair *Pair[First, Second]) Items() (*First, *Second) {
 	return &pair.first, &pair.second
 }
