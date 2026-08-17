@@ -164,27 +164,42 @@ func (entry Entry) MakeDirectory() *gopolutils.Exception {
 	return nil
 }
 
+// Obtain the content based of the given entry.
+// Returns the result of reading the given entry if it exists and is empty, else simply the slice of the entry's content.
+func assignContent(entry Entry) []byte {
+	if entry.Content().IsEmpty() {
+		return gopolutils.Must(Read(entry.Path()))
+	} else {
+		return entry.content.Collect()
+	}
+}
+
+// Create the given entry if it doesn't exist.
+func createIfDoesntExist(entry Entry) {
+	if entry.Path().Exists() {
+		return
+	}
+	var except *gopolutils.Exception = entry.Create()
+	if except != nil {
+		panic(except)
+	}
+}
+
 // Copy an entry into a given destination.
 // After the copy has been completed on the filesystem, the given internal content of the destination entry is set to the internal content of the original entry.
 // If the destination entry does not initially exist and subsequently can not be created, an [gopolutils.IOError] is returned.
 func (entry Entry) Copy(destination *Entry) *gopolutils.Exception {
-	if !entry.Path().Exists() {
-		var except *gopolutils.Exception = entry.Create()
-		if except != nil {
-			return except
-		}
-	} else if !destination.Path().Exists() {
-		var except *gopolutils.Exception = destination.Create()
-		if except != nil {
-			return except
-		}
-	} else if destination.Is(FileType) {
-		var except *gopolutils.Exception = Write(destination.Path(), entry.Content().Collect())
-		if except != nil {
-			return except
-		}
-		destination.SetContent(entry.Content())
+	createIfDoesntExist(entry)
+	createIfDoesntExist(*destination)
+	if !destination.Is(FileType) {
+		return nil
 	}
+	var content []byte = assignContent(entry)
+	var except *gopolutils.Exception = Write(destination.Path(), content)
+	if except != nil {
+		return except
+	}
+	destination.SetContent(entry.Content())
 	return nil
 }
 
