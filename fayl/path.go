@@ -25,6 +25,9 @@ func NewPath() *Path {
 // Construct a new filesystem path from a given path string.
 // Returns a new filesystem path containing the given path.
 func PathFrom(path string) *Path {
+	if len(path) == 0 || path == "" {
+		return NewPath()
+	}
 	var result *Path = new(Path)
 	result.raw = path
 	return result

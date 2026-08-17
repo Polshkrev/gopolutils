@@ -64,7 +64,7 @@ func readRawList[Type any](filePath *Path, reader goserialize.Reader) ([]Type, *
 	if readError != nil {
 		return nil, readError
 	}
-	var result []Type = make([]Type, len(raw))
+	var result []Type = make([]Type, 0, len(raw))
 	var readerError error = reader(raw, &result)
 	if readerError != nil {
 		return nil, gopolutils.NewNamedException(gopolutils.IOError, readerError.Error())
