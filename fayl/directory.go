@@ -162,23 +162,84 @@ func (directory *Directory) Read() *gopolutils.Exception {
 	return nil
 }
 
-// Copy each of the entries in the directory to a given destination directory.
-// If the given destination is determined to be empty, the given directory is extended with the entries from the source directory.
-// If the destination entry does not initially exist and subsequently can not be created, an [gopolutils.IOError] is returned.
-func (directory Directory) Copy(destination *Directory) *gopolutils.Exception {
-	if destination.IsEmpty() {
-		destination.Extend(directory)
+// Obtain the relative [Path] of the given target based on the given root.
+// Returns the relative [Path] of the given target based on the given root.
+func getRelativePath(root, target *Path) *Path {
+	var path string
+	var relativeError error
+	path, relativeError = filepath.Rel(root.String(), target.String())
+	if relativeError != nil {
+		panic(gopolutils.NewNamedException(gopolutils.IOError, "%s", relativeError.Error()))
 	}
+	return PathFrom(path)
+}
+
+// Append a given relative [Entry] path to the given destination [Directory].
+func assignRelative(destination *Directory, entries collections.View[*Entry]) {
+	var i gopolutils.Size
+	for i = range collections.Enumerate(entries) {
+		var entry *Entry = entries.Collect()[i]
+		var path *Path = destination.Root().Join(*entry.Path())
+		var absolute *Path = gopolutils.Must(path.Absolute())
+		var item *Entry = NewEntry(absolute)
+		item.SetType(entry.Type())
+		destination.Append(item)
+	}
+}
+
+// Obtain the relative [Path] of each of the items within the given base [Directory].
+// Returns a [collections.View] of [Entry]s based on the relative [Path] from the directory's root.
+func relativeCopyDirectory(base Directory) collections.View[*Entry] {
+	var result collections.Collection[*Entry] = collections.NewArray[*Entry]()
+	var i gopolutils.Size
+	for i = range collections.Enumerate(base.entries) {
+		var entry *Entry = base.Collect()[i]
+		var path *Path = getRelativePath(base.Root(), entry.Path())
+		var item *Entry = NewEntry(path)
+		item.SetType(entry.Type())
+		result.Append(item)
+	}
+	return result
+}
+
+// Concurrently copy a given [Directory] to a destination [Directory].
+func copyDirectoryConcurrent(directory, destination Directory, exceptChannel chan<- *gopolutils.Exception) {
+	defer close(exceptChannel)
 	var i int
 	for i = range directory.Collect() {
 		var item *Entry = directory.Collect()[i]
 		var destinationEntry *Entry = destination.Collect()[i]
 		var except *gopolutils.Exception = item.Copy(destinationEntry)
 		if except != nil {
+			exceptChannel <- except
+			return
+		}
+	}
+}
+
+// Copy each of the entries in the directory to a given destination directory.
+// If the given destination is determined to be empty, the given directory is extended with the entries from the source directory.
+// If the destination entry does not initially exist and subsequently can not be created, an [gopolutils.IOError] is returned.
+func (directory Directory) Copy(destination *Directory) *gopolutils.Exception {
+	if directory.IsEmpty() {
+		return nil
+	} else if !destination.root.Exists() {
+		var except *gopolutils.Exception = destination.Create()
+		if except != nil {
 			return except
 		}
 	}
-	return nil
+
+	var empty bool = destination.IsEmpty()
+	if empty {
+		var entries collections.View[*Entry] = relativeCopyDirectory(directory)
+		assignRelative(destination, entries)
+	}
+
+	var exceptChannel chan *gopolutils.Exception = make(chan *gopolutils.Exception, 1)
+	go copyDirectoryConcurrent(directory, *destination, exceptChannel)
+	var except *gopolutils.Exception = <-exceptChannel
+	return except
 }
 
 // Represent the directory as a string.
