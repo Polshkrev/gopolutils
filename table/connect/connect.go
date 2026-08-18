@@ -22,8 +22,12 @@ var (
 
 // Connect to a database of a given driver at a given path.
 // Returns a connection to a database at a given path.
+// If the given path is nil, a [gopolutils.ValueError] is returned.
 // If the database can not connect, a [gopolutils.KeyError] is returned.
 func Connect(driver table.Driver, path *fayl.Path) (*sql.DB, *gopolutils.Exception) {
+	if path == nil {
+		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "Can not pass a nil path as an argument.")
+	}
 	connectorLock.RLock()
 	defer connectorLock.RUnlock()
 	var connector Connector
