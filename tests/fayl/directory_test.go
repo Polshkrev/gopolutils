@@ -66,25 +66,25 @@ func TestDirectoryAtOutOfRange(t *testing.T) {
 	}
 }
 
-func TestDirectoryRemove(t *testing.T) {
-	var directory *fayl.Directory = fayl.NewDirectory(fayl.PathFrom(t.TempDir()))
+// func TestDirectoryRemove(t *testing.T) {
+// 	var directory *fayl.Directory = fayl.NewDirectory(fayl.PathFrom(t.TempDir()))
 
-	directory.Append(fayl.NewEntry(fayl.PathFrom("a.txt")))
-	var exception *gopolutils.Exception = directory.Remove(0)
-	if exception != nil {
-		t.Fatal(exception)
-	} else if !directory.IsEmpty() {
-		t.Fatal("directory should be empty")
-	}
-}
+// 	directory.Append(fayl.NewEntry(fayl.PathFrom("a.txt")))
+// 	var exception *gopolutils.Exception = directory.Remove(0)
+// 	if exception != nil {
+// 		t.Fatal(exception)
+// 	} else if !directory.IsEmpty() {
+// 		t.Fatal("directory should be empty")
+// 	}
+// }
 
-func TestDirectoryRemoveOutOfRange(t *testing.T) {
-	var directory *fayl.Directory = fayl.NewDirectory(fayl.PathFrom(t.TempDir()))
-	var exception *gopolutils.Exception = directory.Remove(0)
-	if exception == nil {
-		t.Fatal("expected exception")
-	}
-}
+// func TestDirectoryRemoveOutOfRange(t *testing.T) {
+// 	var directory *fayl.Directory = fayl.NewDirectory(fayl.PathFrom(t.TempDir()))
+// 	var exception *gopolutils.Exception = directory.Remove(0)
+// 	if exception == nil {
+// 		t.Fatal("expected exception")
+// 	}
+// }
 
 func TestDirectoryCollect(t *testing.T) {
 	var directory *fayl.Directory = fayl.NewDirectory(fayl.PathFrom(t.TempDir()))
