@@ -52,7 +52,7 @@ func (mapping Map[Key, Value]) At(key Key) (*Value, *gopolutils.Exception) {
 // If the map is empty, a [gopolutils.ValueError] is returned with a nil data pointer.
 // If the key does not exist in the mapping, a [gopolutils.KeyError] is returned.
 // If a [gopolutils.ValueError] or a [gopolutils.KeyError] is returned, the mapping is not modified.
-func (mapping Map[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
+func (mapping *Map[Key, Value]) Update(key Key, value Value) *gopolutils.Exception {
 	if mapping.IsEmpty() {
 		return gopolutils.NewNamedException(gopolutils.ValueError, "Can not access an empty map at key '%+v'.", key)
 	} else if !mapping.HasKey(key) {

@@ -98,8 +98,8 @@ func Enumerate[Type any](items View[Type]) func(func(gopolutils.Size, Type) bool
 func Reverse[Type any](items View[Type]) func(func(gopolutils.Size, Type) bool) {
 	return func(yield func(gopolutils.Size, Type) bool) {
 		var i gopolutils.Size
-		for i = items.Size() - 1; i <= 0; i-- {
-			if !yield(i, items.Collect()[i]) {
+		for i = items.Size(); i > 0; i-- {
+			if !yield(i-1, items.Collect()[i-1]) {
 				return
 			}
 		}

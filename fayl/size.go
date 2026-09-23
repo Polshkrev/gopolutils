@@ -25,18 +25,18 @@ func NewSize(size gopolutils.Size, unit gopolutils.ByteSize) *Size {
 // Returns a new [Size] based on a given size in bytes.
 func SizeFromBytes(size gopolutils.Size) *Size {
 	switch {
-	case size >= gopolutils.Size(gopolutils.KB):
-		return NewSize(size/gopolutils.Size(gopolutils.KB), gopolutils.KB)
-	case size >= gopolutils.Size(gopolutils.MB):
-		return NewSize(size/gopolutils.Size(gopolutils.MB), gopolutils.MB)
-	case size >= gopolutils.Size(gopolutils.GB):
-		return NewSize(size/gopolutils.Size(gopolutils.GB), gopolutils.GB)
-	case size >= gopolutils.Size(gopolutils.TB):
-		return NewSize(size/gopolutils.Size(gopolutils.TB), gopolutils.TB)
-	case size >= gopolutils.Size(gopolutils.PB):
-		return NewSize(size/gopolutils.Size(gopolutils.PB), gopolutils.PB)
 	case size >= gopolutils.Size(gopolutils.EB):
 		return NewSize(size/gopolutils.Size(gopolutils.EB), gopolutils.EB)
+	case size >= gopolutils.Size(gopolutils.PB):
+		return NewSize(size/gopolutils.Size(gopolutils.PB), gopolutils.PB)
+	case size >= gopolutils.Size(gopolutils.TB):
+		return NewSize(size/gopolutils.Size(gopolutils.TB), gopolutils.TB)
+	case size >= gopolutils.Size(gopolutils.GB):
+		return NewSize(size/gopolutils.Size(gopolutils.GB), gopolutils.GB)
+	case size >= gopolutils.Size(gopolutils.MB):
+		return NewSize(size/gopolutils.Size(gopolutils.MB), gopolutils.MB)
+	case size >= gopolutils.Size(gopolutils.KB):
+		return NewSize(size/gopolutils.Size(gopolutils.KB), gopolutils.KB)
 	default:
 		return NewSize(size, gopolutils.Byte)
 	}
