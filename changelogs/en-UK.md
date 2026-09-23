@@ -1,7 +1,63 @@
 # Changelog
-## v1.41.0 - 2026-08-03
+## v1.42.0 - 2026-09-23
 For future changes, refer to [TODO.md](../TODO.md).
 
+`Added`
+- `tests`
+    - `fayl`
+        - Added all `directory` tests.
+        - Added all `entry` tests.
+        - Added all `path` tests.
+        - Added all `write` tests.
+        - Added all `read` tests.
+        - Added all `size` tests.
+        - Added all `os` tests.
+    - `events`
+        - Added all `events` tests.
+    - `table`
+        - Added all `connect` tests.
+
+`Changed`
+- `collections`
+    - `pair`
+        - The `First` and `Second` getter methods no longer return a pointer.
+        - The `Swap` method now no longer allocates a new temporary swap variable, which is now more idiomatic.
+        - The `Items` method now correctly accepts a pointer reciever to fix the method being &mdash; unintentionally &mdash; a non-mutable method.
+    - `set`
+        - The `From` implementation now accepts a [View](/docs/en-UK/collections/view.md) instead of a [Collection](/docs/en-UK/collections/collection.md)
+- `fayl`
+    - `path`
+        - The `PathFrom` constructor now calls the `NewPath` constustor if an empty string is passed as an argument.
+    - `entry`
+        - The `Copy` method has been rewritten to ensure defined behaviour.
+    - `directory`
+        - The `Copy` method has been rewritten to ensure defined behaviour.
+- `tests`
+    - `collections`
+        - Rewrote all `collections` tests.
+
+`Fixed`
+- `collections`
+    - `map`
+        - The `Update` method now correctly accepts a pointer reciever to fix the method being &mdash; unintentionally &mdash; a non-mutable method.
+    - `iter`
+        - The `Reverse` function has been rewritten to fix an underflow bug.
+    - `array`
+        - The `At` method now correctly checks if the given index is less than `or equal` to the array's size.
+        - The `Update` method now correctly checks if the given index is less than `or equal` to the array's size.
+        - The `Remove` method now correctly checks if the given index is less than `or equal` to the array's size.
+    - `queue`
+        - The `At` method now correctly checks if the given index is less than `or equal` to the queue's size.
+        - The `Update` method now correctly checks if the given index is less than `or equal` to the queue's size.
+        - The `Remove` method now correctly checks if the given index is less than `or equal` to the queue's size.
+    - `stack`
+        - The `At` method now correctly checks if the given index is less than `or equal` to the stack's size.
+        - The `Update` method now correctly checks if the given index is less than `or equal` to the stack's size.
+        - The `Remove` method now correctly checks if the given index is less than `or equal` to the stack's size.
+    - `set`
+        - The underflow and format logic errors have been fixed.
+        - The `Remove` method now correctly checks if the given index is less than `or equal` to the set's size.
+## v1.41.0 - 2026-08-03
 `Added`
 - Added `None` type.
 - Added `Callback` type.
