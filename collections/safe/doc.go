@@ -7,7 +7,7 @@ Interfaces:
   - [Collection]: An interface for linear data structures.
   - [Mapping]: An interface for key-value pairs.
   - [Lockable]: An interface for lockable collections.
-  - [Unockable]: An interface for unlockable collections.
+  - [Unlockable]: An interface for unlockable collections.
 
 Implementations:
   - [Array]
