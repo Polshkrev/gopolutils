@@ -1,5 +1,5 @@
 /*
-Table provides a standardization of working with database tables.
+Table provides a standardisation of working with database tables.
 
 The example below shows storing passwords in a database.
 
