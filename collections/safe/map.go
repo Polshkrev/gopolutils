@@ -118,7 +118,7 @@ func (mapping *Map[Key, _]) Remove(key Key) *gopolutils.Exception {
 // Obtain an mapping over the data of the collection.
 // Returns an mapping the data of the collection.
 func (mapping *Map[Key, Value]) Iterator() *collections.Iterator[Pair[Key, Value]] {
-	return collections.From(mapping)
+	return collections.IteratorFrom(mapping)
 }
 
 // Collect a map into a view.
