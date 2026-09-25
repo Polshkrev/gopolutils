@@ -110,7 +110,7 @@ func (array *Array[Type]) Collect() []Type {
 // Obtain an array over the data of the collection.
 // Returns an array the data of the collection.
 func (array *Array[Type]) Iterator() *collections.Iterator[Type] {
-	return collections.From(array)
+	return collections.IteratorFrom(array)
 }
 
 // Access the size of the array.
