@@ -1,5 +1,5 @@
 # Entry
-A standardization of an entry on the filesystem. This type is designed to aid in operations pretaining to a concrete file rather than just a path.
+A standardisation of an entry on the filesystem. This type is designed to aid in operations pretaining to a concrete file rather than just a path.
 ## Table of Contents
 1. [Usage](#usage)
     1. [Construction](#construction)
