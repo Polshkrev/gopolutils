@@ -185,7 +185,7 @@ func (set Set[Type]) Into() Collection[Type] {
 // Obtain an set over the data of the collection.
 // Returns an set the data of the collection.
 func (set Set[Type]) Iterator() *Iterator[Type] {
-	return From(set)
+	return IteratorFrom(set)
 }
 
 // Render a string representation of the set.

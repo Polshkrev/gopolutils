@@ -142,7 +142,7 @@ func (queue *Queue[Type]) Items() *[]Type {
 // Obtain an queue over the data of the collection.
 // Returns an queue the data of the collection.
 func (queue *Queue[Type]) Iterator() *collections.Iterator[Type] {
-	return collections.From(queue)
+	return collections.IteratorFrom(queue)
 }
 
 // Access the size of the queue.
