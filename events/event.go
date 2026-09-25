@@ -15,7 +15,8 @@ type Event func(any)
 type EventManager collections.Mapping[EventType, collections.Collection[Event]]
 
 var (
-	events EventManager = NewEventManager() // Default event manager.
+	// Default event manager.
+	events EventManager = NewEventManager()
 )
 
 // Construct a new event manager.
@@ -59,10 +60,10 @@ func Events(eventType EventType) collections.View[Event] {
 	var result collections.View[Event]
 	for i = range events.Collect() {
 		var bucket collections.Pair[EventType, collections.Collection[Event]] = events.Collect()[i]
-		if (*(bucket).First()) != eventType {
+		if bucket.First() != eventType {
 			continue
 		}
-		result = (*(bucket).Second())
+		result = bucket).Second()
 	}
 	return result
 }
