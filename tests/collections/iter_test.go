@@ -15,7 +15,7 @@ func TestIterFrom(test *testing.T) {
 	array.Append(2)
 	array.Append(3)
 
-	var iterator *collections.Iterator[int] = collections.From(array)
+	var iterator *collections.Iterator[int] = collections.IteratorFrom(array)
 
 	var values []int = iterator.Collect()
 
@@ -33,7 +33,7 @@ func TestMap(test *testing.T) {
 	array.Append(2)
 	array.Append(3)
 
-	var iterator *collections.Iterator[int] = collections.From(array).Map(func(value int) int {
+	var iterator *collections.Iterator[int] = collections.IteratorFrom(array).Map(func(value int) int {
 		return value * 2
 	})
 
@@ -47,7 +47,7 @@ func TestMap(test *testing.T) {
 func TestMapEmpty(test *testing.T) {
 	var array *collections.Array[int] = collections.NewArray[int]()
 
-	var values []int = collections.From(array).
+	var values []int = collections.IteratorFrom(array).
 		Map(func(value int) int {
 			return value * 2
 		}).
@@ -65,7 +65,7 @@ func TestFilter(test *testing.T) {
 		array.Append(i)
 	}
 
-	var values []int = collections.From(array).
+	var values []int = collections.IteratorFrom(array).
 		Filter(func(value int) bool {
 			return value%2 == 0
 		}).
@@ -84,7 +84,7 @@ func TestFilterNone(test *testing.T) {
 	array.Append(1)
 	array.Append(2)
 
-	var values []int = collections.From(array).
+	var values []int = collections.IteratorFrom(array).
 		Filter(func(value int) bool {
 			return false
 		}).
@@ -101,7 +101,7 @@ func TestFilterAll(test *testing.T) {
 	array.Append(1)
 	array.Append(2)
 
-	var values []int = collections.From(array).
+	var values []int = collections.IteratorFrom(array).
 		Filter(func(value int) bool {
 			return true
 		}).
@@ -123,7 +123,7 @@ func TestForEach(test *testing.T) {
 
 	var sum int = 0
 
-	collections.From(array).ForEach(func(value int) {
+	collections.IteratorFrom(array).ForEach(func(value int) {
 		sum += value
 	})
 
@@ -138,7 +138,7 @@ func TestIterCollect(test *testing.T) {
 	array.Append(10)
 	array.Append(20)
 
-	var values []int = collections.From(array).Collect()
+	var values []int = collections.IteratorFrom(array).Collect()
 
 	var expected []int = []int{10, 20}
 
@@ -154,7 +154,7 @@ func TestIterSize(test *testing.T) {
 		array.Append(i)
 	}
 
-	if collections.From(array).Size() != 5 {
+	if collections.IteratorFrom(array).Size() != 5 {
 		test.Fatal("unexpected iterator size")
 	}
 }
@@ -162,7 +162,7 @@ func TestIterSize(test *testing.T) {
 func TestSizeEmpty(test *testing.T) {
 	var array *collections.Array[int] = collections.NewArray[int]()
 
-	if collections.From(array).Size() != 0 {
+	if collections.IteratorFrom(array).Size() != 0 {
 		test.Fatal("expected size 0")
 	}
 }
@@ -170,13 +170,13 @@ func TestSizeEmpty(test *testing.T) {
 func TestIterIsEmpty(test *testing.T) {
 	var array *collections.Array[int] = collections.NewArray[int]()
 
-	if !collections.From(array).IsEmpty() {
+	if !collections.IteratorFrom(array).IsEmpty() {
 		test.Fatal("expected empty iterator")
 	}
 
 	array.Append(1)
 
-	if collections.From(array).IsEmpty() {
+	if collections.IteratorFrom(array).IsEmpty() {
 		test.Fatal("expected non-empty iterator")
 	}
 }
@@ -273,7 +273,7 @@ func TestMapFilterChain(test *testing.T) {
 		array.Append(i)
 	}
 
-	var values []int = collections.From(array).
+	var values []int = collections.IteratorFrom(array).
 		Map(func(value int) int {
 			return value * value
 		}).
