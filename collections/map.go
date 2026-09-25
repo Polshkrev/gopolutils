@@ -114,7 +114,7 @@ func (mapping Map[Key, Value]) Collect() []Pair[Key, Value] {
 // Obtain an mapping over the data of the collection.
 // Returns an mapping the data of the collection.
 func (mapping Map[Key, Value]) Iterator() *Iterator[Pair[Key, Value]] {
-	return From(mapping)
+	return IteratorFrom(mapping)
 }
 
 // Determine if a given key is stored in the map.
