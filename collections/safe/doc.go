@@ -1,5 +1,5 @@
 /*
-Safe provides interfaces of standardization for operations related to concurrent safe data structures.
+Safe provides interfaces of standardisation for operations related to concurrent safe data structures.
 Standardizations defined within the collections package include:
 
 Interfaces:
