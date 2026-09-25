@@ -1,5 +1,5 @@
 # Events
-Utility defining a standardization of the event pattern.
+Utility defining a standardisation of the event pattern.
 
 ## Subscribe
 Subscribing to an event defines a passed in event &mdash; or callback &mdash; called when the event gets posted. To subscribe to an event, the `EventType` enum will need to be extended. Extended the `EventType` can be defined as below:
