@@ -1,5 +1,5 @@
 /*
-Connect provides a standardization of connecting to a database.
+Connect provides a standardisation of connecting to a database.
 
 The example below shows storing passwords in a database.
 
