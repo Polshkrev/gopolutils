@@ -63,7 +63,7 @@ func Events(eventType EventType) collections.View[Event] {
 		if bucket.First() != eventType {
 			continue
 		}
-		result = bucket).Second()
+		result = bucket.Second()
 	}
 	return result
 }
