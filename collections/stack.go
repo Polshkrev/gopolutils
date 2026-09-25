@@ -114,7 +114,7 @@ func (stack *Stack[Type]) Peek() (*Type, *gopolutils.Exception) {
 // Obtain an stack over the data of the collection.
 // Returns an stack the data of the collection.
 func (stack Stack[Type]) Iterator() *Iterator[Type] {
-	return From(stack)
+	return IteratorFrom(stack)
 }
 
 // Determine if the stack is empty.
