@@ -14,7 +14,7 @@ type Iterator[Value any] struct {
 
 // Construct a new iterator from a given [View].
 // Returns a new iterator from a given [View].
-func From[Value any](source View[Value]) *Iterator[Value] {
+func IteratorFrom[Value any](source View[Value]) *Iterator[Value] {
 	var iterator *Iterator[Value] = new(Iterator[Value])
 	iterator.sequence = slices.Values(source.Collect())
 	return iterator
