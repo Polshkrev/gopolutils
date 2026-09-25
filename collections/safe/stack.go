@@ -155,7 +155,7 @@ func (stack *Stack[Type]) Items() *[]Type {
 // Obtain an stack over the data of the collection.
 // Returns an stack the data of the collection.
 func (stack *Stack[Type]) Iterator() *collections.Iterator[Type] {
-	return collections.From(stack)
+	return collections.IteratorFrom(stack)
 }
 
 // Access the size of the stack.
