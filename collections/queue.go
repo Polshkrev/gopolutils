@@ -119,7 +119,7 @@ func (queue Queue[Type]) Items() *[]Type {
 // Obtain an queue over the data of the collection.
 // Returns an queue the data of the collection.
 func (queue Queue[Type]) Iterator() *Iterator[Type] {
-	return From(queue)
+	return IteratorFrom(queue)
 }
 
 // Determine if the queue is empty.
