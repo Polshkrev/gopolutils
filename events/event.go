@@ -15,7 +15,8 @@ type Event func(any)
 type EventManager collections.Mapping[EventType, collections.Collection[Event]]
 
 var (
-	events EventManager = NewEventManager() // Default event manager.
+	// Default event manager.
+	events EventManager = NewEventManager()
 )
 
 // Construct a new event manager.
@@ -44,4 +45,30 @@ func Post(eventType EventType, data any) {
 		var subscribedEvent Event = (*subscribedEvents).Collect()[i]
 		subscribedEvent(data)
 	}
+}
+
+// Obtain the current [EventManager].
+// Returns a mapping of [EventType]s to a [collections.View] of [Event]s.
+func Manager() EventManager {
+	return events
+}
+
+// Obtain all the [Event]s stored at the given [EventType].
+// Returns all the [Event]s stored at the given [EventType].
+func Events(eventType EventType) collections.View[Event] {
+	var i int
+	var result collections.View[Event]
+	for i = range events.Collect() {
+		var bucket collections.Pair[EventType, collections.Collection[Event]] = events.Collect()[i]
+		if bucket.First() != eventType {
+			continue
+		}
+		result = bucket.Second()
+	}
+	return result
+}
+
+// Change the default [EventManager].
+func SetEventManager(manager EventManager) {
+	events = manager
 }

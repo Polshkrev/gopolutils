@@ -103,8 +103,8 @@ func (logger *Logger) AddConsole() *Exception {
 }
 
 // Bind a file to the logger.
-// If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
-// If the given file can not be found, an IOError is returned.
+// If the logger has already allocated the maximum number of allowed outputs, a [ValueError] is returned.
+// If the given file can not be found, an [IOError] is returned.
 func (logger *Logger) AddFile(fileName string) *Exception {
 	if logger.outputCount >= availableOutputs {
 		return NewNamedException(ValueError, "The number of outputs has exceeded the maximum allowed.")
@@ -121,7 +121,7 @@ func (logger *Logger) AddFile(fileName string) *Exception {
 }
 
 // Bind only the standard output to the logger.
-// If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
+// If the logger has already allocated the maximum number of allowed outputs, a [ValueError] is returned.
 func (logger *Logger) ConsoleOnly() *Exception {
 	var except *Exception = logger.AddConsole()
 	if except != nil {
@@ -132,7 +132,7 @@ func (logger *Logger) ConsoleOnly() *Exception {
 }
 
 // Bind only a file to the logger.
-// If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
+// If the logger has already allocated the maximum number of allowed outputs, a [ValueError] is returned.
 // If the given file can not be found, an Exception is returned.
 func (logger *Logger) FileOnly(fileName string) *Exception {
 	var except *Exception = logger.AddFile(fileName)
@@ -144,7 +144,7 @@ func (logger *Logger) FileOnly(fileName string) *Exception {
 }
 
 // Bind both a file and the standard output to the logger.
-// If the logger has already allocated the maximum number of allowed outputs, a ValueError is returned.
+// If the logger has already allocated the maximum number of allowed outputs, a [ValueError] is returned.
 // If the given file can not be found, an [Exception] is returned.
 func (logger *Logger) FullSetup(fileName string) *Exception {
 	var except *Exception = logger.AddConsole()

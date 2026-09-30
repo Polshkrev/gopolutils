@@ -1,5 +1,5 @@
 /*
-Collections provide interfaces of standardization for operations related to data structures.
+Collections provide interfaces of standardisation for operations related to data structures.
 Standardizations defined within the collections package include:
 
 Interfaces:

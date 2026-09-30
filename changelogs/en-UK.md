@@ -1,4 +1,25 @@
 # Changelog
+## v1.43.0 - 2026-09-30: The Linked List Update
+`Added`
+- `collections`
+    - Added the `Into` interface.
+    - Added the `From` interface.
+    - Added the `Node` type.
+    - Added the `LinkedList` type.
+- `events`
+    - Added the `Manager` getter.
+    - Added the `SetManager` setter.
+    - Added the `Events` getter.
+- `tests`
+    - `table`
+        - Added all `field` tests.
+
+`Changed`
+- `collections`
+    - `iterator`
+        - The `From` constructor has been renamed `IteratorFrom`.
+- `Docs`
+    - All diagrams &mdash; in both russian and english &mdash; have been updated.
 ## v1.42.0 - 2026-09-23
 For future changes, refer to [TODO.md](../TODO.md).
 

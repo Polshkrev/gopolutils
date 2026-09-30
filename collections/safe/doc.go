@@ -1,5 +1,5 @@
 /*
-Safe provides interfaces of standardization for operations related to concurrent safe data structures.
+Safe provides interfaces of standardisation for operations related to concurrent safe data structures.
 Standardizations defined within the collections package include:
 
 Interfaces:
@@ -7,7 +7,7 @@ Interfaces:
   - [Collection]: An interface for linear data structures.
   - [Mapping]: An interface for key-value pairs.
   - [Lockable]: An interface for lockable collections.
-  - [Unockable]: An interface for unlockable collections.
+  - [Unlockable]: An interface for unlockable collections.
 
 Implementations:
   - [Array]
