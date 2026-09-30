@@ -131,9 +131,8 @@ func (set Set[Type]) Items() *[]Type {
 // Returns a pointer to a new set that contains all the unique items that were contained within operand but not the original set.
 func (set Set[Type]) Difference(other Set[Type]) *Set[Type] {
 	var new *Set[Type] = NewSet[Type]()
-	var i int
-	for i = range other.Collect() {
-		var item Type = other.Collect()[i]
+	var item Type
+	for _, item = range other.Collect() {
 		if set.Contains(item) {
 			continue
 		}
