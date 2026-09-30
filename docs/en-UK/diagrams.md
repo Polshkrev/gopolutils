@@ -59,15 +59,30 @@ class View~Type~ {
 
 class Wrapper~Type~ {
     <<interface>>
-    +Into() Collection~Type~*
-    +From(View~Type~)*
+    +Into$
+    +From$
     +View~Type~$
+}
+
+class From~Type~ {
+    <<interface>>
+    +From(View~Type~)*
+}
+
+class Into~Type~ {
+    <<interface>>
+    +Into() Collection~Type~*
 }
 
 class Sized {
     <<interface>>
     +Size() Size*
     +IsEmpty() bool*
+}
+
+class Iterable~Type~ {
+    <<interface>>
+    +Iterator() *Iterator~Type~*
 }
 
 class Exception {
@@ -120,8 +135,11 @@ class ExceptionName {
 class Pair~First, Second~ {
     -First first
     -Second second
-    +First() *First
-    +Second() *Second
+    +First() First
+    +Second() Second
+    +SetFirst(First first)
+    +SetSecond(Second second)
+    +Set(First first, Second second)
     +Swap(Pair~First, Second~)
     +Flip() *Pair~Second, First~
     +Items() ~*First, *Second~
@@ -144,6 +162,15 @@ class SafePair~First, Second~ {
     +RLock()
     +Unlock()
     +RUnlock()
+}
+
+class Iterator~Value~ {
+    +Map(func(Value)Value callback) *Iterator~Value~
+    +Filter(func(Value)bool predicate) *Iterator~Value~
+    +ForEach(func(Value) callback)
+    +Collect() []Value
+    +Size() Size
+    +IsEmpty() bool
 }
 
 class Array~Type~ {
@@ -239,7 +266,7 @@ class SafeMap~Key, Value~ {
     +Values() []Value
     +Remove(Key key) *Exception
     +HasKey(Key key) bool
-    +Collect() []Pair~Key, Value~
+    +Collect() []SafePair~Key, Value~
     +Size() Size
     +IsEmpty() bool
     +Lock()
@@ -293,7 +320,7 @@ class SafeStack~Type~ {
 }
 
 class Set~Type~ {
-    -Mapping~Type, nil~ items
+    -Mapping~Type, None~ items
     +Append(Type Item)
     +Extend(View~Type~ items)
     +At(Size index) ~*Type, *Exception~
@@ -303,8 +330,9 @@ class Set~Type~ {
     +Contains(Type item) bool
     +Difference(Set~Type~ other) *Set~Type~
     +Intersection(Set~Type~ other) *Set~Type~
-    +ToArray() *Array~Type~
-    +ToString() String
+    +Into() Collection~Type~
+    +From(View~Type~)
+    +String() String
     +Items() *[]Type
     +Collect() []Type
     +Size() Size
@@ -323,35 +351,58 @@ Collection <|.. SafeArray : Implements
 Collection <|.. SafeQueue : Implements
 Collection <|.. SafeStack : Implements
 
+Iterable <|.. Array : Implements
+Iterable <|.. Map : Implements
+Iterable <|.. Queue : Implements
+Iterable <|.. Stack : Implements
+Iterable <|.. Set : Implements
+Iterable <|.. SafeArray : Implements
+Iterable <|.. SafeMap : Implements
+Iterable <|.. SafeQueue : Implements
+Iterable <|.. SafeStack : Implements
+
 SafeCollection <|.. SafeArray : Implements
 SafeCollection <|.. SafeQueue : Implements
 SafeCollection <|.. SafeStack : Implements
 
 Lockable <|.. SafeArray : Implements
+Lockable <|.. SafeMap : Implements
 Lockable <|.. SafeQueue : Implements
 Lockable <|.. SafeStack : Implements
 
 Unlockable <|.. SafeArray : Implements
+Unlockable <|.. SafeMap : Implements
 Unlockable <|.. SafeQueue : Implements
 Unlockable <|.. SafeStack : Implements
 
 View <|.. Array : Implements
+View <|.. Map : Implements
 View <|.. Queue : Implements
 View <|.. Stack : Implements
 View <|.. Set : Implements
 View <|.. SafeArray : Implements
+View <|.. SafeMap : Implements
 View <|.. SafeQueue : Implements
 View <|.. SafeStack : Implements
+View <|.. Iterator : Implements
 
 Wrapper <|.. Set : Implements
 Wrapper <.. View : Dependency
 Wrapper <.. Collection : Dependency
 
+From o-- Wrapper : Aggregate
+From <|.. Set : Implements
+
+Into o-- Wrapper : Aggregate
+Into <|.. Set : Implements
+
 Sized <|.. Array : Implements
+Sized <|.. Map : Implements
 Sized <|.. Queue : Implements
 Sized <|.. Stack : Implements
 Sized <|.. Set : Implements
 Sized <|.. SafeArray : Implements
+Sized <|.. SafeMap : Implements
 Sized <|.. SafeQueue : Implements
 Sized <|.. SafeStack : Implements
 
@@ -361,9 +412,10 @@ SafeMapping <|.. SafeMap : Implements
 Mapping ..* Set : Composite
 Mapping <.. Pair : Dependency
 Map <.. Pair : Dependency
-SafeMap <.. Pair : Dependency
+SafeMap <.. SafePair : Dependency
 
-Set <.. Array : Dependency
+Set <.. Collection : Dependency
+Set <.. View : Dependency
 
 Collection <.. Exception : Dependency
 Mapping <.. Exception : Dependency

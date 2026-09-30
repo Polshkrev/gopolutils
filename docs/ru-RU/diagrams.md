@@ -63,15 +63,30 @@ class View~Type~ {
 
 class Wrapper~Type~ {
     <<интерфейс>>
-    +Into() Collection~Type~*
-    +From(View~Type~)*
+    +Into$
+    +From$
     +View~Type~$
+}
+
+class From~Type~ {
+    <<интерфейс>>
+    +From(View~Type~)*
+}
+
+class Into~Type~ {
+    <<интерфейс>>
+    +Into() Collection~Type~*
 }
 
 class Sized {
     <<интерфейс>>
     +Size() Size*
     +IsEmpty() bool*
+}
+
+class Iterable~Type~ {
+    <<интерфейс>>
+    +Iterator() *Iterator~Type~*
 }
 
 class Exception {
@@ -124,8 +139,11 @@ class ExceptionName {
 class Pair~First, Second~ {
     -First first
     -Second second
-    +First() *First
-    +Second() *Second
+    +First() First
+    +Second() Second
+    +SetFirst(First first)
+    +SetSecond(Second second)
+    +Set(First first, Second second)
     +Swap(Pair~First, Second~)
     +Flip() *Pair~Second, First~
     +Items() ~*First, *Second~
@@ -148,6 +166,15 @@ class SafePair~First, Second~ {
     +RLock()
     +Unlock()
     +RUnlock()
+}
+
+class Iterator~Value~ {
+    +Map(func(Value)Value callback) *Iterator~Value~
+    +Filter(func(Value)bool predicate) *Iterator~Value~
+    +ForEach(func(Value) callback)
+    +Collect() []Value
+    +Size() Size
+    +IsEmpty() bool
 }
 
 class Array~Type~ {
@@ -243,7 +270,7 @@ class SafeMap~Key, Value~ {
     +Values() []Value
     +Remove(Key key) *Exception
     +HasKey(Key key) bool
-    +Collect() []Pair~Key, Value~
+    +Collect() []SafePair~Key, Value~
     +Size() Size
     +IsEmpty() bool
     +Lock()
@@ -297,7 +324,7 @@ class SafeStack~Type~ {
 }
 
 class Set~Type~ {
-    -Mapping~Type, nil~ items
+    -Mapping~Type, None~ items
     +Append(Type Item)
     +Extend(View~Type~ items)
     +At(Size index) ~*Type, *Exception~
@@ -307,8 +334,9 @@ class Set~Type~ {
     +Contains(Type item) bool
     +Difference(Set~Type~ other) *Set~Type~
     +Intersection(Set~Type~ other) *Set~Type~
-    +ToArray() *Array~Type~
-    +ToString() String
+    +Into() Collection~Type~
+    +From(View~Type~)
+    +String() String
     +Items() *[]Type
     +Collect() []Type
     +Size() Size
@@ -327,35 +355,58 @@ Collection <|.. SafeArray : Реализует
 Collection <|.. SafeQueue : Реализует
 Collection <|.. SafeStack : Реализует
 
+Iterable <|.. Array : Реализует
+Iterable <|.. Map : Реализует
+Iterable <|.. Queue : Реализует
+Iterable <|.. Stack : Реализует
+Iterable <|.. Set : Реализует
+Iterable <|.. SafeArray : Реализует
+Iterable <|.. SafeMap : Реализует
+Iterable <|.. SafeQueue : Реализует
+Iterable <|.. SafeStack : Реализует
+
 SafeCollection <|.. SafeArray : Реализует
 SafeCollection <|.. SafeQueue : Реализует
 SafeCollection <|.. SafeStack : Реализует
 
 Lockable <|.. SafeArray : Реализует
+Lockable <|.. SafeMap : Реализует
 Lockable <|.. SafeQueue : Реализует
 Lockable <|.. SafeStack : Реализует
 
 Unlockable <|.. SafeArray : Реализует
+Unlockable <|.. SafeMap : Реализует
 Unlockable <|.. SafeQueue : Реализует
 Unlockable <|.. SafeStack : Реализует
 
 View <|.. Array : Реализует
+View <|.. Map : Реализует
 View <|.. Queue : Реализует
 View <|.. Stack : Реализует
 View <|.. Set : Реализует
 View <|.. SafeArray : Реализует
+View <|.. SafeMap : Реализует
 View <|.. SafeQueue : Реализует
 View <|.. SafeStack : Реализует
+View <|.. Iterator : Реализует
 
 Wrapper <|.. Set : Реализует
 Wrapper <.. View : Поддержка
 Wrapper <.. Collection : Поддержка
 
+From o-- Wrapper : Агрегат
+From <|.. Set : Реализует
+
+Into o-- Wrapper : Агрегат
+Into <|.. Set : Реализует
+
 Sized <|.. Array : Реализует
+Sized <|.. Map : Реализует
 Sized <|.. Queue : Реализует
 Sized <|.. Stack : Реализует
 Sized <|.. Set : Реализует
 Sized <|.. SafeArray : Реализует
+Sized <|.. SafeMap : Реализует
 Sized <|.. SafeQueue : Реализует
 Sized <|.. SafeStack : Реализует
 
@@ -365,9 +416,10 @@ SafeMapping <|.. SafeMap : Реализует
 Mapping ..* Set : Композит
 Mapping <.. Pair : Поддержка
 Map <.. Pair : Поддержка
-SafeMap <.. Pair : Поддержка
+SafeMap <.. SafePair : Поддержка
 
-Set <.. Array : Поддержка
+Set <.. Collection : Поддержка
+Set <.. View : Поддержка
 
 Collection <.. Exception : Поддержка
 Mapping <.. Exception : Поддержка
