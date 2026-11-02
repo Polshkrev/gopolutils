@@ -8,6 +8,7 @@ import (
 )
 
 var _ Collection[any] = (*LinkedList[any])(nil)
+var _ Iterable[any] = (*LinkedList[any])(nil)
 
 // Representation of a linked list.
 type LinkedList[Type any] struct {
@@ -102,15 +103,11 @@ func (list *LinkedList[Type]) Update(index gopolutils.Size, item Type) *gopoluti
 	} else if index >= list.size {
 		return gopolutils.NewNamedException(gopolutils.IndexError, "Can not update list of size %d at index %d.", list.size, index)
 	}
-
 	var node *SingleNode[Type] = list.head
-
 	for range index {
 		node = node.next
 	}
-
 	node.SetData(item)
-
 	return nil
 }
 
@@ -138,6 +135,12 @@ func (list *LinkedList[Type]) Remove(index gopolutils.Size) *gopolutils.Exceptio
 	list.size--
 
 	return nil
+}
+
+// Obtain an iterator over the data of the collection.
+// Returns an iterator the data of the collection.
+func (list LinkedList[Type]) Iterator() *Iterator[Type] {
+	return IteratorFrom(list)
 }
 
 // Obtain a string representation of the list.
@@ -168,4 +171,10 @@ func (list LinkedList[Type]) IsEmpty() bool {
 // Returns the size of the list.
 func (list LinkedList[Type]) Size() gopolutils.Size {
 	return list.size
+}
+
+// Obtain a pointer to the head of the list.
+// Returns a pointer to the head of the list.
+func (list LinkedList[Type]) Head() *SingleNode[Type] {
+	return list.head
 }
