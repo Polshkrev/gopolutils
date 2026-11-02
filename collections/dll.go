@@ -8,6 +8,7 @@ import (
 )
 
 var _ Collection[any] = (*DoublyLinkedList[any])(nil)
+var _ Iterable[any] = (*DoublyLinkedList[any])(nil)
 
 // Representation of a doubly-linked list.
 type DoublyLinkedList[Type any] struct {
@@ -28,8 +29,8 @@ func NewDoublyLinkedList[Type any]() *DoublyLinkedList[Type] {
 
 // Obtain a pointer to the head of the list.
 // Returns a pointer to the head of the list.
-func (list DoublyLinkedList[Type]) Head() *Node[Type] {
-	return list.head
+func (list DoublyLinkedList[Type]) Head() Node[Type] {
+	return *list.head
 }
 
 // Determine if the list has a valid head.
@@ -45,8 +46,8 @@ func (list *DoublyLinkedList[Type]) SetHead(node *Node[Type]) {
 
 // Obtain a pointer to the tail of the list.
 // Returns a pointer to the tail of the list.
-func (list DoublyLinkedList[Type]) Tail() *Node[Type] {
-	return list.tail
+func (list DoublyLinkedList[Type]) Tail() Node[Type] {
+	return *list.tail
 }
 
 // Determine if the list has a valid tail.
@@ -214,6 +215,12 @@ func (list DoublyLinkedList[Type]) IsEmpty() bool {
 // Returns the size of the list.
 func (list DoublyLinkedList[Type]) Size() gopolutils.Size {
 	return list.size
+}
+
+// Obtain an [Iterator] over the data of the collection.
+// Returns an [Iterator] the data of the collection.
+func (list DoublyLinkedList[Type]) Iterator() *Iterator[Type] {
+	return IteratorFrom(list)
 }
 
 // Obtain a string representation of the list.

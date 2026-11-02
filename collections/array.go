@@ -91,8 +91,8 @@ func (array Array[Type]) Collect() []Type {
 	return array.items
 }
 
-// Obtain an array over the data of the collection.
-// Returns an array the data of the collection.
+// Obtain an [Iterator] over the data of the collection.
+// Returns an [Iterator] the data of the collection.
 func (array Array[Type]) Iterator() *Iterator[Type] {
 	return IteratorFrom(array)
 }
