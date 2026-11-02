@@ -8,8 +8,9 @@ import (
 
 // Representation of a node within a singly-linked list.
 type Node[Type any] struct {
-	data Type
-	next *Node[Type]
+	data     Type
+	next     *Node[Type]
+	previous *Node[Type]
 }
 
 // Construct a new [Node] with given data for a singly-linked list.
@@ -18,6 +19,7 @@ func NewNode[Type any](data Type) *Node[Type] {
 	var node *Node[Type] = new(Node[Type])
 	node.data = data
 	node.next = nil
+	node.previous = nil
 	return node
 }
 
@@ -31,25 +33,45 @@ func (node *Node[Type]) SetNext(next *Node[Type]) {
 	node.next = next
 }
 
+// Link a given node to the node.
+func (node *Node[Type]) SetPrevious(previous *Node[Type]) {
+	node.previous = previous
+}
+
 // Obtain the data of the node.
 // Returns the data of the node.
-func (node Node[Type]) Data() *Type {
-	return &node.data
+func (node Node[Type]) Data() Type {
+	return node.data
 }
 
 // Obtain the node with which the node has been linked.
-// IF the
-func (node Node[Type]) Next() (*Node[Type], *gopolutils.Exception) {
-	if node.HasNext() {
-		return nil, gopolutils.NewNamedException(gopolutils.ValueError, "No next node has been defined.")
+// If no next node has been defined, a [gopolutils.ValueError] returned with a nil data pointer.
+func (node Node[Type]) Next() (Node[Type], *gopolutils.Exception) {
+	if !node.HasNext() {
+		return Node[Type]{}, gopolutils.NewNamedException(gopolutils.ValueError, "No next node has been defined.")
 	}
-	return node.next, nil
+	return *node.next, nil
+}
+
+// Obtain the node with which the node has been linked.
+// If no previous node has been defined, a [gopolutils.ValueError] returned with a nil data pointer.
+func (node Node[Type]) Previous() (Node[Type], *gopolutils.Exception) {
+	if !node.HasPrevious() {
+		return Node[Type]{}, gopolutils.NewNamedException(gopolutils.ValueError, "No previous node has been defined.")
+	}
+	return *node.previous, nil
 }
 
 // Determine if the node has a linked node.
 // Returns true if the node has a linked node, else false.
 func (node Node[Type]) HasNext() bool {
 	return node.next != nil
+}
+
+// Determine if the node has a linked node.
+// Returns true if the node has a linked node, else false.
+func (node Node[Type]) HasPrevious() bool {
+	return node.previous != nil
 }
 
 // Obtain a string representation of the node.

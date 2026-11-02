@@ -339,6 +339,79 @@ class Set~Type~ {
     +IsEmpty() bool
 }
 
+class SingleNode~Type~ {
+    -Type data
+    -*SingleNode~Type~ next
+    +SetData(Type data)
+    +SetNext(*SingleNode~Type~ next)
+    +Data() *Type
+    +Next() ~*SingleNode~Type~, *Exception~
+    +HasNext() bool
+    +String() String
+}
+
+class Node~Type~ {
+    -Type data
+    -*Node~Type~ next
+    -*Node~Type~ previous
+    +SetData(Type data)
+    +SetNext(*Node~Type~ next)
+    +SetPrevious(*Node~Type~ next)
+    +Data() Type
+    +Next() ~Node~Type~, *Exception~
+    +Previous() ~Node~Type~, *Exception~
+    +HasNext() bool
+    +HasPrevious() bool
+    +String() String
+}
+
+class LinkedList~Type~ {
+    -SingleNode~Type~ head
+    -Size size
+    +Append(Type Item)
+    +Extend(View~Type~ items)
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    +Remove(Size index) *Exception
+    +Items() *[]Type
+    +Collect() []Type
+    +Size() Size
+    +IsEmpty() bool
+}
+
+class DoublyLinkedList~Type~ {
+    -Node~Type~ head
+    -Node~Type~ tail
+    -Size size
+    +Head() *Node~Type~
+    +HasHead() bool
+    +SetHead(*Node~Type~ node)
+    +SetTail(*Node~Type~ node)
+    +HasTail() bool
+    +Tail() *Node~Type~
+    +Append(Type Item)
+    +Extend(View~Type~ items)
+    -traverseForward(Size index)
+    -traverseBackword(Size index)
+    -traverse(Size index)
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    -unlinkNext(*Node~Type~ node)
+    -unlinkForward(*Node~Type~ node)
+    -unlink(*Node~Type~ node)
+    +Remove(Size index) *Exception
+    +Items() *[]Type
+    +Collect() []Type
+    +Size() Size
+    +IsEmpty() bool
+}
+
+class Deque~Type~ {
+    +DoublyLinkedList~Type~
+    -linkFront(*Node~Type~ node)
+    +Use(Size index) *Exception
+}
+
 Collection o-- View : Aggregate
 Collection o-- Wrapper : Aggregate
 View o-- Sized : Aggregate
@@ -347,6 +420,8 @@ Collection <|.. Array : Implements
 Collection <|.. Queue : Implements
 Collection <|.. Stack : Implements
 Collection <|.. Set : Implements
+Collection <|.. LinkedList : Implements
+Collection <|.. DoublyLinkedList : Implements
 Collection <|.. SafeArray : Implements
 Collection <|.. SafeQueue : Implements
 Collection <|.. SafeStack : Implements
@@ -356,6 +431,8 @@ Iterable <|.. Map : Implements
 Iterable <|.. Queue : Implements
 Iterable <|.. Stack : Implements
 Iterable <|.. Set : Implements
+Iterable <|.. LinkedList : Implements
+Iterable <|.. DoublyLinkedList : Implements
 Iterable <|.. SafeArray : Implements
 Iterable <|.. SafeMap : Implements
 Iterable <|.. SafeQueue : Implements
@@ -380,6 +457,8 @@ View <|.. Map : Implements
 View <|.. Queue : Implements
 View <|.. Stack : Implements
 View <|.. Set : Implements
+View <|.. LinkedList : Implements
+View <|.. DoublyLinkedList : Implements
 View <|.. SafeArray : Implements
 View <|.. SafeMap : Implements
 View <|.. SafeQueue : Implements
@@ -419,6 +498,11 @@ Set <.. View : Dependency
 
 Collection <.. Exception : Dependency
 Mapping <.. Exception : Dependency
+
+LinkedList *.. SingleNode : Composite
+DoublyLinkedList *.. Node : Composite
+
+DoublyLinkedList <|.. Deque : Inherits
 
 Exception *-- ExceptionName : Composite
 ```
