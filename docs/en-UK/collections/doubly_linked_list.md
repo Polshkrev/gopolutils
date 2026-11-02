@@ -1,0 +1,20 @@
+# LinkedList
+Implementation of a doubly-linked list.
+
+## Table Of Contents
+1. [Append](#append)
+2. [Remove](#remove)
+3. [Access](#access)
+4. [Implements](#implements)
+
+### Append
+To append to a list, there are two methods that can be used; there is &mdash; of course &mdash; the `Append` method. This method appends a singular item to the list. There is also the `Extend` method. This method appends multiple items to the list in the form of a `View`.
+
+### Remove
+To remove from a list, there is a simple `Remove` method. This method takes in an index where the value to be removed is located. If the list is empty, or if the given index is greater than the size of the list, then an `OutOfRangeError` is returned.
+
+### Access
+To access an item in the list, the `At` method is available. This method will take a given index. This method will either return a pointer to the item stored at the given index, and a nil exception pointer; or this method will return a nil data pointer and an exception. To update the list, an `Update` method is available. This method takes in an index where the item to update is located and a new value to assign at the given index. This method will either update the value at the given index and return a nil exception pointer or this method will return a pointer to, a `ValueError` if the list is empty, or an `OutOfRangeError` if the index is exceedent to the size of the list.
+
+### Implements
+This structure implements the `Collection`, `View`, and `Sized` interfaces.

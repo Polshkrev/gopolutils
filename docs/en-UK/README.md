@@ -26,8 +26,11 @@
         3. [Set](/docs/en-UK/collections/set.md)
         4. [Queue](/docs/en-UK/collections/queue.md)
         5. [Stack](/docs/en-UK/collections/stack.md)
-        6. [Pair](/docs/en-UK/collections/pair.md)
-        7. Safe
+        6. [LinkedList](/docs/en-UK/collections/linked_list.md)
+        7. [DoublyLinkedList](/docs/en-UK/collections/doubly_linked_list.md)
+        8. [Deque](/docs/en-UK/collections/deque.md)
+        9. [Pair](/docs/en-UK/collections/pair.md)
+        10. Safe
             1. [Array](/docs/en-UK/collections/safe/array.md)
             2. [Map](/docs/en-UK/collections/safe/map.md)
             3. [Queue](/docs/en-UK/collections/safe/queue.md)
