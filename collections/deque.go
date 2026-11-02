@@ -5,6 +5,7 @@ import (
 )
 
 var _ Collection[any] = (*Deque[any])(nil)
+var _ Iterable[any] = (*Deque[any])(nil)
 
 // Representation of a double-ended queue.
 type Deque[Type any] struct {
