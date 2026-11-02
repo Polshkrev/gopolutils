@@ -343,6 +343,79 @@ class Set~Type~ {
     +IsEmpty() bool
 }
 
+class SingleNode~Type~ {
+    -Type data
+    -*SingleNode~Type~ next
+    +SetData(Type data)
+    +SetNext(*SingleNode~Type~ next)
+    +Data() *Type
+    +Next() ~*SingleNode~Type~, *Exception~
+    +HasNext() bool
+    +String() String
+}
+
+class Node~Type~ {
+    -Type data
+    -*Node~Type~ next
+    -*Node~Type~ previous
+    +SetData(Type data)
+    +SetNext(*Node~Type~ next)
+    +SetPrevious(*Node~Type~ next)
+    +Data() Type
+    +Next() ~Node~Type~, *Exception~
+    +Previous() ~Node~Type~, *Exception~
+    +HasNext() bool
+    +HasPrevious() bool
+    +String() String
+}
+
+class LinkedList~Type~ {
+    -SingleNode~Type~ head
+    -Size size
+    +Append(Type Item)
+    +Extend(View~Type~ items)
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    +Remove(Size index) *Exception
+    +Items() *[]Type
+    +Collect() []Type
+    +Size() Size
+    +IsEmpty() bool
+}
+
+class DoublyLinkedList~Type~ {
+    -Node~Type~ head
+    -Node~Type~ tail
+    -Size size
+    +Head() *Node~Type~
+    +HasHead() bool
+    +SetHead(*Node~Type~ node)
+    +SetTail(*Node~Type~ node)
+    +HasTail() bool
+    +Tail() *Node~Type~
+    +Append(Type Item)
+    +Extend(View~Type~ items)
+    -traverseForward(Size index)
+    -traverseBackword(Size index)
+    -traverse(Size index)
+    +At(Size index) ~*Type, *Exception~
+    +Update(Size index, Type value) *Exception
+    -unlinkNext(*Node~Type~ node)
+    -unlinkForward(*Node~Type~ node)
+    -unlink(*Node~Type~ node)
+    +Remove(Size index) *Exception
+    +Items() *[]Type
+    +Collect() []Type
+    +Size() Size
+    +IsEmpty() bool
+}
+
+class Deque~Type~ {
+    +DoublyLinkedList~Type~
+    -linkFront(*Node~Type~ node)
+    +Use(Size index) *Exception
+}
+
 Collection o-- View : Агрегат
 Collection o-- Wrapper : Агрегат
 View o-- Sized : Агрегат
@@ -351,6 +424,8 @@ Collection <|.. Array : Реализует
 Collection <|.. Queue : Реализует
 Collection <|.. Stack : Реализует
 Collection <|.. Set : Реализует
+Collection <|.. LinkedList : Реализует
+Collection <|.. DoublyLinkedList : Реализует
 Collection <|.. SafeArray : Реализует
 Collection <|.. SafeQueue : Реализует
 Collection <|.. SafeStack : Реализует
@@ -360,6 +435,8 @@ Iterable <|.. Map : Реализует
 Iterable <|.. Queue : Реализует
 Iterable <|.. Stack : Реализует
 Iterable <|.. Set : Реализует
+Iterable <|.. LinkedList : Реализует
+Iterable <|.. DoublyLinkedList : Реализует
 Iterable <|.. SafeArray : Реализует
 Iterable <|.. SafeMap : Реализует
 Iterable <|.. SafeQueue : Реализует
@@ -384,6 +461,8 @@ View <|.. Map : Реализует
 View <|.. Queue : Реализует
 View <|.. Stack : Реализует
 View <|.. Set : Реализует
+View <|.. LinkedList : Реализует
+View <|.. DoublyLinkedList : Реализует
 View <|.. SafeArray : Реализует
 View <|.. SafeMap : Реализует
 View <|.. SafeQueue : Реализует
@@ -423,6 +502,8 @@ Set <.. View : Поддержка
 
 Collection <.. Exception : Поддержка
 Mapping <.. Exception : Поддержка
+
+DoublyLinkedList <|.. Deque : Перенять
 
 Exception *-- ExceptionName : Композит
 ```
