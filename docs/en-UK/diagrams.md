@@ -406,6 +406,12 @@ class DoublyLinkedList~Type~ {
     +IsEmpty() bool
 }
 
+class Deque~Type~ {
+    +DoublyLinkedList~Type~
+    -linkFront(*Node~Type~ node)
+    +Use(Size index) *Exception
+}
+
 Collection o-- View : Aggregate
 Collection o-- Wrapper : Aggregate
 View o-- Sized : Aggregate
@@ -496,7 +502,7 @@ Mapping <.. Exception : Dependency
 LinkedList *.. SingleNode : Composite
 DoublyLinkedList *.. Node : Composite
 
-LinkedList <|.. DoublyLinkedList : Inherits
+DoublyLinkedList <|.. Deque : Inherits
 
 Exception *-- ExceptionName : Composite
 ```
