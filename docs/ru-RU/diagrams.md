@@ -503,6 +503,9 @@ Set <.. View : Поддержка
 Collection <.. Exception : Поддержка
 Mapping <.. Exception : Поддержка
 
+LinkedList *.. SingleNode : Композит
+DoublyLinkedList *.. Node : Композит
+
 DoublyLinkedList <|.. Deque : Перенять
 
 Exception *-- ExceptionName : Композит
