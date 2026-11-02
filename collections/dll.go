@@ -8,6 +8,7 @@ import (
 )
 
 var _ Collection[any] = (*DoublyLinkedList[any])(nil)
+var _ Iterable[any] = (*DoublyLinkedList[any])(nil)
 
 // Representation of a doubly-linked list.
 type DoublyLinkedList[Type any] struct {
@@ -214,6 +215,12 @@ func (list DoublyLinkedList[Type]) IsEmpty() bool {
 // Returns the size of the list.
 func (list DoublyLinkedList[Type]) Size() gopolutils.Size {
 	return list.size
+}
+
+// Obtain an [Iterator] over the data of the collection.
+// Returns an [Iterator] the data of the collection.
+func (list DoublyLinkedList[Type]) Iterator() *Iterator[Type] {
+	return IteratorFrom(list)
 }
 
 // Obtain a string representation of the list.
