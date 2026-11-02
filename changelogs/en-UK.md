@@ -1,4 +1,22 @@
 # Changelog
+## v1.44.0 - 2026-11-02
+`Added`
+- `collections`
+    - Added the `DoublyLinkedList` type.
+    - Added the `Deque` type.
+    - Added the `Node` type.
+    - Added the `Head` method to the `LinkedList` type.
+    - Added the `Iterator` method to the `LinkedList` type.
+- `tests`
+    - Added `DoublyLinkedList` tests.
+    - Added `Deque` tests.
+    - Added `Node` tests.
+
+`Changed`
+- `collections`
+    - `Node` has been renamed to `SingleNode`.
+- `documentation`
+    - All documentation &mdash; in both russian and english &mdash; have been updated.
 ## v1.43.0 - 2026-09-30: The Linked List Update
 `Added`
 - `collections`

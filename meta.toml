@@ -2,12 +2,11 @@
 name = "gopolutils"
 author = {name = "Polshkrev"}
 description = "A collection of golang utilities."
-type = "library"
+type = "Library"
 
 [project.version]
 major = 1
-minor = 43
-name = "The Linked List Update"
+minor = 44
 
 [license]
 type = "MIT"
