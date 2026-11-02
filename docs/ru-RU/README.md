@@ -26,8 +26,11 @@
         3. [Множество](/docs/ru-RU/collections/set.md)
         4. [Очередь](/docs/ru-RU/collections/queue.md)
         5. [Стек](/docs/ru-RU/collections/stack.md)
-        6. [Пара](/docs/ru-RU/collections/pair.md)
-        7. Конкурентный
+        6. [Односвязный список](/docs/ru-RU/collections/linked_list.md)
+        7. [Двусвязный список](/docs/ru-RU/collections/doubly_linked_list.md)
+        8. [Дек](/docs/ru-RU/collections/deque.md)
+        9. [Пара](/docs/ru-RU/collections/pair.md)
+        10. Конкурентный
             1. [Список](/docs/ru-RU/collections/safe/array.md)
             2. [Таблица](/docs/ru-RU/collections/safe/map.md)
             3. [Очередь](/docs/ru-RU/collections/safe/queue.md)
