@@ -29,8 +29,8 @@ func NewDoublyLinkedList[Type any]() *DoublyLinkedList[Type] {
 
 // Obtain a pointer to the head of the list.
 // Returns a pointer to the head of the list.
-func (list DoublyLinkedList[Type]) Head() *Node[Type] {
-	return list.head
+func (list DoublyLinkedList[Type]) Head() Node[Type] {
+	return *list.head
 }
 
 // Determine if the list has a valid head.
@@ -46,8 +46,8 @@ func (list *DoublyLinkedList[Type]) SetHead(node *Node[Type]) {
 
 // Obtain a pointer to the tail of the list.
 // Returns a pointer to the tail of the list.
-func (list DoublyLinkedList[Type]) Tail() *Node[Type] {
-	return list.tail
+func (list DoublyLinkedList[Type]) Tail() Node[Type] {
+	return *list.tail
 }
 
 // Determine if the list has a valid tail.
