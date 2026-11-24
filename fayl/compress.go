@@ -66,8 +66,9 @@ func concurrentGunzip(content []byte, resultChannel chan<- []byte, exceptionChan
 func concurrentGzip(content []byte, resultChannel chan<- []byte, exceptionChannel chan<- *gopolutils.Exception) {
 	defer close(resultChannel)
 	defer close(exceptionChannel)
-	var buffer *bytes.Buffer = new(bytes.Buffer)
-	var writer *gzip.Writer = gzip.NewWriter(buffer)
+	var buffer bytes.Buffer
+	buffer.Grow(len(content))
+	var writer *gzip.Writer = gzip.NewWriter(&buffer)
 	var writeError error
 	_, writeError = writer.Write(content)
 	if writeError != nil {
