@@ -401,26 +401,15 @@ func createFile(target string) (*os.File, *gopolutils.Exception) {
 	return result, except
 }
 
-// Concurrently copy a file.
-// If the file can not be copied, an [gopolutils.IOError] is sent to the exception channel.
-func copyConcurrent(destination io.Writer, source io.Reader, exceptionChannel chan<- *gopolutils.Exception) {
-	defer close(exceptionChannel)
-	var copyError error
-	_, copyError = io.Copy(destination, source)
-	if copyError != nil {
-		exceptionChannel <- gopolutils.NewNamedException(gopolutils.IOError, copyError.Error())
-		return
-	}
-	exceptionChannel <- nil
-}
-
 // Copy a file on the filesystem.
 // If the file can not be copied, an [gopolutils.IOError] returned.
 func copyFile(destination io.Writer, source io.Reader) *gopolutils.Exception {
-	var exceptionChannel chan *gopolutils.Exception = make(chan *gopolutils.Exception, 1)
-	go copyConcurrent(destination, source, exceptionChannel)
-	var except *gopolutils.Exception = <-exceptionChannel
-	return except
+	var copyError error
+	_, copyError = io.Copy(destination, source)
+	if copyError != nil {
+		return gopolutils.NewNamedException(gopolutils.IOError, copyError.Error())
+	}
+	return nil
 }
 
 // Strip the given prefix from the given if contains the given prefix.
