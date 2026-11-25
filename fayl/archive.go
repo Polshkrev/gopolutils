@@ -351,54 +351,27 @@ func validate(source, destination string) bool {
 	return strings.HasPrefix(source, filepath.Clean(destination)+string(os.PathSeparator))
 }
 
-// Concurrently create a directory on the filesystem.
-// If the directory can not be created, an [gopolutils.OSError] is sent to the exception channel.
-func makeDirectoryConcurrent(target string, exceptionChannel chan<- *gopolutils.Exception) {
-	defer close(exceptionChannel)
-	var makeDirectoryError error = os.MkdirAll(target, 0755)
-	if makeDirectoryError != nil {
-		exceptionChannel <- gopolutils.NewNamedException(gopolutils.OSError, makeDirectoryError.Error())
-		return
-	}
-	exceptionChannel <- nil
-}
-
 // Create a directory on the filesystem.
-// If the directory can not be created, an [gopolutils.OSError] returned.
+// If the directory can not be created, an [gopolutils.OSError] is returned.
 func makeDirectory(target string) *gopolutils.Exception {
-	var exceptionChannel chan *gopolutils.Exception = make(chan *gopolutils.Exception, 1)
-	go makeDirectoryConcurrent(target, exceptionChannel)
-	var except *gopolutils.Exception = <-exceptionChannel
-	return except
-}
-
-// Concurrently create a file on the filesystem.
-// If the file can not be created, an [gopolutils.OSError] is sent to the exceptionChannel.
-func createConcurrent(target string, resultChannel chan<- *os.File, exceptionChannel chan<- *gopolutils.Exception) {
-	defer close(resultChannel)
-	defer close(exceptionChannel)
-	var result *os.File
-	var createError error
-	result, createError = os.Create(target)
+	var createError error = os.MkdirAll(target, 0755)
 	if createError != nil {
-		resultChannel <- nil
-		exceptionChannel <- gopolutils.NewNamedException(gopolutils.OSError, createError.Error())
-		return
+		return gopolutils.NewNamedException(gopolutils.OSError, createError.Error())
 	}
-	resultChannel <- result
-	exceptionChannel <- nil
+	return nil
 }
 
 // Create a file on the filesystem.
 // Returns a handle to the created file.
 // If the file can not be created, an [gopolutils.OSError] is returned.
 func createFile(target string) (*os.File, *gopolutils.Exception) {
-	var resultChannel chan *os.File = make(chan *os.File, 1)
-	var exceptionChannel chan *gopolutils.Exception = make(chan *gopolutils.Exception, 1)
-	go createConcurrent(target, resultChannel, exceptionChannel)
-	var result *os.File = <-resultChannel
-	var except *gopolutils.Exception = <-exceptionChannel
-	return result, except
+	var result *os.File
+	var createError error
+	result, createError = os.Create(target)
+	if createError != nil {
+		return nil, gopolutils.NewNamedException(gopolutils.OSError, createError.Error())
+	}
+	return result, nil
 }
 
 // Copy a file on the filesystem.
